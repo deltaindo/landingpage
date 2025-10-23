@@ -1,66 +1,92 @@
 "use client";
 
-const SafetyServices = () => {
+import { useEffect, useRef } from "react";
+
+const Services = () => {
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("animate-fade-in");
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      const cards = sectionRef.current.querySelectorAll(".service-card");
+      cards.forEach((card) => observer.observe(card));
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   const services = [
     {
-      title: "Process Construction",
-      subtitle: "Mechanical (M&E)",
-      image: "/service1.jpg",
-      icon: "⚙️",
+      icon: "📚",
+      title: "Pelatihan K3",
+      description:
+        "Pelatihan keselamatan dan kesehatan kerja bersertifikat Kemnaker RI",
     },
     {
-      title: "Radiation Prevention",
-      subtitle: "Environmental Management",
-      image: "/service2.jpg",
-      icon: "🔥",
+      icon: "🎓",
+      title: "Sertifikasi K3",
+      description:
+        "Sertifikasi kompetensi BNSP dan Kemnaker untuk berbagai bidang",
     },
     {
-      title: "Risk Management",
-      subtitle: "Safety Planning",
-      image: "/service3.jpg",
-      icon: "👷",
+      icon: "🔧",
+      title: "Riksa Uji Alat",
+      description: "Pemeriksaan dan pengujian alat K3 sesuai standar",
+    },
+    {
+      icon: "💼",
+      title: "Konsultan K3",
+      description: "Konsultasi sistem manajemen K3 dan produktivitas",
+    },
+    {
+      icon: "📋",
+      title: "Audit SMK3",
+      description: "Audit Sistem Manajemen K3 sesuai PP No. 50 Tahun 2012",
+    },
+    {
+      icon: "🏗️",
+      title: "Kajian Teknik",
+      description: "Kajian teknik untuk SKK, SLF, dan perizinan",
     },
   ];
 
   return (
-    <section className="py-20 bg-white">
+    <section id="layanan" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-12">
-          <div>
-            <h2 className="text-3xl font-bold text-dark mb-2">
-              Our Safety & Services
-            </h2>
-            <p className="text-gray-600">Get Info</p>
-          </div>
-          <button className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">
-            View More
-          </button>
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-dark mb-4">Layanan Kami</h2>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Layanan komprehensif untuk kebutuhan K3 perusahaan Anda
+          </p>
         </div>
 
-        {/* Service Cards */}
-        <div className="grid md:grid-cols-3 gap-6">
+        <div
+          ref={sectionRef}
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
           {services.map((service, index) => (
             <div
               key={index}
-              className="relative h-96 rounded-2xl overflow-hidden group cursor-pointer shadow-lg hover:shadow-2xl transition"
+              className="service-card opacity-0 bg-white border border-gray-200 rounded-xl p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group"
+              style={{ animationDelay: `${index * 100}ms` }}
             >
-              {/* Background Image */}
-              <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900">
-                {/* Placeholder - replace with actual images */}
-                <div className="absolute inset-0 flex items-center justify-center text-white text-8xl opacity-30">
-                  {service.icon}
-                </div>
+              <div className="text-5xl mb-4 group-hover:scale-110 transition-transform">
+                {service.icon}
               </div>
-
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-
-              {/* Content */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                <h3 className="text-2xl font-bold mb-2">{service.title}</h3>
-                <p className="text-blue-200">{service.subtitle}</p>
-              </div>
+              <h3 className="text-xl font-bold text-dark mb-3">
+                {service.title}
+              </h3>
+              <p className="text-gray-600">{service.description}</p>
             </div>
           ))}
         </div>
@@ -69,4 +95,4 @@ const SafetyServices = () => {
   );
 };
 
-export default SafetyServices;
+export default Services;

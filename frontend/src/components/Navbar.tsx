@@ -53,14 +53,6 @@ const Navbar = () => {
                 isScrolled ? "text-dark" : "text-white"
               } hover:text-primary transition`}
             >
-              Beranda
-            </button>
-            <button
-              onClick={() => scrollToSection("tentang")}
-              className={`${
-                isScrolled ? "text-dark" : "text-white"
-              } hover:text-primary transition`}
-            >
               Tentang Kami
             </button>
             <button
@@ -110,12 +102,6 @@ const Navbar = () => {
             <div className="flex flex-col space-y-4 p-4">
               <button
                 onClick={() => scrollToSection("beranda")}
-                className="text-dark hover:text-primary transition text-left"
-              >
-                Beranda
-              </button>
-              <button
-                onClick={() => scrollToSection("tentang")}
                 className="text-dark hover:text-primary transition text-left"
               >
                 Tentang Kami

@@ -14,10 +14,7 @@ const About = () => {
 
         {/* Content with Heading */}
         <div className="mb-12">
-          <h3 className="text-2xl md:text-3xl font-bold text-dark leading-relaxed max-w-3xl">
-            We deliver quality solutions that meet regulations and foster
-            growth.
-          </h3>
+          <h3 className="text-2xl md:text-3xl font-bold text-dark leading-relaxed max-w-3xl"></h3>
         </div>
 
         <div className="grid md:grid-cols-2 gap-12 items-start">
