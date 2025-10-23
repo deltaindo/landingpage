@@ -1,80 +1,65 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { FaCheckCircle } from "react-icons/fa";
+import { FaPlay } from "react-icons/fa";
 
 const About = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("animate-slide-up");
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  const features = [
-    "Sertifikasi Resmi Kemnaker RI & BNSP",
-    "Instruktur Berpengalaman & Bersertifikat",
-    "Fasilitas Training Modern",
-    "Konsultasi Gratis",
-  ];
-
   return (
-    <section id="tentang" className="py-20 bg-gray-50" ref={sectionRef}>
+    <section id="tentang" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          {/* Image */}
+        {/* Section Header */}
+        <div className="mb-12">
+          <h2 className="text-3xl font-bold text-dark mb-2">About Us</h2>
+          <p className="text-gray-600">Our details</p>
+        </div>
+
+        {/* Content with Heading */}
+        <div className="mb-12">
+          <h3 className="text-2xl md:text-3xl font-bold text-dark leading-relaxed max-w-3xl">
+            We deliver quality solutions that meet regulations and foster
+            growth.
+          </h3>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-12 items-start">
+          {/* Video Player */}
           <div className="relative">
-            <div className="w-full h-96 bg-gradient-to-br from-primary to-blue-700 rounded-2xl shadow-2xl overflow-hidden">
-              <div className="w-full h-full flex items-center justify-center text-white text-6xl font-bold">
-                DI
-              </div>
+            <div className="w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center group cursor-pointer">
+              {/* Video Thumbnail - Replace with actual video */}
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900"></div>
+              <button className="relative z-10 w-20 h-20 bg-white rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
+                <FaPlay className="text-primary text-2xl ml-1" />
+              </button>
             </div>
-            <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-secondary rounded-2xl opacity-20"></div>
           </div>
 
-          {/* Content */}
-          <div className="space-y-6">
-            <h2 className="text-4xl font-bold text-dark">
-              Tentang Delta Indonesia
-            </h2>
-            <p className="text-lg text-gray-700 leading-relaxed">
-              PT Delta Indonesia Pranenggar adalah Perusahaan Jasa Keselamatan
-              Kesehatan Kerja (PJK3) yang ditunjuk oleh Kementerian
-              Ketenagakerjaan Republik Indonesia untuk menyelenggarakan
-              pelatihan dan sertifikasi K3.
-            </p>
-            <p className="text-lg text-gray-700 leading-relaxed">
-              Dengan pengalaman lebih dari 19 tahun, kami telah membantu ribuan
-              profesional dan perusahaan dalam meningkatkan standar keselamatan
-              dan kesehatan kerja.
-            </p>
-
-            {/* Features */}
-            <div className="space-y-4 mt-8">
-              {features.map((feature, index) => (
-                <div key={index} className="flex items-center space-x-3">
-                  <FaCheckCircle className="text-primary text-xl flex-shrink-0" />
-                  <span className="text-gray-700">{feature}</span>
-                </div>
-              ))}
+          {/* Stats */}
+          <div className="space-y-8">
+            <div className="border-b border-gray-200 pb-6">
+              <h3 className="text-4xl font-bold text-dark mb-2">Since</h3>
+              <div className="text-xl text-gray-700">
+                <p>
+                  Established in <span className="font-bold">2001</span> with
+                </p>
+                <p>a strong foundation in</p>
+                <p>industrial development</p>
+              </div>
             </div>
 
-            <button className="mt-8 bg-primary text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition transform hover:scale-105">
-              Selengkapnya
+            <div className="border-b border-gray-200 pb-6">
+              <h3 className="text-4xl font-bold text-dark mb-2">Clients</h3>
+              <div className="text-xl text-gray-700">
+                <p>
+                  Trusted by <span className="font-bold">over 1,000</span>
+                </p>
+                <p>clients across Indonesia,</p>
+                <p>providing support for size</p>
+                <p>safety analysis.</p>
+              </div>
+            </div>
+
+            <button className="bg-primary text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition flex items-center space-x-2">
+              <span>Get a Quote</span>
+              <span>→</span>
             </button>
           </div>
         </div>
