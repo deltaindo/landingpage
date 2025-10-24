@@ -1,252 +1,218 @@
 "use client";
 
 import { useState } from "react";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight, FaThumbtack } from "react-icons/fa";
+import { FiArrowRight } from "react-icons/fi";
 
+// Define the type for a media item
 interface MediaItem {
-  type: "Media Release" | "Featured";
   title: string;
   date: string;
+  description: string;
   image: string;
-  featured?: boolean;
+  featured: boolean;
+  category: string;
 }
 
 const MediaInfo = () => {
+  // State to manage the current index of the carousel
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  // Array of media items, with the first one marked as featured
   const mediaItems: MediaItem[] = [
     {
-      type: "Featured",
-      title: "Delta Indonesia Commemorates Its First Major K3 Achievement",
+      title: "Media Release",
       date: "7 July 2025",
-      image: "/media/featured.jpg",
+      description:
+        "PETRONAS Commemorates Its First LNG Cargo from LNG Canada Facility",
+      image: "/media/lng-ship.jpg", // Placeholder image path
       featured: true,
+      category: "Featured",
     },
     {
-      type: "Media Release",
-      title:
-        "Delta Indonesia and Partner Forge Strategic Partnership to Advance Safety Training",
+      title: "Media Release",
       date: "21 October 2025",
-      image: "/media/media1.jpg",
+      description:
+        "PETRONAS and Oman’s OQEP Forge Strategic Partnership to Advance Upstream Collaboration",
+      image: "/media/partnership.jpg", // Placeholder image path
+      featured: false,
+      category: "Partnership",
     },
     {
-      type: "Media Release",
-      title:
-        "Delta Indonesia Presents 'Safety Excellence', a Celebration of Workplace Security",
+      title: "Media Release",
       date: "20 October 2025",
-      image: "/media/media2.jpg",
+      description:
+        "PETRONAS Presents 'Virunthu', a Celebration of Love and Togetherness",
+      image: "/media/celebration.jpg", // Placeholder image path
+      featured: false,
+      category: "Event",
+    },
+    {
+      title: "Sustainability",
+      date: "15 October 2025",
+      description:
+        "New Report Highlights Advances in Sustainable Energy Solutions",
+      image: "/media/sustainability.jpg", // Placeholder image path
+      featured: false,
+      category: "Report",
+    },
+    {
+      title: "Technology",
+      date: "12 October 2025",
+      description:
+        "Delta Indonesia Implements New AI-Powered Safety Monitoring System",
+      image: "/media/ai-safety.jpg", // Placeholder image path
+      featured: false,
+      category: "Innovation",
     },
   ];
 
-  // Calculate total pages (showing 3 items at a time, first is large + 2 small)
-  const totalPages = Math.ceil(mediaItems.length / 3);
+  // Separate the featured item from the rest
+  const featuredItem = mediaItems.find((item) => item.featured);
+  const carouselItems = mediaItems.filter((item) => !item.featured);
 
+  // Handlers for carousel navigation
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % totalPages);
+    setCurrentIndex((prev) => (prev + 1) % carouselItems.length);
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + totalPages) % totalPages);
+    setCurrentIndex(
+      (prev) => (prev - 1 + carouselItems.length) % carouselItems.length
+    );
   };
 
-  const goToPage = (index: number) => {
-    setCurrentIndex(index);
+  // Function to get the two items to display in the carousel
+  const getDisplayItems = () => {
+    const display = [];
+    for (let i = 0; i < 2; i++) {
+      display.push(carouselItems[(currentIndex + i) % carouselItems.length]);
+    }
+    return display;
   };
 
-  // Get current items to display
-  const startIndex = currentIndex * 3;
-  const currentItems = mediaItems.slice(startIndex, startIndex + 3);
-  const featuredItem = currentItems;
-  const regularItems = currentItems.slice(1);
+  const displayItems = getDisplayItems();
 
   return (
-    <section className="py-20 bg-gray-50">
+    <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
         <div className="mb-12">
-          <h2 className="text-4xl font-bold text-dark mb-3">
-            Latest <span className="font-normal">Updates</span>
+          <h2 className="text-4xl font-bold text-gray-800 mb-2">
+            Latest Updates
           </h2>
-          <p className="text-gray-600 text-lg">
+          <p className="text-lg text-gray-600 max-w-2xl">
             Stay informed with our latest media releases, featuring key
             announcements, insights, and developments.
           </p>
         </div>
 
-        {/* Carousel Container */}
-        <div className="relative">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Featured/Large Card - Left Side */}
-            {featuredItem && (
-              <div className="relative group cursor-pointer h-full">
-                <div className="relative h-full min-h-[500px] rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300">
-                  {/* Image */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-blue-600">
-                    {/* Placeholder - Replace with actual image */}
-                    <div className="w-full h-full flex items-center justify-center text-white text-8xl opacity-30">
-                      📸
-                    </div>
-                  </div>
-
-                  {/* Overlay Gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-
-                  {/* Featured Badge */}
-                  {featuredItem.featured && (
-                    <div className="absolute top-6 left-6 z-10">
-                      <div className="bg-purple-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 font-semibold">
-                        <span>🏆</span>
-                        <span>Featured</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Read More Button - Top Right */}
-                  <div className="absolute top-6 right-6 z-10">
-                    <button className="bg-teal-500 hover:bg-teal-600 text-white px-6 py-3 rounded-full flex items-center space-x-2 transition group-hover:scale-105">
-                      <span className="font-semibold">Read more</span>
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M17 8l4 4m0 0l-4 4m4-4H3"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-
-                  {/* Content - Bottom */}
-                  <div className="absolute bottom-0 left-0 right-0 p-8 z-10">
-                    <div className="mb-3">
-                      <span className="text-white font-semibold">
-                        {featuredItem.type}
-                      </span>
-                    </div>
-                    <h3 className="text-white text-3xl font-bold leading-tight mb-3">
-                      {featuredItem.title}
-                    </h3>
-                    <p className="text-white/90 text-lg">{featuredItem.date}</p>
-                  </div>
-                </div>
+        <div className="grid lg:grid-cols-2 gap-8 items-start">
+          {/* Featured Card */}
+          {featuredItem && (
+            <div className="relative rounded-xl overflow-hidden shadow-lg group h-full flex flex-col">
+              <div className="absolute top-4 left-4 z-10 bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center space-x-2">
+                <FaThumbtack />
+                <span>{featuredItem.category}</span>
               </div>
-            )}
+              <div className="absolute top-4 right-4 z-10">
+                <a
+                  href="#"
+                  className="bg-teal-500 text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center space-x-2 hover:bg-teal-600 transition-colors"
+                >
+                  <span>Read more</span>
+                  <FiArrowRight />
+                </a>
+              </div>
 
-            {/* Regular Cards - Right Side (Stacked) */}
-            <div className="flex flex-col gap-6">
-              {regularItems.map((item, index) => (
-                <div key={index} className="relative group cursor-pointer">
-                  <div className="relative h-64 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-                    {/* Image */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-gray-300 to-gray-400">
-                      {/* Placeholder - Replace with actual image */}
-                      <div className="w-full h-full flex items-center justify-center text-gray-600 text-6xl opacity-40">
-                        📷
-                      </div>
-                    </div>
+              <div className="relative h-64">
+                <img
+                  src={featuredItem.image}
+                  alt={featuredItem.description}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+              </div>
 
-                    {/* Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
-
-                    {/* Read More Button - Top Right */}
-                    <div className="absolute top-4 right-4 z-10">
-                      <button className="bg-teal-500 hover:bg-teal-600 text-white p-3 rounded-full transition group-hover:scale-105">
-                        <svg
-                          className="w-5 h-5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M17 8l4 4m0 0l-4 4m4-4H3"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-
-                    {/* Content */}
-                    <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-white font-semibold text-sm">
-                          {item.type}
-                        </span>
-                        <span className="text-white/90 text-sm">
-                          {item.date}
-                        </span>
-                      </div>
-                      <h3 className="text-white text-lg font-bold leading-tight">
-                        {item.title}
-                      </h3>
-                    </div>
-                  </div>
+              <div className="absolute bottom-0 p-6 text-white">
+                <div className="flex justify-between items-center text-xs opacity-80 mb-2">
+                  <span>{featuredItem.title}</span>
+                  <span>{featuredItem.date}</span>
                 </div>
-              ))}
+                <h3 className="text-xl font-bold">
+                  {featuredItem.description}
+                </h3>
+              </div>
             </div>
-          </div>
+          )}
 
-          {/* Navigation Controls - Bottom Center */}
-          <div className="flex items-center justify-center space-x-6 mt-12">
-            {/* Previous Button */}
-            <button
-              onClick={prevSlide}
-              className="bg-teal-500 hover:bg-teal-600 text-white p-4 rounded-full transition hover:scale-110 shadow-lg"
-              aria-label="Previous"
-            >
-              <FaChevronLeft className="text-xl" />
-            </button>
-
-            {/* Dots Navigation */}
-            <div className="flex items-center space-x-2">
-              {Array.from({ length: totalPages }).map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => goToPage(index)}
-                  className={`transition-all duration-300 rounded-full ${
-                    index === currentIndex
-                      ? "bg-purple-600 w-12 h-3"
-                      : "bg-gray-400 hover:bg-gray-500 w-3 h-3"
-                  }`}
-                  aria-label={`Go to page ${index + 1}`}
-                />
-              ))}
-            </div>
-
-            {/* Next Button */}
-            <button
-              onClick={nextSlide}
-              className="bg-teal-500 hover:bg-teal-600 text-white p-4 rounded-full transition hover:scale-110 shadow-lg"
-              aria-label="Next"
-            >
-              <FaChevronRight className="text-xl" />
-            </button>
-          </div>
-
-          {/* View All Button - Bottom Right */}
-          <div className="flex justify-end mt-8">
-            <button className="bg-teal-500 hover:bg-teal-600 text-white px-8 py-3 rounded-full flex items-center space-x-2 transition hover:scale-105 shadow-lg font-semibold">
-              <span>View all</span>
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+          {/* Carousel Cards */}
+          <div className="space-y-6">
+            {displayItems.map((item, idx) => (
+              <div
+                key={idx}
+                className="bg-gray-50 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow duration-300 relative"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                />
-              </svg>
-            </button>
+                <div className="absolute top-4 right-4 z-10">
+                  <a
+                    href="#"
+                    className="bg-teal-500 text-white px-3 py-1.5 rounded-md text-xs font-semibold flex items-center space-x-1 hover:bg-teal-600 transition-colors"
+                  >
+                    <span>Read more</span>
+                    <FiArrowRight />
+                  </a>
+                </div>
+                <div className="flex justify-between items-center text-xs text-gray-500 mb-2">
+                  <span className="font-semibold text-purple-600">
+                    {item.category}
+                  </span>
+                  <span>{item.date}</span>
+                </div>
+                <p className="text-gray-800 font-semibold">
+                  {item.description}
+                </p>
+              </div>
+            ))}
+
+            {/* Navigation & View All */}
+            <div className="flex items-center justify-between pt-4">
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={prevSlide}
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-teal-500 text-white hover:bg-teal-600 transition-colors"
+                  aria-label="Previous"
+                >
+                  <FaChevronLeft />
+                </button>
+
+                {/* Pagination Dots */}
+                <div className="flex space-x-2">
+                  {carouselItems.map((_, index) => (
+                    <div
+                      key={index}
+                      className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                        currentIndex === index ? "bg-purple-600" : "bg-gray-300"
+                      }`}
+                    ></div>
+                  ))}
+                </div>
+
+                <button
+                  onClick={nextSlide}
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-teal-500 text-white hover:bg-teal-600 transition-colors"
+                  aria-label="Next"
+                >
+                  <FaChevronRight />
+                </button>
+              </div>
+
+              <a
+                href="#"
+                className="bg-teal-500 text-white px-6 py-2.5 rounded-lg font-semibold flex items-center space-x-2 hover:bg-teal-600 transition-colors"
+              >
+                <span>View all</span>
+                <FiArrowRight />
+              </a>
+            </div>
           </div>
         </div>
       </div>
