@@ -1,80 +1,89 @@
 // src/components/About.tsx
-
 "use client";
 
 import React, { useState } from "react";
 import { FaPlay } from "react-icons/fa";
 
-export const About = () => {
+const About = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const videoId = "Pf98Ui1ejPM"; // YouTube Video ID
 
   return (
-    <section id="about" className="bg-gray-50 py-20 lg:py-28">
-      <div className="container mx-auto px-4 lg:px-8">
-        <div className="flex flex-col lg:flex-row items-center justify-center lg:space-x-12">
-          {/* Left Column: Video Player (65% width) */}
-          <div className="w-full lg:w-[65%]">
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-800 mb-2">
-              Tentang Kami
-            </h2>
-            <p className="text-gray-500 mb-6">About Us</p>
+    <section id="tentang" className="py-16 bg-white">
+      {/* Unified container: small, consistent left gutter */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section title (stick to left) */}
+        <div className="mb-6">
+          <p className="text-sm font-semibold text-primary uppercase tracking-wider">
+            Tentang Kami
+          </p>
+          <h2 className="text-3xl md:text-4xl font-bold text-dark mt-1">
+            About Us
+          </h2>
+        </div>
 
-            <div className="relative rounded-lg shadow-xl overflow-hidden">
-              {/* Custom Aspect Ratio Container (approx 9:5) */}
-              <div className="relative w-full" style={{ paddingTop: "55.6%" }}>
+        {/* 12-col grid, stable visual ratio: 7/12 (video) : 5/12 (stats) */}
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+          {/* Left: Video */}
+          <div className="lg:col-span-7">
+            <div className="relative w-full overflow-hidden rounded-xl shadow-lg bg-black">
+              {/* Custom aspect ratio ~ 9:5 */}
+              <div className="relative w-full aspect-[9/5]">
                 {isPlaying ? (
                   <iframe
-                    className="absolute top-0 left-0 w-full h-full"
-                    src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`}
-                    title="YouTube video player"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    className="absolute inset-0 h-full w-full"
+                    src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`}
+                    title="About Video"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowFullScreen
-                  ></iframe>
+                  />
                 ) : (
                   <>
-                    <img
-                      src={`https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`}
-                      alt="Delta Indonesia Company Profile"
-                      className="absolute top-0 left-0 w-full h-full object-cover"
-                    />
-                    <div className="absolute top-0 left-0 w-full h-full bg-slate-900 bg-opacity-60 flex items-center justify-center">
-                      <button
-                        onClick={() => setIsPlaying(true)}
-                        className="w-20 h-20 bg-white rounded-full flex items-center justify-center transform transition-transform duration-300 hover:scale-110"
-                        aria-label="Play video"
-                      >
-                        <FaPlay className="text-blue-600 text-2xl ml-1" />
-                      </button>
-                    </div>
+                    {/* Poster placeholder — replace with your thumbnail */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900" />
+                    {/* Play button */}
+                    <button
+                      onClick={() => setIsPlaying(true)}
+                      aria-label="Play video"
+                      className="absolute inset-0 m-auto w-16 h-16 sm:w-20 sm:h-20 bg-white text-primary rounded-full flex items-center justify-center shadow-xl transition-transform hover:scale-105"
+                      style={{ width: "5rem", height: "5rem" }}
+                    >
+                      <FaPlay className="ml-1 text-2xl" />
+                    </button>
                   </>
                 )}
               </div>
             </div>
           </div>
 
-          {/* Right Column: Stats (35% width) */}
-          <div className="w-full lg:w-[35%] mt-12 lg:mt-0 lg:pl-10 flex flex-col justify-center">
-            <div className="mb-12">
-              <h3 className="text-5xl lg:text-6xl font-bold text-gray-800">
-                Sejak
-              </h3>
-              <p className="mt-2 text-gray-600 max-w-sm">
-                Berdiri sejak <span className="font-semibold">2001</span>{" "}
-                berkomitmen membangun kemajuan industri secara berkelanjutan.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-5xl lg:text-6xl font-bold text-gray-800">
-                Klien
-              </h3>
-              <p className="mt-2 text-gray-600 max-w-sm">
-                Dipercaya oleh{" "}
-                <span className="font-semibold">lebih dari 1,100</span>{" "}
-                perusahaan di seluruh Indonesia dalam menghadirkan solusi HR dan
-                keselamatan yang ahli.
-              </p>
+          {/* Right: Stats/Copy */}
+          <div className="lg:col-span-5">
+            <div className="space-y-8">
+              {/* Since */}
+              <div className="border-b border-gray-200 pb-6">
+                <h3 className="text-3xl font-bold text-dark mb-2">Sejak</h3>
+                <p className="text-gray-700 leading-relaxed">
+                  Berdiri sejak <span className="font-semibold">2001</span>{" "}
+                  berkomitmen membangun kemajuan industri secara berkelanjutan.
+                </p>
+              </div>
+
+              {/* Clients */}
+              <div className="border-b border-gray-200 pb-6">
+                <h3 className="text-3xl font-bold text-dark mb-2">Klien</h3>
+                <p className="text-gray-700 leading-relaxed">
+                  Dipercaya oleh{" "}
+                  <span className="font-semibold">lebih dari 1,100</span>{" "}
+                  perusahaan di seluruh Indonesia dalam menghadirkan solusi HR
+                  dan keselamatan yang ahli.
+                </p>
+              </div>
+
+              {/* CTA (optional, aligns left) 
+              <button className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                Get a Quote <span className="-mt-0.5">→</span>
+              </button>
+              */}
             </div>
           </div>
         </div>

@@ -202,7 +202,7 @@ const Hero = () => {
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-8">
                       <button
                         onClick={() => scrollToSection("layanan")}
-                        className="bg-secondary text-white px-8 py-3 rounded-lg font-semibold hover:bg-orange-600 transition transform hover:scale-105 shadow-lg"
+                        className="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition transform hover:scale-105 shadow-lg"
                       >
                         Lihat Layanan
                       </button>

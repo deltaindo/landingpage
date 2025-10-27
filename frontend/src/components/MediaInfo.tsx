@@ -75,13 +75,11 @@ const MediaInfo = () => {
   };
 
   return (
-    <section className="py-20 bg-gray-50">
+    <section className="py-20 bg-gray-50" id="media">
       <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
+        {/* Header - FIXED: Removed duplicate text */}
         <div className="mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-dark mb-4">
-            Latest <span className="font-normal">Updates</span>
-          </h2>
+          <h2 className="text-4xl font-bold text-dark mb-4">Latest Updates</h2>
           <p className="text-lg text-gray-600 max-w-3xl">
             Stay informed with our latest media releases, featuring key
             announcements, insights, and developments.
@@ -90,7 +88,7 @@ const MediaInfo = () => {
 
         {/* Cards Grid with Carousel */}
         <div className="relative">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {visibleItems.map((item, index) => {
               const isFeatured =
                 item.type === "featured" && currentIndex === 0 && index === 0;
@@ -98,66 +96,68 @@ const MediaInfo = () => {
               return (
                 <div
                   key={index}
-                  className={`relative group cursor-pointer ${
-                    isFeatured ? "md:col-span-1 md:row-span-2" : ""
-                  }`}
+                  className={`${
+                    isFeatured ? "md:col-span-1 md:row-span-2" : "md:col-span-1"
+                  } relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all group bg-white`}
                 >
                   {/* Card */}
-                  <div className="relative h-full bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
+                  <div
+                    className={`relative ${isFeatured ? "h-full" : "h-full"}`}
+                  >
                     {/* Image Section */}
                     <div
                       className={`relative ${
-                        isFeatured ? "h-[500px]" : "h-64"
+                        isFeatured ? "h-full" : "h-64"
                       } overflow-hidden`}
                     >
                       {/* Placeholder Background */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-blue-400 via-blue-500 to-teal-500">
-                        {/* You can add actual images here */}
-                        <div className="absolute inset-0 flex items-center justify-center text-white text-6xl opacity-30">
-                          📸
-                        </div>
+                      <div
+                        className="absolute inset-0 bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600"
+                        style={{
+                          backgroundImage: `url('${item.image}')`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                        }}
+                      >
+                        {/* Fallback gradient */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-blue-600"></div>
                       </div>
 
-                      {/* Category Badge */}
-                      <div className="absolute top-4 left-4 z-10">
-                        <span
-                          className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                            item.type === "featured"
-                              ? "bg-purple-600 text-white"
-                              : "bg-teal-500 text-white"
-                          }`}
-                        >
-                          {item.type === "featured" ? (
-                            <span className="flex items-center space-x-2">
-                              <span>🏆</span>
-                              <span>Featured</span>
-                            </span>
-                          ) : (
-                            item.category
-                          )}
-                        </span>
-                      </div>
+                      {/* Category Badge - FIXED */}
+                      {item.type === "featured" ? (
+                        <div className="absolute top-4 left-4 z-20">
+                          <div className="bg-white text-primary px-4 py-2 rounded-full font-semibold text-sm shadow-lg flex items-center space-x-2">
+                            <span>Featured</span>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="absolute top-4 left-4 z-20">
+                          <div className="bg-primary text-white px-4 py-2 rounded-full font-semibold text-sm shadow-lg">
+                            {item.category}
+                          </div>
+                        </div>
+                      )}
 
                       {/* Read More Button (Top Right) */}
-                      <button className="absolute top-4 right-4 z-10 bg-teal-500 text-white p-3 rounded-full hover:bg-teal-600 transition group-hover:scale-110">
-                        <FaArrowRight className="text-lg" />
+                      <button className="absolute top-4 right-4 z-20 bg-primary text-white p-3 rounded-full hover:bg-blue-700 transition shadow-lg group-hover:scale-110">
+                        <FaArrowRight className="text-sm" />
                       </button>
 
                       {/* Gradient Overlay (for featured) */}
                       {isFeatured && (
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10"></div>
                       )}
 
                       {/* Content Overlay for Featured */}
                       {isFeatured && (
-                        <div className="absolute bottom-0 left-0 right-0 p-6 text-white z-10">
-                          <p className="text-sm text-gray-300 mb-2">
+                        <div className="absolute bottom-0 left-0 right-0 p-6 z-20 text-white">
+                          <p className="text-sm mb-2 text-blue-200">
                             {item.category}
                           </p>
-                          <p className="text-sm text-gray-300 mb-3">
+                          <p className="text-sm mb-3 text-blue-200">
                             {item.date}
                           </p>
-                          <h3 className="text-2xl font-bold mb-3">
+                          <h3 className="text-2xl font-bold leading-tight">
                             {item.title}
                           </h3>
                         </div>
@@ -167,18 +167,13 @@ const MediaInfo = () => {
                     {/* Content Section (for non-featured) */}
                     {!isFeatured && (
                       <div className="p-6">
-                        <div className="flex items-center justify-between mb-3">
-                          <span className="text-sm font-semibold text-gray-600">
-                            {item.category}
-                          </span>
-                          <span className="text-sm text-gray-500">
-                            {item.date}
-                          </span>
-                        </div>
-                        <h3 className="text-xl font-bold text-dark mb-3 group-hover:text-primary transition">
+                        <p className="text-sm text-gray-500 mb-3">
+                          {item.date}
+                        </p>
+                        <h3 className="text-xl font-bold text-dark mb-3 line-clamp-2">
                           {item.title}
                         </h3>
-                        <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
+                        <p className="text-gray-600 text-sm line-clamp-3">
                           {item.description}
                         </p>
                       </div>
@@ -190,7 +185,7 @@ const MediaInfo = () => {
           </div>
 
           {/* Navigation Controls */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-center space-x-4 mt-12">
             {/* Left Arrow */}
             <button
               onClick={prevSlide}
@@ -198,22 +193,22 @@ const MediaInfo = () => {
               className={`p-4 rounded-full transition-all ${
                 currentIndex === 0
                   ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  : "bg-teal-500 text-white hover:bg-teal-600"
+                  : "bg-primary text-white hover:bg-blue-600"
               }`}
               aria-label="Previous slide"
             >
-              <FaChevronLeft className="text-xl" />
+              <FaChevronLeft />
             </button>
 
             {/* Dot Navigation */}
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2">
               {Array.from({ length: maxSlides + 1 }).map((_, index) => (
                 <button
                   key={index}
                   onClick={() => goToSlide(index)}
                   className={`transition-all duration-300 ${
                     index === currentIndex
-                      ? "bg-purple-600 w-12 h-3 rounded-full"
+                      ? "bg-primary w-12 h-3 rounded-full"
                       : "bg-gray-400 w-3 h-3 rounded-full hover:bg-gray-500"
                   }`}
                   aria-label={`Go to slide ${index + 1}`}
@@ -228,21 +223,21 @@ const MediaInfo = () => {
               className={`p-4 rounded-full transition-all ${
                 currentIndex >= maxSlides
                   ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  : "bg-teal-500 text-white hover:bg-teal-600"
+                  : "bg-primary text-white hover:bg-blue-600"
               }`}
               aria-label="Next slide"
             >
-              <FaChevronRight className="text-xl" />
+              <FaChevronRight />
             </button>
           </div>
+        </div>
 
-          {/* View All Button */}
-          <div className="flex justify-center mt-12">
-            <button className="flex items-center space-x-2 bg-teal-500 text-white px-8 py-4 rounded-lg hover:bg-teal-600 transition group">
-              <span className="font-semibold">View all</span>
-              <FaArrowRight className="transform group-hover:translate-x-1 transition-transform" />
-            </button>
-          </div>
+        {/* View All Button */}
+        <div className="flex justify-center mt-12">
+          <button className="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition flex items-center space-x-2 shadow-lg">
+            <span>View all</span>
+            <FaArrowRight />
+          </button>
         </div>
       </div>
     </section>
