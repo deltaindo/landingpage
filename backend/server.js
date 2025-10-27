@@ -42,11 +42,10 @@ app.get("/api", (req, res) => {
   });
 });
 
-// Only include routes that exist
-// app.use('/api/blog', require('./src/routes/blog'));
-// app.use('/api/courses', require('./src/routes/course'));
-// app.use('/api/registrations', require('./src/routes/registration'));
-// app.use('/api/form-templates', require('./src/routes/formTemplate'));
+// All routes
+app.use("/api/courses", require("./src/routes/course"));
+app.use("/api/registrations", require("./src/routes/registration"));
+app.use("/api/form-templates", require("./src/routes/formTemplate"));
 app.use("/api/contact", require("./src/routes/contact"));
 app.use("/api/subscription", require("./src/routes/subscription"));
 app.use("/api/auth", require("./src/routes/auth"));
