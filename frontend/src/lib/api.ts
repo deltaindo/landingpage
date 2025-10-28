@@ -1,77 +1,60 @@
-import axios from "axios";
-import { ContactFormData, Training, ApiResponse } from "@/types";
+// API Base URL
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
-
-const api = axios.create({
-  baseURL: API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
-// Blog API
-export const blogAPI = {
-  getAll: (params?: any) => {
-    const queryString = new URLSearchParams(params).toString();
-    return apiCall(`/blog?${queryString}`);
-  },
-
-  getBySlug: (slug: string) => {
-    return apiCall(`/blog/${slug}`);
-  },
-
-  create: async (formData: FormData) => {
-    const response = await fetch(`${API_BASE_URL}/blog`, {
-      method: "POST",
-      body: formData,
+// Generic API call function
+async function apiCall(endpoint: string, options: RequestInit = {}) {
+  try {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || "Failed to create blog post");
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || `API Error: ${response.status}`);
     }
 
     return response.json();
-  },
+  } catch (error) {
+    console.error("API Call Error:", error);
+    throw error;
+  }
+}
 
-  update: async (id: string, formData: FormData) => {
-    const response = await fetch(`${API_BASE_URL}/blog/${id}`, {
-      method: "PUT",
-      body: formData,
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || "Failed to update blog post");
-    }
-
-    return response.json();
-  },
-
-  delete: (id: string) => {
-    return apiCall(`/blog/${id}`, {
-      method: "DELETE",
-    });
-  },
-
-  publish: (id: string) => {
-    return apiCall(`/blog/${id}/publish`, {
-      method: "PATCH",
-    });
-  },
-};
-
+// =====================================================
+// COURSE API
+// =====================================================
 export const courseAPI = {
-  getAll: (params?: any) => {
-    const queryString = new URLSearchParams(params).toString();
-    return apiCall(`/courses?${queryString}`);
+  // Get all courses with filters
+  getAll: async (params?: {
+    category?: string;
+    status?: string;
+    featured?: string;
+    search?: string;
+    page?: number;
+    limit?: number;
+  }) => {
+    const queryString = params
+      ? new URLSearchParams(params as any).toString()
+      : "";
+    return apiCall(`/courses${queryString ? `?${queryString}` : ""}`);
   },
 
+  // Get single course by ID
   getById: (id: string) => {
     return apiCall(`/courses/${id}`);
   },
 
+  // Get featured courses
+  getFeatured: () => {
+    return apiCall("/courses/featured/list");
+  },
+
+  // Create course (admin)
   create: (data: any) => {
     return apiCall("/courses", {
       method: "POST",
@@ -79,101 +62,262 @@ export const courseAPI = {
     });
   },
 
+  // Update course (admin)
   update: (id: string, data: any) => {
     return apiCall(`/courses/${id}`, {
       method: "PUT",
       body: JSON.stringify(data),
     });
   },
-};
 
-export const contactAPI = {
-  sendMessage: async (data: ContactFormData): Promise<ApiResponse<any>> => {
-    try {
-      const response = await api.post("/contact", data);
-      return response.data;
-    } catch (error: any) {
-      throw new Error(
-        error.response?.data?.message || "Failed to send message"
-      );
-    }
+  // Delete course (admin)
+  delete: (id: string) => {
+    return apiCall(`/courses/${id}`, {
+      method: "DELETE",
+    });
   },
 };
 
-// Form Template API
+// =====================================================
+// FORM TEMPLATE API
+// =====================================================
 export const formTemplateAPI = {
+  // Get all form templates
   getAll: () => {
     return apiCall("/form-templates");
   },
 
+  // Get form template by ID
   getById: (id: string) => {
     return apiCall(`/form-templates/${id}`);
   },
 
+  // Get default form template
   getDefault: () => {
     return apiCall("/form-templates/default");
   },
+
+  // Create form template (admin)
+  create: (data: any) => {
+    return apiCall("/form-templates", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
 };
 
-// Registration API
+// =====================================================
+// REGISTRATION API
+// =====================================================
 export const registrationAPI = {
+  // Create new registration with file uploads
   create: async (formData: FormData) => {
-    const response = await fetch(`${API_BASE_URL}/registrations`, {
-      method: "POST",
-      body: formData, // Don't set Content-Type for FormData
-    });
+    try {
+      const response = await fetch(`${API_BASE_URL}/registrations`, {
+        method: "POST",
+        body: formData, // Don't set Content-Type for FormData
+      });
 
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || "Registration failed");
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "Registration failed");
+      }
+
+      return response.json();
+    } catch (error) {
+      console.error("Registration Error:", error);
+      throw error;
     }
-
-    return response.json();
   },
 
-  getAll: (params?: any) => {
-    const queryString = new URLSearchParams(params).toString();
-    return apiCall(`/registrations?${queryString}`);
+  // Get all registrations (admin)
+  getAll: (params?: { status?: string; page?: number; limit?: number }) => {
+    const queryString = params
+      ? new URLSearchParams(params as any).toString()
+      : "";
+    return apiCall(`/registrations${queryString ? `?${queryString}` : ""}`);
   },
 
+  // Get registration by ID
   getById: (id: string) => {
     return apiCall(`/registrations/${id}`);
   },
-};
 
-export const trainingAPI = {
-  getAll: async (): Promise<ApiResponse<Training[]>> => {
-    try {
-      const response = await api.get("/training");
-      return response.data;
-    } catch (error: any) {
-      throw new Error(
-        error.response?.data?.message || "Failed to fetch trainings"
-      );
-    }
-  },
-
-  getByCategory: async (category: string): Promise<ApiResponse<Training[]>> => {
-    try {
-      const response = await api.get(`/training?category=${category}`);
-      return response.data;
-    } catch (error: any) {
-      throw new Error(
-        error.response?.data?.message || "Failed to fetch trainings"
-      );
-    }
+  // Update registration status (admin)
+  updateStatus: (id: string, status: string) => {
+    return apiCall(`/registrations/${id}/status`, {
+      method: "PATCH",
+      body: JSON.stringify({ status }),
+    });
   },
 };
 
+// =====================================================
+// BLOG API
+// =====================================================
+export const blogAPI = {
+  // Get all blog posts
+  getAll: (params?: {
+    type?: string;
+    status?: string;
+    category?: string;
+    search?: string;
+    page?: number;
+    limit?: number;
+  }) => {
+    const queryString = params
+      ? new URLSearchParams(params as any).toString()
+      : "";
+    return apiCall(`/blog${queryString ? `?${queryString}` : ""}`);
+  },
+
+  // Get blog post by slug
+  getBySlug: (slug: string) => {
+    return apiCall(`/blog/${slug}`);
+  },
+
+  // Get blog post by ID
+  getById: (id: string) => {
+    return apiCall(`/blog/id/${id}`);
+  },
+
+  // Create blog post (admin)
+  create: async (formData: FormData) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/blog`, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "Failed to create blog post");
+      }
+
+      return response.json();
+    } catch (error) {
+      console.error("Blog Create Error:", error);
+      throw error;
+    }
+  },
+
+  // Update blog post (admin)
+  update: async (id: string, formData: FormData) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/blog/${id}`, {
+        method: "PUT",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "Failed to update blog post");
+      }
+
+      return response.json();
+    } catch (error) {
+      console.error("Blog Update Error:", error);
+      throw error;
+    }
+  },
+
+  // Delete blog post (admin)
+  delete: (id: string) => {
+    return apiCall(`/blog/${id}`, {
+      method: "DELETE",
+    });
+  },
+
+  // Publish blog post (admin)
+  publish: (id: string) => {
+    return apiCall(`/blog/${id}/publish`, {
+      method: "PATCH",
+    });
+  },
+
+  // Increment view count
+  incrementView: (id: string) => {
+    return apiCall(`/blog/${id}/view`, {
+      method: "POST",
+    });
+  },
+};
+
+// =====================================================
+// CONTACT API
+// =====================================================
+export const contactAPI = {
+  // Submit contact form
+  submit: (data: {
+    name: string;
+    email: string;
+    phone: string;
+    message: string;
+  }) => {
+    return apiCall("/contact", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+};
+
+// =====================================================
+// SUBSCRIPTION API
+// =====================================================
 export const subscriptionAPI = {
-  subscribe: async (email: string): Promise<ApiResponse<any>> => {
-    try {
-      const response = await api.post("/subscription", { email });
-      return response.data;
-    } catch (error: any) {
-      throw new Error(error.response?.data?.message || "Failed to subscribe");
-    }
+  // Subscribe to newsletter
+  subscribe: (email: string) => {
+    return apiCall("/subscription", {
+      method: "POST",
+      body: JSON.stringify({ email }),
+    });
   },
 };
 
-export default api;
+// =====================================================
+// AUTH API
+// =====================================================
+export const authAPI = {
+  // Login
+  login: (email: string, password: string) => {
+    return apiCall("/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+    });
+  },
+
+  // Register (for initial setup)
+  register: (data: {
+    email: string;
+    password: string;
+    name: string;
+    role?: string;
+  }) => {
+    return apiCall("/auth/register", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  // Get current user
+  getMe: (token: string) => {
+    return apiCall("/auth/me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  },
+};
+
+// =====================================================
+// EXPORT ALL
+// =====================================================
+export default {
+  course: courseAPI,
+  formTemplate: formTemplateAPI,
+  registration: registrationAPI,
+  blog: blogAPI,
+  contact: contactAPI,
+  subscription: subscriptionAPI,
+  auth: authAPI,
+};
