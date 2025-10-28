@@ -26,7 +26,7 @@ const connectDB = async () => {
 
     // Sync models (creates tables if they don't exist)
     if (process.env.NODE_ENV === "development") {
-      await sequelize.sync({ alter: true });
+      //await sequelize.sync({ alter: true });
       console.log("Database synchronized");
     }
   } catch (error) {
