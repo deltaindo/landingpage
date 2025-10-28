@@ -1,4 +1,7 @@
 // GET single registration
+const express = require("express");
+const router = express.Router();
+
 router.get("/:id", async (req, res, next) => {
   try {
     const registration = await Registration.findByPk(req.params.id, {
@@ -33,3 +36,5 @@ router.get("/:id", async (req, res, next) => {
     next(error);
   }
 });
+
+module.exports = router;
