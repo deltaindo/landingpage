@@ -1,58 +1,66 @@
 const { sequelize } = require("../config/database");
 
 // Import all models
+const User = require("./User");
 const Blog = require("./Blog");
 const Course = require("./Course");
 const CourseSchedule = require("./CourseSchedule");
 const Registration = require("./Registration");
 const RegistrationDocument = require("./RegistrationDocument");
 const FormTemplate = require("./FormTemplate");
-const User = require("./User");
 
-// Define associations
+// =====================================================
+// DEFINE ASSOCIATIONS - FIXES ALIAS ERRORS
+// =====================================================
+
+// Course <-> CourseSchedule
 Course.hasMany(CourseSchedule, {
-  foreignKey: "course_id",
-  as: "schedules",
+  foreignKey: "courseId",
+  as: "courseSchedules", // ✅ Match this alias everywhere
 });
 CourseSchedule.belongsTo(Course, {
-  foreignKey: "course_id",
+  foreignKey: "courseId",
   as: "course",
 });
 
+// Course <-> Registration
 Course.hasMany(Registration, {
-  foreignKey: "course_id",
+  foreignKey: "courseId",
   as: "registrations",
 });
 Registration.belongsTo(Course, {
-  foreignKey: "course_id",
+  foreignKey: "courseId",
   as: "course",
 });
 
-Registration.belongsTo(CourseSchedule, {
-  foreignKey: "schedule_id",
-  as: "courseSchedule",
-});
+// CourseSchedule <-> Registration
 CourseSchedule.hasMany(Registration, {
-  foreignKey: "schedule_id",
+  foreignKey: "scheduleId",
   as: "registrations",
 });
+Registration.belongsTo(CourseSchedule, {
+  foreignKey: "scheduleId",
+  as: "courseSchedule", // ✅ Use 'courseSchedule' NOT 'schedule'
+});
 
+// Registration <-> RegistrationDocument
 Registration.hasMany(RegistrationDocument, {
-  foreignKey: "registration_id",
+  foreignKey: "registrationId",
   as: "documents",
 });
 RegistrationDocument.belongsTo(Registration, {
-  foreignKey: "registration_id",
+  foreignKey: "registrationId",
   as: "registration",
 });
 
+// Export all models
 module.exports = {
   sequelize,
+  User,
   Blog,
   Course,
   CourseSchedule,
   Registration,
   RegistrationDocument,
   FormTemplate,
-  User,
 };

@@ -10,7 +10,7 @@ const FormTemplate = sequelize.define(
       primaryKey: true,
     },
     name: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(255),
       unique: true,
       allowNull: false,
     },
@@ -32,7 +32,11 @@ const FormTemplate = sequelize.define(
     },
   },
   {
+    tableName: "formTemplates",
     timestamps: true,
+    underscored: false,
+    createdAt: "createdAt",
+    updatedAt: "updatedAt",
   }
 );
 

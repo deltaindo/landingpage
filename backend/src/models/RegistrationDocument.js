@@ -9,34 +9,35 @@ const RegistrationDocument = sequelize.define(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    registration_id: {
+    registrationId: {
       type: DataTypes.UUID,
       allowNull: false,
+      field: "registrationId",
     },
-    document_type: {
-      type: DataTypes.STRING,
+    documentType: {
+      type: DataTypes.STRING(100),
       allowNull: false,
     },
-    document_label: {
-      type: DataTypes.STRING,
+    documentLabel: {
+      type: DataTypes.STRING(255),
     },
-    file_url: {
-      type: DataTypes.STRING,
+    fileUrl: {
+      type: DataTypes.STRING(500),
       allowNull: false,
     },
-    file_size: {
+    fileSize: {
       type: DataTypes.INTEGER,
     },
-    file_type: {
-      type: DataTypes.STRING,
+    fileType: {
+      type: DataTypes.STRING(50),
     },
-    uploaded_at: {
+    uploadedAt: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
     },
   },
   {
-    tableName: "registration_documents",
+    tableName: "registrationDocuments",
     timestamps: false,
   }
 );

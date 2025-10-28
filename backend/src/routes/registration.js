@@ -1,43 +1,35 @@
-const express = require("express");
-const router = express.Router();
-const registrationController = require("../controllers/registrationController");
-const { authenticate, authorize } = require("../middleware/auth");
-const upload = require("../middleware/upload");
+// GET single registration
+router.get("/:id", async (req, res, next) => {
+  try {
+    const registration = await Registration.findByPk(req.params.id, {
+      include: [
+        {
+          model: Course,
+          as: "course",
+        },
+        {
+          model: CourseSchedule,
+          as: "courseSchedule", // ✅ Use 'courseSchedule' NOT 'schedule'
+        },
+        {
+          model: RegistrationDocument,
+          as: "documents",
+        },
+      ],
+    });
 
-// Public route
-router.post(
-  "/",
-  upload.array("documents", 5),
-  registrationController.createRegistration
-);
+    if (!registration) {
+      return res.status(404).json({
+        success: false,
+        error: "Registration not found",
+      });
+    }
 
-// Protected routes (admin only)
-router.get(
-  "/",
-  authenticate,
-  authorize("admin"),
-  registrationController.getAllRegistrations
-);
-
-router.get(
-  "/stats",
-  authenticate,
-  authorize("admin"),
-  registrationController.getRegistrationStats
-);
-
-router.get(
-  "/:id",
-  authenticate,
-  authorize("admin"),
-  registrationController.getRegistrationById
-);
-
-router.patch(
-  "/:id/status",
-  authenticate,
-  authorize("admin"),
-  registrationController.updateRegistrationStatus
-);
-
-module.exports = router;
+    res.json({
+      success: true,
+      data: registration,
+    });
+  } catch (error) {
+    next(error);
+  }
+});

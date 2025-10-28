@@ -9,13 +9,13 @@ const Course = sequelize.define(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    name: {
-      type: DataTypes.STRING,
+    code: {
+      type: DataTypes.STRING(50),
+      unique: true,
       allowNull: false,
     },
-    code: {
-      type: DataTypes.STRING,
-      unique: true,
+    name: {
+      type: DataTypes.STRING(255),
       allowNull: false,
     },
     category: {
@@ -23,12 +23,15 @@ const Course = sequelize.define(
       allowNull: false,
     },
     certification: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(255),
       allowNull: false,
     },
-    duration: {
-      type: DataTypes.JSONB,
-      defaultValue: { value: 0, unit: "days" },
+    durationValue: {
+      type: DataTypes.INTEGER,
+    },
+    durationUnit: {
+      type: DataTypes.STRING(20),
+      defaultValue: "days",
     },
     description: {
       type: DataTypes.TEXT,
@@ -36,30 +39,33 @@ const Course = sequelize.define(
     },
     objectives: {
       type: DataTypes.ARRAY(DataTypes.TEXT),
-      defaultValue: [],
     },
     prerequisites: {
       type: DataTypes.ARRAY(DataTypes.TEXT),
-      defaultValue: [],
     },
     syllabus: {
       type: DataTypes.JSONB,
       defaultValue: [],
     },
-    price: {
-      type: DataTypes.JSONB,
-      defaultValue: { regular: 0, earlyBird: 0, group: 0, currency: "IDR" },
+    priceRegular: {
+      type: DataTypes.DECIMAL(15, 2),
     },
-    schedule: {
-      type: DataTypes.JSONB,
-      defaultValue: [],
+    priceEarlyBird: {
+      type: DataTypes.DECIMAL(15, 2),
+    },
+    priceGroup: {
+      type: DataTypes.DECIMAL(15, 2),
+    },
+    currency: {
+      type: DataTypes.STRING(10),
+      defaultValue: "IDR",
     },
     instructor: {
       type: DataTypes.JSONB,
       defaultValue: {},
     },
     images: {
-      type: DataTypes.ARRAY(DataTypes.JSONB),
+      type: DataTypes.JSONB,
       defaultValue: [],
     },
     featured: {
@@ -74,25 +80,21 @@ const Course = sequelize.define(
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
-    rating: {
-      type: DataTypes.JSONB,
-      defaultValue: { average: 0, count: 0 },
+    ratingAverage: {
+      type: DataTypes.DECIMAL(3, 2),
+      defaultValue: 0.0,
+    },
+    ratingCount: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
     },
   },
   {
+    tableName: "courses",
     timestamps: true,
-    hooks: {
-      beforeValidate: (course) => {
-        if (!course.code) {
-          const prefix = course.category.substring(0, 3).toUpperCase();
-          const random = Math.random()
-            .toString(36)
-            .substring(2, 8)
-            .toUpperCase();
-          course.code = `${prefix}-${random}`;
-        }
-      },
-    },
+    underscored: false, // Use camelCase
+    createdAt: "createdAt",
+    updatedAt: "updatedAt",
   }
 );
 

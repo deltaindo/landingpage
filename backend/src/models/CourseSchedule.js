@@ -9,15 +9,16 @@ const CourseSchedule = sequelize.define(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    course_id: {
+    courseId: {
       type: DataTypes.UUID,
       allowNull: false,
+      field: "courseId", // Match database column
     },
-    start_date: {
+    startDate: {
       type: DataTypes.DATE,
       allowNull: false,
     },
-    end_date: {
+    endDate: {
       type: DataTypes.DATE,
       allowNull: false,
     },
@@ -27,10 +28,10 @@ const CourseSchedule = sequelize.define(
     type: {
       type: DataTypes.ENUM("online", "offline", "hybrid"),
     },
-    max_participants: {
+    maxParticipants: {
       type: DataTypes.INTEGER,
     },
-    current_participants: {
+    currentParticipants: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
@@ -38,14 +39,16 @@ const CourseSchedule = sequelize.define(
       type: DataTypes.ENUM("open", "full", "closed", "cancelled"),
       defaultValue: "open",
     },
-    whatsapp_group: {
+    whatsappGroup: {
       type: DataTypes.STRING,
     },
   },
   {
-    tableName: "course_schedules",
+    tableName: "courseSchedules",
     timestamps: true,
-    underscored: true,
+    underscored: false,
+    createdAt: "createdAt",
+    updatedAt: "updatedAt",
   }
 );
 

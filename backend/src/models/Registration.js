@@ -1,6 +1,5 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../config/database");
-const Course = require("./Course");
 
 const Registration = sequelize.define(
   "Registration",
@@ -11,46 +10,86 @@ const Registration = sequelize.define(
       primaryKey: true,
     },
     registrationNumber: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(50),
       unique: true,
       allowNull: false,
     },
     courseId: {
       type: DataTypes.UUID,
+      field: "courseId",
+    },
+    scheduleId: {
+      type: DataTypes.UUID,
+      field: "scheduleId",
+    },
+
+    // Personal Information
+    fullName: {
+      type: DataTypes.STRING(255),
       allowNull: false,
-      references: {
-        model: Course,
-        key: "id",
-      },
     },
-    schedule: {
-      type: DataTypes.JSONB,
-      defaultValue: {},
+    nik: {
+      type: DataTypes.STRING(20),
+      allowNull: false,
     },
+    tempatLahir: {
+      type: DataTypes.STRING(100),
+    },
+    tanggalLahir: {
+      type: DataTypes.DATE,
+    },
+    golonganDarah: {
+      type: DataTypes.STRING(10),
+    },
+
+    // Address
+    provinsi: DataTypes.STRING(100),
+    kabupaten: DataTypes.STRING(100),
+    kecamatan: DataTypes.STRING(100),
+    kelurahan: DataTypes.STRING(100),
+    alamat: DataTypes.TEXT,
+
+    // Contact
+    email: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+    },
+    noWhatsapp: {
+      type: DataTypes.STRING(20),
+      allowNull: false,
+    },
+
+    // Education
+    pendidikanTerakhir: DataTypes.STRING(50),
+    namaSekolah: DataTypes.STRING(255),
+    noIjazah: DataTypes.STRING(50),
+    tanggalIjazah: DataTypes.DATE,
+
+    // Company
+    instansi: DataTypes.STRING(255),
+    bidangUsaha: DataTypes.STRING(100),
+    jabatan: DataTypes.STRING(100),
+    alamatPerusahaan: DataTypes.TEXT,
+    tlpKantor: DataTypes.STRING(20),
+    emailPerusahaan: DataTypes.STRING(100),
+
+    // Form Data
     formData: {
       type: DataTypes.JSONB,
-      allowNull: false,
-    },
-    personalInfo: {
-      type: DataTypes.JSONB,
       defaultValue: {},
     },
-    companyInfo: {
-      type: DataTypes.JSONB,
-      defaultValue: {},
+
+    // Payment
+    paymentMethod: DataTypes.STRING(50),
+    paymentAmount: DataTypes.DECIMAL(15, 2),
+    paymentStatus: {
+      type: DataTypes.ENUM("pending", "paid", "failed", "refunded"),
+      defaultValue: "pending",
     },
-    documentsData: {
-      type: DataTypes.ARRAY(DataTypes.JSONB),
-      defaultValue: [],
-    },
-    paymentInfo: {
-      type: DataTypes.JSONB,
-      defaultValue: {
-        method: null,
-        amount: 0,
-        status: "pending",
-      },
-    },
+    paidAt: DataTypes.DATE,
+    invoiceNumber: DataTypes.STRING(50),
+
+    // Status
     status: {
       type: DataTypes.ENUM(
         "pending",
@@ -61,50 +100,16 @@ const Registration = sequelize.define(
       ),
       defaultValue: "pending",
     },
-    notes: {
-      type: DataTypes.TEXT,
-    },
-    adminNotes: {
-      type: DataTypes.TEXT,
-    },
+    notes: DataTypes.TEXT,
+    adminNotes: DataTypes.TEXT,
   },
   {
+    tableName: "registrations",
     timestamps: true,
-    hooks: {
-      beforeCreate: async (registration) => {
-        if (!registration.registrationNumber) {
-          const date = new Date();
-          const year = date.getFullYear().toString().substring(2);
-          const month = (date.getMonth() + 1).toString().padStart(2, "0");
-
-          // Get count of registrations this month
-          const count = await Registration.count({
-            where: {
-              createdAt: {
-                [sequelize.Sequelize.Op.gte]: new Date(
-                  date.getFullYear(),
-                  date.getMonth(),
-                  1
-                ),
-                [sequelize.Sequelize.Op.lt]: new Date(
-                  date.getFullYear(),
-                  date.getMonth() + 1,
-                  1
-                ),
-              },
-            },
-          });
-
-          const sequence = (count + 1).toString().padStart(4, "0");
-          registration.registrationNumber = `REG-${year}${month}-${sequence}`;
-        }
-      },
-    },
+    underscored: false,
+    createdAt: "createdAt",
+    updatedAt: "updatedAt",
   }
 );
-
-// Define associations
-Registration.belongsTo(Course, { foreignKey: "courseId" });
-Course.hasMany(Registration, { foreignKey: "courseId" });
 
 module.exports = Registration;

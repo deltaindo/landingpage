@@ -11,19 +11,16 @@ const User = sequelize.define(
       primaryKey: true,
     },
     email: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(100),
       unique: true,
       allowNull: false,
-      validate: {
-        isEmail: true,
-      },
     },
     password: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(255),
       allowNull: false,
     },
     name: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(255),
       allowNull: false,
     },
     role: {
@@ -36,18 +33,20 @@ const User = sequelize.define(
     },
   },
   {
+    tableName: "users",
     timestamps: true,
+    underscored: true, // users table uses snake_case
+    createdAt: "created_at",
+    updatedAt: "updated_at",
     hooks: {
       beforeCreate: async (user) => {
         if (user.password) {
-          const salt = await bcrypt.genSalt(10);
-          user.password = await bcrypt.hash(user.password, salt);
+          user.password = await bcrypt.hash(user.password, 10);
         }
       },
       beforeUpdate: async (user) => {
         if (user.changed("password")) {
-          const salt = await bcrypt.genSalt(10);
-          user.password = await bcrypt.hash(user.password, salt);
+          user.password = await bcrypt.hash(user.password, 10);
         }
       },
     },
@@ -55,7 +54,7 @@ const User = sequelize.define(
 );
 
 User.prototype.comparePassword = async function (candidatePassword) {
-  return await bcrypt.compare(candidatePassword, this.password);
+  return bcrypt.compare(candidatePassword, this.password);
 };
 
 module.exports = User;

@@ -1,6 +1,5 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../config/database");
-const slugify = require("slugify");
 
 const Blog = sequelize.define(
   "Blog",
@@ -11,11 +10,11 @@ const Blog = sequelize.define(
       primaryKey: true,
     },
     title: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(255),
       allowNull: false,
     },
     slug: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(255),
       unique: true,
       allowNull: false,
     },
@@ -32,20 +31,20 @@ const Blog = sequelize.define(
       allowNull: false,
     },
     featuredImage: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(500),
       allowNull: false,
+      field: "featured_image",
     },
     author: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(100),
       defaultValue: "Delta Indonesia",
     },
     category: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(100),
       defaultValue: "Media Release",
     },
     tags: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      defaultValue: [],
+      type: DataTypes.ARRAY(DataTypes.TEXT),
     },
     status: {
       type: DataTypes.ENUM("draft", "published", "archived"),
@@ -53,6 +52,7 @@ const Blog = sequelize.define(
     },
     publishedAt: {
       type: DataTypes.DATE,
+      field: "published_at",
     },
     views: {
       type: DataTypes.INTEGER,
@@ -64,23 +64,11 @@ const Blog = sequelize.define(
     },
   },
   {
+    tableName: "blog_posts",
     timestamps: true,
-    hooks: {
-      beforeValidate: (blog) => {
-        if (blog.title && !blog.slug) {
-          blog.slug = slugify(blog.title, { lower: true, strict: true });
-        }
-      },
-      beforeUpdate: (blog) => {
-        if (
-          blog.changed("status") &&
-          blog.status === "published" &&
-          !blog.publishedAt
-        ) {
-          blog.publishedAt = new Date();
-        }
-      },
-    },
+    underscored: true,
+    createdAt: "created_at",
+    updatedAt: "updated_at",
   }
 );
 
