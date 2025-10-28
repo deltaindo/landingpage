@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { registrationAPI, formTemplateAPI } from '@/lib/api';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { registrationAPI, formTemplateAPI } from "@/lib/api";
 
 interface Field {
   name: string;
@@ -19,7 +19,7 @@ interface Field {
     pattern?: string;
     message?: string;
   };
-  gridColumn: 'full' | 'half' | 'third';
+  gridColumn: "full" | "half" | "third";
   conditional?: {
     dependsOn: string;
     showWhen: string;
@@ -41,25 +41,33 @@ interface FormTemplate {
 
 interface DynamicRegistrationFormProps {
   courseId: string;
-  scheduleIndex: number;
+  scheduleIndex?: number;
   templateId?: string;
+  template?: FormTemplate;
+  course?: any;
 }
 
 export default function DynamicRegistrationForm({
   courseId,
-  scheduleIndex,
+  scheduleIndex = 0,
   templateId,
+  template: providedTemplate,
+  course,
 }: DynamicRegistrationFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [template, setTemplate] = useState<FormTemplate | null>(null);
+  const [template, setTemplate] = useState<FormTemplate | null>(
+    providedTemplate || null
+  );
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [files, setFiles] = useState<Record<string, File>>({});
 
   useEffect(() => {
-    fetchTemplate();
-  }, [templateId]);
+    if (!providedTemplate) {
+      fetchTemplate();
+    }
+  }, [templateId, providedTemplate]);
 
   const fetchTemplate = async () => {
     try {
@@ -68,7 +76,7 @@ export default function DynamicRegistrationForm({
         : await formTemplateAPI.getDefault();
       setTemplate(response.data);
     } catch (error) {
-      console.error('Error fetching template:', error);
+      console.error("Error fetching template:", error);
     }
   };
 
@@ -81,7 +89,7 @@ export default function DynamicRegistrationForm({
     if (errors[fieldName]) {
       setErrors({
         ...errors,
-        [fieldName]: '',
+        [fieldName]: "",
       });
     }
   };
@@ -98,27 +106,27 @@ export default function DynamicRegistrationForm({
     const { validation } = field;
 
     if (validation.required && !value) {
-      return validation.message || `${field.label} is required`;
+      return validation.message || `${field.label} wajib diisi`;
     }
 
-    if (value && typeof value === 'string') {
+    if (value && typeof value === "string") {
       if (validation.minLength && value.length < validation.minLength) {
-        return `${field.label} must be at least ${validation.minLength} characters`;
+        return `${field.label} minimal ${validation.minLength} karakter`;
       }
       if (validation.maxLength && value.length > validation.maxLength) {
-        return `${field.label} must be at most ${validation.maxLength} characters`;
+        return `${field.label} maksimal ${validation.maxLength} karakter`;
       }
       if (validation.pattern && !new RegExp(validation.pattern).test(value)) {
-        return validation.message || `${field.label} format is invalid`;
+        return validation.message || `Format ${field.label} tidak valid`;
       }
     }
 
-    if (value && typeof value === 'number') {
+    if (value && typeof value === "number") {
       if (validation.min !== undefined && value < validation.min) {
-        return `${field.label} must be at least ${validation.min}`;
+        return `${field.label} minimal ${validation.min}`;
       }
       if (validation.max !== undefined && value > validation.max) {
-        return `${field.label} must be at most ${validation.max}`;
+        return `${field.label} maksimal ${validation.max}`;
       }
     }
 
@@ -155,6 +163,7 @@ export default function DynamicRegistrationForm({
     e.preventDefault();
 
     if (!validateForm()) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
 
@@ -162,23 +171,25 @@ export default function DynamicRegistrationForm({
 
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append('courseId', courseId);
-      formDataToSend.append('scheduleIndex', scheduleIndex.toString());
-      formDataToSend.append('formData', JSON.stringify(formData));
+      formDataToSend.append("courseId", courseId);
+      formDataToSend.append("scheduleIndex", scheduleIndex.toString());
+      formDataToSend.append("formData", JSON.stringify(formData));
 
       // Append files
       Object.entries(files).forEach(([key, file]) => {
-        formDataToSend.append('documents', file, key);
+        formDataToSend.append("documents", file, key);
       });
 
       const response = await registrationAPI.create(formDataToSend);
 
       // Show success message
-      alert(`Registration successful! Your registration number is: ${response.data.registrationNumber}`);
-      router.push('/');
+      alert(
+        `Pendaftaran berhasil! Nomor registrasi Anda: ${response.data.registrationNumber}`
+      );
+      router.push("/");
     } catch (error: any) {
-      console.error('Error submitting registration:', error);
-      alert(error.message || 'Error submitting registration');
+      console.error("Error submitting registration:", error);
+      alert(error.message || "Gagal mengirim pendaftaran");
     } finally {
       setLoading(false);
     }
@@ -193,24 +204,27 @@ export default function DynamicRegistrationForm({
   const renderField = (field: Field) => {
     if (!shouldShowField(field)) return null;
 
-    const baseClasses = "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent";
+    const baseClasses =
+      "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent";
     const errorClasses = errors[field.name] ? "border-red-500" : "";
 
     switch (field.type) {
-      case 'text':
-      case 'email':
-      case 'tel':
-      case 'number':
-      case 'date':
+      case "text":
+      case "email":
+      case "tel":
+      case "number":
+      case "date":
         return (
           <div key={field.name} className={getGridClass(field.gridColumn)}>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               {field.label}
-              {field.validation.required && <span className="text-red-500 ml-1">*</span>}
+              {field.validation.required && (
+                <span className="text-red-500 ml-1">*</span>
+              )}
             </label>
             <input
               type={field.type}
-              value={formData[field.name] || ''}
+              value={formData[field.name] || ""}
               onChange={(e) => handleChange(field.name, e.target.value)}
               placeholder={field.placeholder}
               className={`${baseClasses} ${errorClasses}`}
@@ -221,15 +235,17 @@ export default function DynamicRegistrationForm({
           </div>
         );
 
-      case 'textarea':
+      case "textarea":
         return (
           <div key={field.name} className={getGridClass(field.gridColumn)}>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               {field.label}
-              {field.validation.required && <span className="text-red-500 ml-1">*</span>}
+              {field.validation.required && (
+                <span className="text-red-500 ml-1">*</span>
+              )}
             </label>
             <textarea
-              value={formData[field.name] || ''}
+              value={formData[field.name] || ""}
               onChange={(e) => handleChange(field.name, e.target.value)}
               placeholder={field.placeholder}
               rows={4}
@@ -241,19 +257,21 @@ export default function DynamicRegistrationForm({
           </div>
         );
 
-      case 'select':
+      case "select":
         return (
           <div key={field.name} className={getGridClass(field.gridColumn)}>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               {field.label}
-              {field.validation.required && <span className="text-red-500 ml-1">*</span>}
+              {field.validation.required && (
+                <span className="text-red-500 ml-1">*</span>
+              )}
             </label>
             <select
-              value={formData[field.name] || ''}
+              value={formData[field.name] || ""}
               onChange={(e) => handleChange(field.name, e.target.value)}
               className={`${baseClasses} ${errorClasses}`}
             >
-              <option value="">Select {field.label}</option>
+              <option value="">Pilih {field.label}</option>
               {field.options?.map((option) => (
                 <option key={option} value={option}>
                   {option}
@@ -266,12 +284,14 @@ export default function DynamicRegistrationForm({
           </div>
         );
 
-      case 'radio':
+      case "radio":
         return (
           <div key={field.name} className={getGridClass(field.gridColumn)}>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               {field.label}
-              {field.validation.required && <span className="text-red-500 ml-1">*</span>}
+              {field.validation.required && (
+                <span className="text-red-500 ml-1">*</span>
+              )}
             </label>
             <div className="space-y-2">
               {field.options?.map((option) => (
@@ -294,12 +314,14 @@ export default function DynamicRegistrationForm({
           </div>
         );
 
-      case 'checkbox':
+      case "checkbox":
         return (
           <div key={field.name} className={getGridClass(field.gridColumn)}>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               {field.label}
-              {field.validation.required && <span className="text-red-500 ml-1">*</span>}
+              {field.validation.required && (
+                <span className="text-red-500 ml-1">*</span>
+              )}
             </label>
             <div className="space-y-2">
               {field.options?.map((option) => (
@@ -327,21 +349,41 @@ export default function DynamicRegistrationForm({
           </div>
         );
 
-      case 'file':
+      case "file":
         return (
           <div key={field.name} className={getGridClass(field.gridColumn)}>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               {field.label}
-              {field.validation.required && <span className="text-red-500 ml-1">*</span>}
+              {field.validation.required && (
+                <span className="text-red-500 ml-1">*</span>
+              )}
             </label>
             <input
               type="file"
+              accept=".jpg,.jpeg,.png,.pdf"
               onChange={(e) => {
-                const file = e.target.files?.;
-                if (file) handleFileChange(field.name, file);
+                // FIXED: Proper array access with optional chaining
+                const file = e.target.files?.[0];
+                if (file) {
+                  // Validate file size (2MB max)
+                  if (file.size > 2 * 1024 * 1024) {
+                    alert("Ukuran file maksimal 2MB");
+                    e.target.value = "";
+                    return;
+                  }
+                  handleFileChange(field.name, file);
+                }
               }}
               className={`${baseClasses} ${errorClasses}`}
             />
+            <p className="text-xs text-gray-500 mt-1">
+              Format: JPG, PNG, PDF | Maksimal 2MB
+            </p>
+            {files[field.name] && (
+              <p className="text-sm text-green-600 mt-1">
+                ✓ {files[field.name].name}
+              </p>
+            )}
             {errors[field.name] && (
               <p className="text-red-500 text-sm mt-1">{errors[field.name]}</p>
             )}
@@ -355,18 +397,23 @@ export default function DynamicRegistrationForm({
 
   const getGridClass = (gridColumn: string): string => {
     switch (gridColumn) {
-      case 'half':
-        return 'md:col-span-6';
-      case 'third':
-        return 'md:col-span-4';
-      case 'full':
+      case "half":
+        return "md:col-span-6";
+      case "third":
+        return "md:col-span-4";
+      case "full":
       default:
-        return 'md:col-span-12';
+        return "md:col-span-12";
     }
   };
 
   if (!template) {
-    return <div className="p-12 text-center text-gray-500">Loading form...</div>;
+    return (
+      <div className="p-12 text-center text-gray-500">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+        <p>Memuat formulir...</p>
+      </div>
+    );
   }
 
   return (
@@ -390,14 +437,14 @@ export default function DynamicRegistrationForm({
           onClick={() => router.back()}
           className="px-8 py-3 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
         >
-          Cancel
+          Batal
         </button>
         <button
           type="submit"
           disabled={loading}
-          className="px-8 py-3 bg-primary text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-8 py-3 bg-primary text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
         >
-          {loading ? 'Submitting...' : 'Submit Registration'}
+          {loading ? "Mengirim..." : "Kirim Pendaftaran"}
         </button>
       </div>
     </form>

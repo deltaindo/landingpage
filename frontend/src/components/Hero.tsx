@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import Image from "next/image";
+import Link from "next/link";
 
 interface Slide {
   type: "image" | "video";
@@ -200,12 +201,12 @@ const Hero = () => {
                   {/* CTA Buttons */}
                   {slide.type === "image" && index === 0 && (
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-8">
-                      <button
-                        onClick={() => scrollToSection("layanan")}
+                      <Link
+                        href="/courses"
                         className="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition transform hover:scale-105 shadow-lg"
                       >
-                        Lihat Layanan
-                      </button>
+                        Daftar Pelatihan
+                      </Link>
                       <button
                         onClick={() => scrollToSection("kontak")}
                         className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-primary transition"

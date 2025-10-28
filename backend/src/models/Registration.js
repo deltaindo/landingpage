@@ -39,7 +39,7 @@ const Registration = sequelize.define(
       type: DataTypes.JSONB,
       defaultValue: {},
     },
-    documents: {
+    documentsData: {
       type: DataTypes.ARRAY(DataTypes.JSONB),
       defaultValue: [],
     },

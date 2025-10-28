@@ -10,6 +10,83 @@ const api = axios.create({
   },
 });
 
+// Blog API
+export const blogAPI = {
+  getAll: (params?: any) => {
+    const queryString = new URLSearchParams(params).toString();
+    return apiCall(`/blog?${queryString}`);
+  },
+
+  getBySlug: (slug: string) => {
+    return apiCall(`/blog/${slug}`);
+  },
+
+  create: async (formData: FormData) => {
+    const response = await fetch(`${API_BASE_URL}/blog`, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Failed to create blog post");
+    }
+
+    return response.json();
+  },
+
+  update: async (id: string, formData: FormData) => {
+    const response = await fetch(`${API_BASE_URL}/blog/${id}`, {
+      method: "PUT",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Failed to update blog post");
+    }
+
+    return response.json();
+  },
+
+  delete: (id: string) => {
+    return apiCall(`/blog/${id}`, {
+      method: "DELETE",
+    });
+  },
+
+  publish: (id: string) => {
+    return apiCall(`/blog/${id}/publish`, {
+      method: "PATCH",
+    });
+  },
+};
+
+export const courseAPI = {
+  getAll: (params?: any) => {
+    const queryString = new URLSearchParams(params).toString();
+    return apiCall(`/courses?${queryString}`);
+  },
+
+  getById: (id: string) => {
+    return apiCall(`/courses/${id}`);
+  },
+
+  create: (data: any) => {
+    return apiCall("/courses", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  update: (id: string, data: any) => {
+    return apiCall(`/courses/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+  },
+};
+
 export const contactAPI = {
   sendMessage: async (data: ContactFormData): Promise<ApiResponse<any>> => {
     try {
@@ -20,6 +97,47 @@ export const contactAPI = {
         error.response?.data?.message || "Failed to send message"
       );
     }
+  },
+};
+
+// Form Template API
+export const formTemplateAPI = {
+  getAll: () => {
+    return apiCall("/form-templates");
+  },
+
+  getById: (id: string) => {
+    return apiCall(`/form-templates/${id}`);
+  },
+
+  getDefault: () => {
+    return apiCall("/form-templates/default");
+  },
+};
+
+// Registration API
+export const registrationAPI = {
+  create: async (formData: FormData) => {
+    const response = await fetch(`${API_BASE_URL}/registrations`, {
+      method: "POST",
+      body: formData, // Don't set Content-Type for FormData
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Registration failed");
+    }
+
+    return response.json();
+  },
+
+  getAll: (params?: any) => {
+    const queryString = new URLSearchParams(params).toString();
+    return apiCall(`/registrations?${queryString}`);
+  },
+
+  getById: (id: string) => {
+    return apiCall(`/registrations/${id}`);
   },
 };
 

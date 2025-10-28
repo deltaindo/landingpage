@@ -61,7 +61,7 @@ exports.createRegistration = async (req, res, next) => {
         department: formData.department,
         address: formData.companyAddress,
       },
-      documents,
+      documentsData,
       paymentInfo: {
         method: formData.paymentMethod,
         amount: course.price.regular,

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
 const Training = () => {
   const [activeTab, setActiveTab] = useState<"kemnaker" | "bnsp" | "migas">(
@@ -86,9 +87,12 @@ const Training = () => {
                     {training.cert}
                   </span>
                 </div>
-                <button className="w-full bg-primary text-white py-2 rounded-lg hover:bg-blue-700 transition group-hover:scale-105 transform">
+                <Link
+                  href={`/courses/${training.id}/register`}
+                  className="w-full bg-primary text-white py-2 rounded-lg hover:bg-blue-700 transition group-hover:scale-105 transform"
+                >
                   Daftar
-                </button>
+                </Link>
               </div>
             </div>
           ))}
