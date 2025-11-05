@@ -182,77 +182,104 @@ export default function MultiStepRegistrationPage() {
 
     const formDataToSend = new FormData();
 
-    // Add all text fields
+    // Add all text fields (exclude File objects)
     Object.keys(formData).forEach((key) => {
       const value = formData[key as keyof FormData];
       if (value && !(value instanceof File)) {
-        formDataToSend.append(key, value);
+        formDataToSend.append(key, value as string);
       }
     });
 
     // Add course ID
     formDataToSend.append("courseId", params.courseId as string);
 
-    // Add files
-    if (formData.doc_ktp) formDataToSend.append("doc_ktp", formData.doc_ktp);
-    if (formData.doc_ijazah)
-      formDataToSend.append("doc_ijazah", formData.doc_ijazah);
-    if (formData.doc_surat_pernyataan)
+    // ✅ CORRECT - Check instanceof File and append individually
+    if (formData.doc_ktp instanceof File) {
+      formDataToSend.append("doc_ktp", formData.doc_ktp, formData.doc_ktp.name);
+    }
+    if (formData.doc_ijazah instanceof File) {
+      formDataToSend.append(
+        "doc_ijazah",
+        formData.doc_ijazah,
+        formData.doc_ijazah.name
+      );
+    }
+    if (formData.doc_surat_pernyataan instanceof File) {
       formDataToSend.append(
         "doc_surat_pernyataan",
-        formData.doc_surat_pernyataan
+        formData.doc_surat_pernyataan,
+        formData.doc_surat_pernyataan.name
       );
-    if (formData.doc_surat_bekerja)
-      formDataToSend.append("doc_surat_bekerja", formData.doc_surat_bekerja);
-    if (formData.doc_cv) formDataToSend.append("doc_cv", formData.doc_cv);
-    if (formData.doc_pas_foto)
-      formDataToSend.append("doc_pas_foto", formData.doc_pas_foto);
-    if (formData.doc_skp) formDataToSend.append("doc_skp", formData.doc_skp);
-    if (formData.doc_lisensi)
-      formDataToSend.append("doc_lisensi", formData.doc_lisensi);
-    if (formData.doc_sertifikat)
-      formDataToSend.append("doc_sertifikat", formData.doc_sertifikat);
-    if (formData.doc_surat_sehat)
-      formDataToSend.append("doc_surat_sehat", formData.doc_surat_sehat);
+    }
+    if (formData.doc_surat_bekerja instanceof File) {
+      formDataToSend.append(
+        "doc_surat_bekerja",
+        formData.doc_surat_bekerja,
+        formData.doc_surat_bekerja.name
+      );
+    }
+    if (formData.doc_cv instanceof File) {
+      formDataToSend.append("doc_cv", formData.doc_cv, formData.doc_cv.name);
+    }
+    if (formData.doc_pas_foto instanceof File) {
+      formDataToSend.append(
+        "doc_pas_foto",
+        formData.doc_pas_foto,
+        formData.doc_pas_foto.name
+      );
+    }
+    if (formData.doc_skp instanceof File) {
+      formDataToSend.append("doc_skp", formData.doc_skp, formData.doc_skp.name);
+    }
+    if (formData.doc_lisensi instanceof File) {
+      formDataToSend.append(
+        "doc_lisensi",
+        formData.doc_lisensi,
+        formData.doc_lisensi.name
+      );
+    }
+    if (formData.doc_sertifikat instanceof File) {
+      formDataToSend.append(
+        "doc_sertifikat",
+        formData.doc_sertifikat,
+        formData.doc_sertifikat.name
+      );
+    }
+    if (formData.doc_surat_sehat instanceof File) {
+      formDataToSend.append(
+        "doc_surat_sehat",
+        formData.doc_surat_sehat,
+        formData.doc_surat_sehat.name
+      );
+    }
+
+    // Debug log
+    console.log("📤 Sending files:");
+    for (let [key, value] of formDataToSend.entries()) {
+      if (value instanceof File) {
+        console.log(`  ${key}: ${value.name} (${value.size} bytes)`);
+      }
+    }
 
     try {
-      console.log(
-        "Sending registration to:",
-        "http://localhost:5000/api/registrations"
-      );
-
       const response = await fetch("http://localhost:5000/api/registrations", {
         method: "POST",
         body: formDataToSend,
-        // Don't set Content-Type header - let browser set it with boundary for FormData
       });
 
-      console.log("Response status:", response.status);
-
-      // Check if response is JSON
-      const contentType = response.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        throw new Error(
-          "Server returned non-JSON response. Check if backend is running on http://localhost:5000"
-        );
-      }
-
       const data = await response.json();
-      console.log("Response data:", data);
 
       if (data.success) {
         alert(
-          `✅ Pendaftaran berhasil!\\n\\nNomor Registrasi: ${data.data.registration_number}\\n\\nTim kami akan menghubungi Anda segera.`
+          `✅ Pendaftaran berhasil!\n\nNomor Registrasi: ${data.data.registration_number}\n\nDokumen terupload: ${data.data.documents_count}\n\nTim kami akan menghubungi Anda segera.`
         );
         router.push("/courses");
       } else {
         alert("❌ Pendaftaran gagal: " + (data.error || "Unknown error"));
       }
     } catch (error: any) {
-      console.error("❌ Error submitting form:", error);
-      alert(
-        `❌ Terjadi kesalahan:\\n\\n${error.message}\\n\\nPastikan backend berjalan di http://localhost:5000`
-      );
+      console.error("❌ Error:", error);
+      alert(`Terjadi kesalahan: ${error.message}`);
     } finally {
       setSubmitting(false);
     }
