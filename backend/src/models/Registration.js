@@ -9,22 +9,16 @@ const Registration = sequelize.define(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    registrationNumber: {
+    registration_number: {
       type: DataTypes.STRING(50),
       unique: true,
       allowNull: false,
     },
-    courseId: {
+    course_id: {
       type: DataTypes.UUID,
-      field: "courseId",
+      allowNull: false,
     },
-    scheduleId: {
-      type: DataTypes.UUID,
-      field: "scheduleId",
-    },
-
-    // Personal Information
-    fullName: {
+    full_name: {
       type: DataTypes.STRING(255),
       allowNull: false,
     },
@@ -32,83 +26,99 @@ const Registration = sequelize.define(
       type: DataTypes.STRING(20),
       allowNull: false,
     },
-    tempatLahir: {
-      type: DataTypes.STRING(100),
+    tempat_lahir: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
-    tanggalLahir: {
-      type: DataTypes.DATE,
+    tanggal_lahir: {
+      type: DataTypes.DATEONLY,
+      allowNull: true,
     },
-    golonganDarah: {
-      type: DataTypes.STRING(10),
+    golongan_darah: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
-
-    // Address
-    provinsi: DataTypes.STRING(100),
-    kabupaten: DataTypes.STRING(100),
-    kecamatan: DataTypes.STRING(100),
-    kelurahan: DataTypes.STRING(100),
-    alamat: DataTypes.TEXT,
-
-    // Contact
+    provinsi: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    kabupaten: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    kecamatan: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    kelurahan: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    alamat: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
     email: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.STRING,
       allowNull: false,
     },
-    noWhatsapp: {
-      type: DataTypes.STRING(20),
+    no_whatsapp: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
-
-    // Education
-    pendidikanTerakhir: DataTypes.STRING(50),
-    namaSekolah: DataTypes.STRING(255),
-    noIjazah: DataTypes.STRING(50),
-    tanggalIjazah: DataTypes.DATE,
-
-    // Company
-    instansi: DataTypes.STRING(255),
-    bidangUsaha: DataTypes.STRING(100),
-    jabatan: DataTypes.STRING(100),
-    alamatPerusahaan: DataTypes.TEXT,
-    tlpKantor: DataTypes.STRING(20),
-    emailPerusahaan: DataTypes.STRING(100),
-
-    // Form Data
-    formData: {
-      type: DataTypes.JSONB,
-      defaultValue: {},
+    pendidikan_terakhir: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
-
-    // Payment
-    paymentMethod: DataTypes.STRING(50),
-    paymentAmount: DataTypes.DECIMAL(15, 2),
-    paymentStatus: {
-      type: DataTypes.ENUM("pending", "paid", "failed", "refunded"),
-      defaultValue: "pending",
+    nama_sekolah: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
-    paidAt: DataTypes.DATE,
-    invoiceNumber: DataTypes.STRING(50),
-
-    // Status
+    no_ijazah: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    tanggal_ijazah: {
+      type: DataTypes.DATEONLY,
+      allowNull: true,
+    },
+    instansi: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    bidang_usaha: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    jabatan: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    alamat_perusahaan: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    tlp_kantor: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    email_perusahaan: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     status: {
-      type: DataTypes.ENUM(
-        "pending",
-        "confirmed",
-        "attended",
-        "completed",
-        "cancelled"
-      ),
+      type: DataTypes.STRING(20),
       defaultValue: "pending",
     },
-    notes: DataTypes.TEXT,
-    adminNotes: DataTypes.TEXT,
+    documents_json: {
+      type: DataTypes.JSON,
+      allowNull: true,
+    },
   },
   {
     tableName: "registrations",
     timestamps: true,
-    underscored: false,
-    createdAt: "createdAt",
-    updatedAt: "updatedAt",
+    underscored: true,
   }
 );
 

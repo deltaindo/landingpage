@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const { connectDB } = require("./src/config/database");
 const errorHandler = require("./src/middleware/errorHandler");
-
+const { sequelize } = require("./src/config/database");
 // Load environment variables
 dotenv.config();
 
