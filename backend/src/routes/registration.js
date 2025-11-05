@@ -51,37 +51,34 @@ router.post(
   ]),
   async (req, res) => {
     try {
-      console.log("📝 Registration POST received");
+      console.log("📝 POST received");
 
-      const {
-        courseId,
-        fullName,
-        nik,
-        tempatLahir,
-        tanggalLahir,
-        golonganDarah,
-        provinsi,
-        kabupaten,
-        kecamatan,
-        kelurahan,
-        alamat,
-        email,
-        noWhatsapp,
-        pendidikanTerakhir,
-        namaSekolah,
-        noIjazah,
-        tanggalIjazah,
-        instansi,
-        bidangUsaha,
-        jabatan,
-        alamatPerusahaan,
-        tlpKantor,
-        emailPerusahaan,
-        paymentMethod,
-        paymentAmount,
-      } = req.body;
+      const data = req.body;
+      const courseId = data.courseId;
+      const fullName = data.full_name || data.fullName;
+      const nik = data.nik;
+      const tempatLahir = data.tempat_lahir || data.tempatLahir;
+      const tanggalLahir = data.tanggal_lahir || data.tanggalLahir;
+      const golonganDarah = data.golongan_darah || data.golonganDarah;
+      const provinsi = data.provinsi;
+      const kabupaten = data.kabupaten;
+      const kecamatan = data.kecamatan;
+      const kelurahan = data.kelurahan;
+      const alamat = data.alamat;
+      const email = data.email;
+      const noWhatsapp = data.no_whatsapp || data.noWhatsapp;
+      const pendidikanTerakhir =
+        data.pendidikan_terakhir || data.pendidikanTerakhir;
+      const namaSekolah = data.nama_sekolah || data.namaSekolah;
+      const noIjazah = data.no_ijazah || data.noIjazah;
+      const tanggalIjazah = data.tanggal_ijazah || data.tanggalIjazah;
+      const instansi = data.instansi;
+      const bidangUsaha = data.bidang_usaha || data.bidangUsaha;
+      const jabatan = data.jabatan;
+      const alamatPerusahaan = data.alamat_perusahaan || data.alamatPerusahaan;
+      const tlpKantor = data.tlp_kantor || data.tlpKantor;
+      const emailPerusahaan = data.email_perusahaan || data.emailPerusahaan;
 
-      // Validate required
       if (!courseId || !fullName || !nik || !email || !noWhatsapp) {
         return res.status(400).json({
           success: false,
@@ -89,137 +86,80 @@ router.post(
         });
       }
 
-      // Generate registration number
       const now = new Date();
       const yearMonth = now.toISOString().slice(2, 7).replace("-", "");
       const randomNum = Math.floor(1000 + Math.random() * 9000);
       const registrationNumber = `REG-${yearMonth}-${randomNum}`;
 
-      // Collect documents
       const documents = [];
       if (req.files) {
         for (const [fieldname, fileArray] of Object.entries(req.files)) {
-          if (fileArray && fileArray) {
-            const file = fileArray;
+          if (fileArray && fileArray[0]) {
+            const file = fileArray[0];
             documents.push({
               type: fieldname,
               filename: file.filename,
               size: file.size,
             });
-            console.log(`✅ ${fieldname}: ${file.filename}`);
           }
         }
       }
 
-      // Insert into registrations table using raw SQL
       const query = `
-        INSERT INTO "public"."registrations" (
-          "id",
-          "registrationNumber",
-          "courseId",
-          "fullName",
-          "nik",
-          "tempatLahir",
-          "tanggalLahir",
-          "golonganDarah",
-          "provinsi",
-          "kabupaten",
-          "kecamatan",
-          "kelurahan",
-          "alamat",
-          "email",
-          "noWhatsapp",
-          "pendidikanTerakhir",
-          "namaSekolah",
-          "noIjazah",
-          "tanggalIjazah",
-          "instansi",
-          "bidangUsaha",
-          "jabatan",
-          "alamatPerusahaan",
-          "tlpKantor",
-          "emailPerusahaan",
-          "paymentMethod",
-          "paymentAmount",
-          "paymentStatus",
-          "formData",
-          "status",
-          "createdAt",
-          "updatedAt"
+        INSERT INTO "registrations" (
+          "registrationNumber", "courseId", "fullName", "nik",
+          "tempatLahir", "tanggalLahir", "golonganDarah",
+          "provinsi", "kabupaten", "kecamatan", "kelurahan",
+          "alamat", "email", "noWhatsapp",
+          "pendidikanTerakhir", "namaSekolah", "noIjazah", "tanggalIjazah",
+          "instansi", "bidangUsaha", "jabatan",
+          "alamatPerusahaan", "tlpKantor", "emailPerusahaan",
+          "formData", "paymentStatus", "status",
+          "createdAt", "updatedAt"
         ) VALUES (
-          gen_random_uuid(),
-          $1,
-          $2,
-          $3,
-          $4,
-          $5,
-          $6,
-          $7,
-          $8,
-          $9,
-          $10,
-          $11,
-          $12,
-          $13,
-          $14,
-          $15,
-          $16,
-          $17,
-          $18,
-          $19,
-          $20,
-          $21,
-          $22,
-          $23,
-          $24,
-          $25,
-          $26,
-          $27,
-          'pending',
-          'pending',
-          NOW(),
-          NOW()
-        ) RETURNING "id", "registrationNumber"
+          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10,
+          $11, $12, $13, $14, $15, $16, $17, $18, $19, $20,
+          $21, $22, $23, $24, $25, $26, $27, NOW(), NOW()
+        )
       `;
 
-      const result = await sequelize.query(query, {
-        replacements: [
+      await sequelize.query(query, {
+        bind: [
           registrationNumber,
           courseId,
           fullName,
           nik,
-          tempatLahir || null,
-          tanggalLahir || null,
-          golonganDarah || null,
-          provinsi || null,
-          kabupaten || null,
-          kecamatan || null,
-          kelurahan || null,
-          alamat || null,
+          tempatLahir,
+          tanggalLahir,
+          golonganDarah,
+          provinsi,
+          kabupaten,
+          kecamatan,
+          kelurahan,
+          alamat,
           email,
           noWhatsapp,
-          pendidikanTerakhir || null,
-          namaSekolah || null,
-          noIjazah || null,
-          tanggalIjazah || null,
-          instansi || null,
-          bidangUsaha || null,
-          jabatan || null,
-          alamatPerusahaan || null,
-          tlpKantor || null,
-          emailPerusahaan || null,
-          paymentMethod || null,
-          paymentAmount || null,
+          pendidikanTerakhir,
+          namaSekolah,
+          noIjazah,
+          tanggalIjazah,
+          instansi,
+          bidangUsaha,
+          jabatan,
+          alamatPerusahaan,
+          tlpKantor,
+          emailPerusahaan,
           JSON.stringify(documents),
+          "pending",
+          "pending",
         ],
       });
 
-      console.log("✅ Saved to DB:", registrationNumber);
-      console.log("📎 Files:", documents.length);
+      console.log("✅ Saved:", registrationNumber);
 
       res.status(201).json({
         success: true,
-        message: "Pendaftaran berhasil disimpan",
+        message: "Pendaftaran berhasil",
         data: {
           registrationNumber,
           status: "pending",
