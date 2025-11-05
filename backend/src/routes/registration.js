@@ -10,11 +10,9 @@ if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
-// Configure multer for file uploads
+// Configure multer
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadsDir);
-  },
+  destination: (req, file, cb) => cb(null, uploadsDir),
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     cb(
@@ -26,23 +24,19 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage,
-  limits: { fileSize: 2 * 1024 * 1024 }, // 2MB max
+  limits: { fileSize: 2 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const allowedTypes = /jpeg|jpg|png|pdf/;
     const extname = allowedTypes.test(
       path.extname(file.originalname).toLowerCase()
     );
     const mimetype = allowedTypes.test(file.mimetype);
-
-    if (mimetype && extname) {
-      return cb(null, true);
-    } else {
-      cb(new Error("Only JPG, PNG, and PDF files allowed!"));
-    }
+    if (mimetype && extname) return cb(null, true);
+    cb(new Error("Only JPG, PNG, PDF allowed!"));
   },
 });
 
-// POST - Create new registration
+// POST - Create registration
 router.post(
   "/",
   upload.fields([
@@ -60,12 +54,9 @@ router.post(
   async (req, res) => {
     try {
       console.log("📝 Registration request received");
-      console.log("Body:", req.body);
-      console.log("Files:", req.files);
 
       const {
         courseId,
-        scheduleId,
         full_name,
         nik,
         tempat_lahir,
@@ -90,7 +81,7 @@ router.post(
         email_perusahaan,
       } = req.body;
 
-      // Validate required fields
+      // Validate required
       if (!courseId || !full_name || !nik || !email || !no_whatsapp) {
         return res.status(400).json({
           success: false,
@@ -104,66 +95,37 @@ router.post(
       const randomNum = Math.floor(1000 + Math.random() * 9000);
       const registration_number = `REG-${yearMonth}-${randomNum}`;
 
-      // Create registration object (simplified for now)
-      const registration = {
-        registration_number,
-        course_id: courseId,
-        schedule_id: scheduleId || null,
-        full_name,
-        nik,
-        tempat_lahir,
-        tanggal_lahir,
-        golongan_darah,
-        provinsi,
-        kabupaten,
-        kecamatan,
-        kelurahan,
-        alamat,
-        email,
-        no_whatsapp,
-        pendidikan_terakhir,
-        nama_sekolah,
-        no_ijazah,
-        tanggal_ijazah,
-        instansi,
-        bidang_usaha,
-        jabatan,
-        alamat_perusahaan,
-        tlp_kantor,
-        email_perusahaan,
-        status: "pending",
-        created_at: now,
-      };
-
-      // Handle document uploads
+      // Count uploaded files
+      const filesCount = Object.keys(req.files || {}).length;
       const documents = [];
+
       if (req.files) {
-        Object.keys(req.files).forEach((fieldname) => {
-          const file = req.files[fieldname];
+        for (const [fieldname, fileArray] of Object.entries(req.files)) {
+          const file = fileArray;
           documents.push({
-            document_type: fieldname,
-            file_url: `/uploads/documents/${file.filename}`,
-            file_size: file.size,
-            file_type: file.mimetype,
+            type: fieldname,
+            filename: file.filename,
+            size: file.size,
+            path: `/uploads/documents/${file.filename}`,
           });
-        });
+        }
       }
 
       console.log("✅ Registration created:", registration_number);
-      console.log("📎 Documents uploaded:", documents.length);
+      console.log("📎 Documents uploaded:", filesCount);
 
-      // Return success response
       res.status(201).json({
         success: true,
-        message: "Registration successful",
+        message: "Pendaftaran berhasil",
         data: {
           registration_number,
           status: "pending",
-          documents_count: documents.length,
+          documents_count: filesCount,
+          documents: documents,
         },
       });
     } catch (error) {
-      console.error("❌ Registration error:", error);
+      console.error("❌ Error:", error);
       res.status(500).json({
         success: false,
         error: error.message || "Registration failed",
@@ -172,26 +134,13 @@ router.post(
   }
 );
 
-// GET all registrations
-router.get("/", async (req, res) => {
-  try {
-    // For now, return empty array
-    res.json({
-      success: true,
-      data: [],
-      pagination: {
-        total: 0,
-        page: 1,
-        limit: 20,
-        totalPages: 0,
-      },
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    });
-  }
+// GET placeholder
+router.get("/", (req, res) => {
+  res.json({
+    success: true,
+    data: [],
+    message: "Registrations endpoint",
+  });
 });
 
 module.exports = router;
