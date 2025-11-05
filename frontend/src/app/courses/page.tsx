@@ -43,9 +43,9 @@ export default function CoursesPage() {
 
   const categories = [
     { value: "all", label: "Semua Pelatihan" },
-    { value: "kemnaker", label: "Kemnaker RI" },
-    { value: "bnsp", label: "BNSP" },
-    { value: "migas", label: "Migas" },
+    { value: "kemnaker", label: "Reguler" },
+    /*{ value: "bnsp", label: "BNSP" },*/
+    /*{ value: "migas", label: "Migas" },*/
     { value: "inhouse", label: "In-House" },
   ];
 
