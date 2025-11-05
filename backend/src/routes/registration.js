@@ -4,24 +4,20 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const { sequelize } = require("../config/database");
-const Registration = require("../models/Registration");
 
-// Ensure uploads directory exists
 const uploadsDir = path.join(__dirname, "../../uploads/documents");
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
-// Configure multer
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadsDir);
-  },
+  destination: (req, file, cb) => cb(null, uploadsDir),
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    const filename =
-      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname);
-    cb(null, filename);
+    cb(
+      null,
+      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname)
+    );
   },
 });
 
@@ -34,15 +30,11 @@ const upload = multer({
       path.extname(file.originalname).toLowerCase()
     );
     const mimetype = allowedTypes.test(file.mimetype);
-
-    if (mimetype && extname) {
-      return cb(null, true);
-    }
+    if (mimetype && extname) return cb(null, true);
     cb(new Error("Only JPG, PNG, PDF allowed!"));
   },
 });
 
-// POST - Create registration
 router.post(
   "/",
   upload.fields([
@@ -60,38 +52,37 @@ router.post(
   async (req, res) => {
     try {
       console.log("📝 Registration POST received");
-      console.log("Body keys:", Object.keys(req.body));
-      console.log("Files received:", Object.keys(req.files || {}));
 
       const {
         courseId,
-        full_name,
+        fullName,
         nik,
-        tempat_lahir,
-        tanggal_lahir,
-        golongan_darah,
+        tempatLahir,
+        tanggalLahir,
+        golonganDarah,
         provinsi,
         kabupaten,
         kecamatan,
         kelurahan,
         alamat,
         email,
-        no_whatsapp,
-        pendidikan_terakhir,
-        nama_sekolah,
-        no_ijazah,
-        tanggal_ijazah,
+        noWhatsapp,
+        pendidikanTerakhir,
+        namaSekolah,
+        noIjazah,
+        tanggalIjazah,
         instansi,
-        bidang_usaha,
+        bidangUsaha,
         jabatan,
-        alamat_perusahaan,
-        tlp_kantor,
-        email_perusahaan,
+        alamatPerusahaan,
+        tlpKantor,
+        emailPerusahaan,
+        paymentMethod,
+        paymentAmount,
       } = req.body;
 
-      // Validate required fields
-      if (!courseId || !full_name || !nik || !email || !no_whatsapp) {
-        console.error("❌ Missing required fields");
+      // Validate required
+      if (!courseId || !fullName || !nik || !email || !noWhatsapp) {
         return res.status(400).json({
           success: false,
           error: "Missing required fields",
@@ -102,9 +93,9 @@ router.post(
       const now = new Date();
       const yearMonth = now.toISOString().slice(2, 7).replace("-", "");
       const randomNum = Math.floor(1000 + Math.random() * 9000);
-      const registration_number = `REG-${yearMonth}-${randomNum}`;
+      const registrationNumber = `REG-${yearMonth}-${randomNum}`;
 
-      // Collect documents info
+      // Collect documents
       const documents = [];
       if (req.files) {
         for (const [fieldname, fileArray] of Object.entries(req.files)) {
@@ -114,111 +105,139 @@ router.post(
               type: fieldname,
               filename: file.filename,
               size: file.size,
-              path: `/uploads/documents/${file.filename}`,
             });
-            console.log(`✅ File uploaded: ${file.filename}`);
+            console.log(`✅ ${fieldname}: ${file.filename}`);
           }
         }
       }
 
-      // Create registration in database
-      const registration = await Registration.create({
-        registration_number,
-        course_id: courseId,
-        full_name,
-        nik,
-        tempat_lahir,
-        tanggal_lahir,
-        golongan_darah,
-        provinsi,
-        kabupaten,
-        kecamatan,
-        kelurahan,
-        alamat,
-        email,
-        no_whatsapp,
-        pendidikan_terakhir,
-        nama_sekolah,
-        no_ijazah,
-        tanggal_ijazah,
-        instansi,
-        bidang_usaha,
-        jabatan,
-        alamat_perusahaan,
-        tlp_kantor,
-        email_perusahaan,
-        status: "pending",
-        documents_json: JSON.stringify(documents),
+      // Insert into registrations table using raw SQL
+      const query = `
+        INSERT INTO "public"."registrations" (
+          "id",
+          "registrationNumber",
+          "courseId",
+          "fullName",
+          "nik",
+          "tempatLahir",
+          "tanggalLahir",
+          "golonganDarah",
+          "provinsi",
+          "kabupaten",
+          "kecamatan",
+          "kelurahan",
+          "alamat",
+          "email",
+          "noWhatsapp",
+          "pendidikanTerakhir",
+          "namaSekolah",
+          "noIjazah",
+          "tanggalIjazah",
+          "instansi",
+          "bidangUsaha",
+          "jabatan",
+          "alamatPerusahaan",
+          "tlpKantor",
+          "emailPerusahaan",
+          "paymentMethod",
+          "paymentAmount",
+          "paymentStatus",
+          "formData",
+          "status",
+          "createdAt",
+          "updatedAt"
+        ) VALUES (
+          gen_random_uuid(),
+          $1,
+          $2,
+          $3,
+          $4,
+          $5,
+          $6,
+          $7,
+          $8,
+          $9,
+          $10,
+          $11,
+          $12,
+          $13,
+          $14,
+          $15,
+          $16,
+          $17,
+          $18,
+          $19,
+          $20,
+          $21,
+          $22,
+          $23,
+          $24,
+          $25,
+          $26,
+          $27,
+          'pending',
+          'pending',
+          NOW(),
+          NOW()
+        ) RETURNING "id", "registrationNumber"
+      `;
+
+      const result = await sequelize.query(query, {
+        replacements: [
+          registrationNumber,
+          courseId,
+          fullName,
+          nik,
+          tempatLahir || null,
+          tanggalLahir || null,
+          golonganDarah || null,
+          provinsi || null,
+          kabupaten || null,
+          kecamatan || null,
+          kelurahan || null,
+          alamat || null,
+          email,
+          noWhatsapp,
+          pendidikanTerakhir || null,
+          namaSekolah || null,
+          noIjazah || null,
+          tanggalIjazah || null,
+          instansi || null,
+          bidangUsaha || null,
+          jabatan || null,
+          alamatPerusahaan || null,
+          tlpKantor || null,
+          emailPerusahaan || null,
+          paymentMethod || null,
+          paymentAmount || null,
+          JSON.stringify(documents),
+        ],
       });
 
-      console.log("✅ Registration saved to DB:", registration_number);
-      console.log("📎 Total documents:", documents.length);
+      console.log("✅ Saved to DB:", registrationNumber);
+      console.log("📎 Files:", documents.length);
 
       res.status(201).json({
         success: true,
         message: "Pendaftaran berhasil disimpan",
         data: {
-          id: registration.id,
-          registration_number,
+          registrationNumber,
           status: "pending",
-          documents_count: documents.length,
-          documents: documents,
+          documentsCount: documents.length,
         },
       });
     } catch (error) {
-      console.error("❌ Registration error:", error);
+      console.error("❌ Error:", error.message);
       res.status(500).json({
         success: false,
-        error: error.message || "Registration failed",
+        error: error.message,
       });
     }
   }
 );
 
-// GET all registrations
-router.get("/", async (req, res) => {
-  try {
-    const registrations = await Registration.findAll({
-      order: [["createdAt", "DESC"]],
-      limit: 50,
-    });
-
-    res.json({
-      success: true,
-      data: registrations,
-      count: registrations.length,
-    });
-  } catch (error) {
-    console.error("❌ Error:", error);
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    });
-  }
-});
-
-// GET single registration
-router.get("/:id", async (req, res) => {
-  try {
-    const registration = await Registration.findByPk(req.params.id);
-
-    if (!registration) {
-      return res.status(404).json({
-        success: false,
-        error: "Registration not found",
-      });
-    }
-
-    res.json({
-      success: true,
-      data: registration,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    });
-  }
+router.get("/", (req, res) => {
+  res.json({ success: true, data: [] });
 });
 
 module.exports = router;
