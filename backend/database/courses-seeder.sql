@@ -1,8 +1,8 @@
 -- =====================================================
--- DELTA INDONESIA COURSES SEEDER - KEMNAKER & INHOUSE
+-- DELTA INDONESIA COURSES SEEDER - KEMNAKER, BNSP & INHOUSE
 -- Each course has two versions:
---   1. Kemnaker (Government regulated)
---   2. In-house (Company internal training)
+--   1. Kemnaker (Government regulated) / BNSP (LSP)
+--   2. In-house (Client internal training)
 -- =====================================================
 
 DO $$
@@ -19,16 +19,16 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '9c67d3b1-6f0a-4dc4-88cf-140c733a98bf'::uuid,
-        'DI-KEM-001',
+        'DI-KEM-A-001',
         'K3 Elevator Eskalator (TEKNISI)',
         'kemnaker',
-        'K3 UMUM',
-        3,
+        'Ahli',
+        6,
         'days',
         'Training course: K3 Elevator Eskalator (TEKNISI)',
-        1000000,
-        800000,
-        700000,
+        7000000,
+        6120000,
+        6000000,
         'IDR',
         false,
         'active',
@@ -49,16 +49,16 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '6e46967f-b0e3-4644-9bdb-1e95b7cd1f9f'::uuid,
-        'DI-IH-001',
+        'DI-IH-A-001',
         'K3 Elevator Eskalator (TEKNISI)',
         'inhouse',
         'K3 UMUM',
-        3,
+        6,
         'days',
         'Training course: K3 Elevator Eskalator (TEKNISI)',
-        1000000,
-        800000,
-        700000,
+        7000000,
+        6120000,
+        6000000,
         'IDR',
         false,
         'active',
@@ -79,16 +79,16 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'dfa7cd65-502f-472a-b070-264e6bd2dc30'::uuid,
-        'DI-KEM-002',
+        'DI-KEM-A-002',
         'K3 Elevator Eskalator (AHLI)',
         'kemnaker',
         'K3 AHLI',
-        5,
+        12,
         'days',
         'Training course: K3 Elevator Eskalator (AHLI)',
-        1000000,
-        800000,
-        700000,
+        14000000,
+        13515000,
+        13400000,
         'IDR',
         false,
         'active',
@@ -109,16 +109,16 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '02131b55-df37-4128-9fac-e8e05444a487'::uuid,
-        'DI-IH-002',
+        'DI-IH-A-002',
         'K3 Elevator Eskalator (AHLI)',
         'inhouse',
         'K3 AHLI',
-        5,
+        12,
         'days',
         'Training course: K3 Elevator Eskalator (AHLI)',
-        1000000,
-        800000,
-        700000,
+        14000000,
+        13515000,
+        13400000,
         'IDR',
         false,
         'active',
@@ -139,16 +139,16 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'b1ed7aae-5eb7-4288-9543-bae5451bc63f'::uuid,
-        'DI-KEM-003',
+        'DI-KEM-A-003',
         'K3 Listrik (TEKNISI)',
         'kemnaker',
         'K3 UMUM',
-        3,
+        6,
         'days',
         'Training course: K3 Listrik (TEKNISI)',
-        1000000,
-        800000,
-        700000,
+        6500000,
+        6120000,
+        6000000,
         'IDR',
         false,
         'active',
@@ -169,16 +169,16 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '9be2b6f3-a7a0-4a69-a9f5-579b3b605ed7'::uuid,
-        'DI-IH-003',
+        'DI-IH-A-003',
         'K3 Listrik (TEKNISI)',
         'inhouse',
         'K3 UMUM',
-        3,
+        6,
         'days',
         'Training course: K3 Listrik (TEKNISI)',
-        1000000,
-        800000,
-        700000,
+        6500000,
+        6120000,
+        6000000,
         'IDR',
         false,
         'active',
@@ -199,11 +199,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '1787e908-b734-4a5d-ba95-41051ff200b5'::uuid,
-        'DI-KEM-004',
+        'DI-KEM-A-004',
         'K3 Listrik (AHLI)',
         'kemnaker',
         'K3 AHLI',
-        5,
+        17,
         'days',
         'Training course: K3 Listrik (AHLI)',
         1000000,
@@ -229,11 +229,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '35857d0d-0a28-40a5-8f06-5b969f46e912'::uuid,
-        'DI-IH-004',
+        'DI-IH-A-004',
         'K3 Listrik (AHLI)',
         'inhouse',
         'K3 AHLI',
-        5,
+        17,
         'days',
         'Training course: K3 Listrik (AHLI)',
         1000000,
@@ -259,7 +259,7 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'e1b25650-d7c0-42e9-8d8d-c4726e214313'::uuid,
-        'DI-KEM-005',
+        'DI-KEM-A-005',
         'Petugas Peran Kebakaran (Damkar D)',
         'kemnaker',
         'DAMKAR',
@@ -289,7 +289,7 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '9f6fa107-f177-47bc-8207-848758a80a3e'::uuid,
-        'DI-IH-005',
+        'DI-IH-A-005',
         'Petugas Peran Kebakaran (Damkar D)',
         'inhouse',
         'DAMKAR',
@@ -319,11 +319,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'fe50d889-1cd7-4d5d-8970-7777111797e1'::uuid,
-        'DI-KEM-006',
+        'DI-KEM-A-006',
         'Regu Penanggulangan kebakaran (Damkar C)',
         'kemnaker',
         'DAMKAR',
-        3,
+        6,
         'days',
         'Training course: Regu Penanggulangan kebakaran (Damkar C)',
         1000000,
@@ -349,11 +349,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'a45d9922-682a-4460-837d-72fc542e0248'::uuid,
-        'DI-IH-006',
+        'DI-IH-A-006',
         'Regu Penanggulangan kebakaran (Damkar C)',
         'inhouse',
         'DAMKAR',
-        3,
+        6,
         'days',
         'Training course: Regu Penanggulangan kebakaran (Damkar C)',
         1000000,
@@ -379,11 +379,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '8f20cdb5-fdd3-4dd7-9243-fa579502f5d1'::uuid,
-        'DI-KEM-007',
+        'DI-KEM-A-007',
         'K3 Kebakaran Kelas D dan kelas C',
         'kemnaker',
         'K3 UMUM',
-        3,
+        8,
         'days',
         'Training course: K3 Kebakaran Kelas D dan kelas C',
         1000000,
@@ -409,11 +409,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '9f075389-f30a-4636-9b5e-bdf792b0e834'::uuid,
-        'DI-IH-007',
+        'DI-IH-A-007',
         'K3 Kebakaran Kelas D dan kelas C',
         'inhouse',
         'K3 UMUM',
-        3,
+        8,
         'days',
         'Training course: K3 Kebakaran Kelas D dan kelas C',
         1000000,
@@ -439,11 +439,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '10306d8a-a262-4c86-af01-d8a8a86905f4'::uuid,
-        'DI-KEM-008',
+        'DI-KEM-A-008',
         'Kordinator Unit Perana Kebakaran (Damkar B)',
         'kemnaker',
         'DAMKAR',
-        3,
+        6,
         'days',
         'Training course: Kordinator Unit Perana Kebakaran (Damkar B)',
         1000000,
@@ -469,11 +469,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '6a46b10c-02f6-4f5c-aa38-da4e3e933dc2'::uuid,
-        'DI-IH-008',
+        'DI-IH-A-008',
         'Kordinator Unit Perana Kebakaran (Damkar B)',
         'inhouse',
         'DAMKAR',
-        3,
+        6,
         'days',
         'Training course: Kordinator Unit Perana Kebakaran (Damkar B)',
         1000000,
@@ -499,11 +499,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'a9d1e007-df6f-4594-a6ac-812bd5724593'::uuid,
-        'DI-KEM-009',
+        'DI-KEM-A-009',
         'Ahli K3 Kebakaran (Damkar A)',
         'kemnaker',
         'K3 UMUM',
-        3,
+        6,
         'days',
         'Training course: Ahli K3 Kebakaran (Damkar A)',
         1000000,
@@ -529,11 +529,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '96a151da-826f-4f57-9377-8d7ae1a60050'::uuid,
-        'DI-IH-009',
+        'DI-IH-A-009',
         'Ahli K3 Kebakaran (Damkar A)',
         'inhouse',
         'K3 UMUM',
-        3,
+        6,
         'days',
         'Training course: Ahli K3 Kebakaran (Damkar A)',
         1000000,
@@ -559,11 +559,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '735a82ba-7723-42ea-b593-b33012efcb8d'::uuid,
-        'DI-KEM-010',
+        'DI-KEM-A-010',
         'K3 Konstruksi Ahli Muda',
         'kemnaker',
         'K3 UMUM',
-        3,
+        6,
         'days',
         'Training course: K3 Konstruksi Ahli Muda',
         1000000,
@@ -589,11 +589,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'cb54601b-8fea-4679-b31d-ac3636083d12'::uuid,
-        'DI-IH-010',
+        'DI-IH-A-010',
         'K3 Konstruksi Ahli Muda',
         'inhouse',
         'K3 UMUM',
-        3,
+        6,
         'days',
         'Training course: K3 Konstruksi Ahli Muda',
         1000000,
@@ -619,11 +619,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'cc233fe0-1b59-4cfe-a78c-3372e57e66fa'::uuid,
-        'DI-KEM-011',
+        'DI-KEM-A-011',
         'K3 Konstruksi Ahli Madya',
         'kemnaker',
         'K3 UMUM',
-        3,
+        9,
         'days',
         'Training course: K3 Konstruksi Ahli Madya',
         1000000,
@@ -649,11 +649,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '48df70d2-9e9f-4d0e-b3fd-962008591766'::uuid,
-        'DI-IH-011',
+        'DI-IH-A-011',
         'K3 Konstruksi Ahli Madya',
         'inhouse',
         'K3 UMUM',
-        3,
+        9,
         'days',
         'Training course: K3 Konstruksi Ahli Madya',
         1000000,
@@ -679,11 +679,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'defb16cc-7bbe-47ed-9fb5-333f13f1eed0'::uuid,
-        'DI-KEM-012',
+        'DI-KEM-A-012',
         'K3 Konstruksi Ahli Utama',
         'kemnaker',
         'K3 UMUM',
-        3,
+        10,
         'days',
         'Training course: K3 Konstruksi Ahli Utama',
         1000000,
@@ -709,11 +709,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '99725aa3-0351-46aa-a326-8f1bba3a9820'::uuid,
-        'DI-IH-012',
+        'DI-IH-A-012',
         'K3 Konstruksi Ahli Utama',
         'inhouse',
         'K3 UMUM',
-        3,
+        10,
         'days',
         'Training course: K3 Konstruksi Ahli Utama',
         1000000,
@@ -739,11 +739,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'd3ecbab2-b53d-4f54-ba90-9515f89b09b2'::uuid,
-        'DI-KEM-013',
+        'DI-KEM-A-013',
         'K3 Scaffolding (TEKNISI)',
         'kemnaker',
         'K3 UMUM',
-        3,
+        4,
         'days',
         'Training course: K3 Scaffolding (TEKNISI)',
         1000000,
@@ -769,11 +769,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '449c6177-46ab-4b27-a1f5-ebd57ae847a4'::uuid,
-        'DI-IH-013',
+        'DI-IH-A-013',
         'K3 Scaffolding (TEKNISI)',
         'inhouse',
         'K3 UMUM',
-        3,
+        4,
         'days',
         'Training course: K3 Scaffolding (TEKNISI)',
         1000000,
@@ -799,11 +799,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'a74d13a1-902e-44ed-9fa4-2c9723b83b9a'::uuid,
-        'DI-KEM-014',
+        'DI-KEM-A-014',
         'K3 Scaffolding (SUPERVISI)',
         'kemnaker',
         'K3 UMUM',
-        3,
+        5,
         'days',
         'Training course: K3 Scaffolding (SUPERVISI)',
         1000000,
@@ -829,11 +829,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'b99814bf-7c5f-42b6-8e5e-6b2e7323ae9d'::uuid,
-        'DI-IH-014',
+        'DI-IH-A-014',
         'K3 Scaffolding (SUPERVISI)',
         'inhouse',
         'K3 UMUM',
-        3,
+        5,
         'days',
         'Training course: K3 Scaffolding (SUPERVISI)',
         1000000,
@@ -859,11 +859,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'e8870087-9eae-4c1a-b050-0a9380782b8b'::uuid,
-        'DI-KEM-015',
+        'DI-KEM-B-015',
         'K3 Pesawat Angkat Angkut (PAA) (AHLI)',
         'kemnaker',
         'K3 AHLI',
-        5,
+        25,
         'days',
         'Training course: K3 Pesawat Angkat Angkut (PAA) (AHLI)',
         1000000,
@@ -889,11 +889,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'ba9c641c-1f30-42ac-8e4b-ed9db3d6f1fc'::uuid,
-        'DI-IH-015',
+        'DI-IH-B-015',
         'K3 Pesawat Angkat Angkut (PAA) (AHLI)',
         'inhouse',
         'K3 AHLI',
-        5,
+        25,
         'days',
         'Training course: K3 Pesawat Angkat Angkut (PAA) (AHLI)',
         1000000,
@@ -919,11 +919,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '8a71ab68-c516-4cb9-aa55-6933afbf9da8'::uuid,
-        'DI-KEM-016',
+        'DI-KEM-B-016',
         'Pemeriksa Penguji PAA, PTP, PUBT (TEKNISI/PETUGAS)',
         'kemnaker',
         'BOILER',
-        3,
+        9,
         'days',
         'Training course: Pemeriksa Penguji PAA, PTP, PUBT (TEKNISI/PETUGAS)',
         1000000,
@@ -949,11 +949,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '383fa06e-ec3f-408b-9e27-126128f97791'::uuid,
-        'DI-IH-016',
+        'DI-IH-B-016',
         'Pemeriksa Penguji PAA, PTP, PUBT (TEKNISI/PETUGAS)',
         'inhouse',
         'BOILER',
-        3,
+        9,
         'days',
         'Training course: Pemeriksa Penguji PAA, PTP, PUBT (TEKNISI/PETUGAS)',
         1000000,
@@ -979,7 +979,7 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '74af1411-8b8b-42e6-b0a8-f462f33a069f'::uuid,
-        'DI-KEM-017',
+        'DI-KEM-B-017',
         'Gondola, Dongkrak, Mekanik, Takel, Mesin Pancang, Conveyor, Rigger  (OPERATOR)',
         'kemnaker',
         'GENERAL',
@@ -1009,7 +1009,7 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '0767ee76-b731-485a-87a5-15dfc3a9ca25'::uuid,
-        'DI-IH-017',
+        'DI-IH-B-017',
         'Gondola, Dongkrak, Mekanik, Takel, Mesin Pancang, Conveyor, Rigger  (OPERATOR)',
         'inhouse',
         'GENERAL',
@@ -1039,11 +1039,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '7744d5e7-2bc8-4ac8-903f-46355ce64860'::uuid,
-        'DI-KEM-018',
+        'DI-KEM-B-018',
         'Mesin Produksi & Perkakas,Tanur I (OPERATOR)',
         'kemnaker',
         'GENERAL',
-        3,
+        5,
         'days',
         'Training course: Mesin Produksi & Perkakas,Tanur I (OPERATOR)',
         1000000,
@@ -1069,11 +1069,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '63b6f12a-97aa-489d-859f-e8d42145d923'::uuid,
-        'DI-IH-018',
+        'DI-IH-B-018',
         'Mesin Produksi & Perkakas,Tanur I (OPERATOR)',
         'inhouse',
         'GENERAL',
-        3,
+        5,
         'days',
         'Training course: Mesin Produksi & Perkakas,Tanur I (OPERATOR)',
         1000000,
@@ -1099,11 +1099,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '18cd7242-f991-4fe2-b235-6f904add2851'::uuid,
-        'DI-KEM-019',
+        'DI-KEM-B-019',
         'Mesin Produksi & Perkakas,Tanur II (OPERATOR)',
         'kemnaker',
         'GENERAL',
-        3,
+        4,
         'days',
         'Training course: Mesin Produksi & Perkakas,Tanur II (OPERATOR)',
         1000000,
@@ -1129,11 +1129,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '9dd277ec-e28a-4fd0-89fc-d59f70fec64e'::uuid,
-        'DI-IH-019',
+        'DI-IH-B-019',
         'Mesin Produksi & Perkakas,Tanur II (OPERATOR)',
         'inhouse',
         'GENERAL',
-        3,
+        4,
         'days',
         'Training course: Mesin Produksi & Perkakas,Tanur II (OPERATOR)',
         1000000,
@@ -1159,11 +1159,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'c47cc199-79d4-4020-87b2-1da5d108e01f'::uuid,
-        'DI-KEM-020',
+        'DI-KEM-B-020',
         'K3 Boiler Kelas I',
         'kemnaker',
         'K3 UMUM',
-        3,
+        6,
         'days',
         'Training course: K3 Boiler Kelas I',
         1000000,
@@ -1189,11 +1189,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '79ee854e-b85c-472a-ae19-c67f7a8606c0'::uuid,
-        'DI-IH-020',
+        'DI-IH-B-020',
         'K3 Boiler Kelas I',
         'inhouse',
         'K3 UMUM',
-        3,
+        6,
         'days',
         'Training course: K3 Boiler Kelas I',
         1000000,
@@ -1219,11 +1219,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '393f24ca-8471-425c-a46b-11c19e13aa77'::uuid,
-        'DI-KEM-021',
+        'DI-KEM-B-021',
         'K3 Boiler Kelas II',
         'kemnaker',
         'K3 UMUM',
-        3,
+        4,
         'days',
         'Training course: K3 Boiler Kelas II',
         1000000,
@@ -1249,11 +1249,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'f5cd43c8-49c5-4d91-a02d-d33499940573'::uuid,
-        'DI-IH-021',
+        'DI-IH-B-021',
         'K3 Boiler Kelas II',
         'inhouse',
         'K3 UMUM',
-        3,
+        4,
         'days',
         'Training course: K3 Boiler Kelas II',
         1000000,
@@ -1279,11 +1279,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'ee851900-42c7-4210-aef6-8e9e9314ac3d'::uuid,
-        'DI-KEM-022',
+        'DI-KEM-B-022',
         'K3 Crane Kelas I',
         'kemnaker',
         'K3 UMUM',
-        3,
+        5,
         'days',
         'Training course: K3 Crane Kelas I',
         1000000,
@@ -1309,11 +1309,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'ff1f1518-2465-42c2-bc03-c0384eff33c4'::uuid,
-        'DI-IH-022',
+        'DI-IH-B-022',
         'K3 Crane Kelas I',
         'inhouse',
         'K3 UMUM',
-        3,
+        5,
         'days',
         'Training course: K3 Crane Kelas I',
         1000000,
@@ -1339,11 +1339,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'aa77f22c-96ca-4862-a638-75b8aaeb6190'::uuid,
-        'DI-KEM-023',
+        'DI-KEM-B-023',
         'K3 Crane Kelas II',
         'kemnaker',
         'K3 UMUM',
-        3,
+        4,
         'days',
         'Training course: K3 Crane Kelas II',
         1000000,
@@ -1369,11 +1369,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '247406e6-3ae8-4206-acba-032b716ecb97'::uuid,
-        'DI-IH-023',
+        'DI-IH-B-023',
         'K3 Crane Kelas II',
         'inhouse',
         'K3 UMUM',
-        3,
+        4,
         'days',
         'Training course: K3 Crane Kelas II',
         1000000,
@@ -1399,7 +1399,7 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '57a21cc0-6338-4675-b738-1b31250e9ba5'::uuid,
-        'DI-KEM-024',
+        'DI-KEM-B-024',
         'K3 Crane Kelas III',
         'kemnaker',
         'K3 UMUM',
@@ -1429,7 +1429,7 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '3c1a1458-ee1a-44d9-9982-7742f1dd3397'::uuid,
-        'DI-IH-024',
+        'DI-IH-B-024',
         'K3 Crane Kelas III',
         'inhouse',
         'K3 UMUM',
@@ -1459,11 +1459,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'a764bcd7-8c1f-45c4-b705-836921841b4e'::uuid,
-        'DI-KEM-025',
+        'DI-KEM-B-025',
         'K3 Alat Berat',
         'kemnaker',
         'K3 UMUM',
-        3,
+        4,
         'days',
         'Training course: K3 Alat Berat',
         1000000,
@@ -1489,11 +1489,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'bf906c4e-719d-46bc-8adc-50e1a3ca2daf'::uuid,
-        'DI-IH-025',
+        'DI-IH-B-025',
         'K3 Alat Berat',
         'inhouse',
         'K3 UMUM',
-        3,
+        4,
         'days',
         'Training course: K3 Alat Berat',
         1000000,
@@ -1519,11 +1519,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '20c37b6c-f2de-44fb-971c-755ca0bb821f'::uuid,
-        'DI-KEM-026',
+        'DI-KEM-B-026',
         'K3 Forklift Kelas I',
         'kemnaker',
         'K3 UMUM',
-        3,
+        4,
         'days',
         'Training course: K3 Forklift Kelas I',
         1000000,
@@ -1549,11 +1549,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '9611785b-5b99-4536-a3c8-0b9a0232b963'::uuid,
-        'DI-IH-026',
+        'DI-IH-B-026',
         'K3 Forklift Kelas I',
         'inhouse',
         'K3 UMUM',
-        3,
+        4,
         'days',
         'Training course: K3 Forklift Kelas I',
         1000000,
@@ -1579,7 +1579,7 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '1339db01-8674-4c04-9683-30d1626abd8c'::uuid,
-        'DI-KEM-027',
+        'DI-KEM-B-027',
         'K3 Forklift Kelas II',
         'kemnaker',
         'K3 UMUM',
@@ -1609,7 +1609,7 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'b2f6bf17-fbe0-47cd-b215-f4d838ddf0d5'::uuid,
-        'DI-IH-027',
+        'DI-IH-B-027',
         'K3 Forklift Kelas II',
         'inhouse',
         'K3 UMUM',
@@ -1639,11 +1639,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'fd921260-efbb-40df-8eb7-c6d946cc53d4'::uuid,
-        'DI-KEM-028',
+        'DI-KEM-B-028',
         'K3 Diesel/Genset Kelas 1 dan Kelas 2',
         'kemnaker',
         'K3 UMUM',
-        3,
+        4,
         'days',
         'Training course: K3 Diesel/Genset Kelas 1 dan Kelas 2',
         1000000,
@@ -1669,11 +1669,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'cf2fe83b-6e8b-4ed5-8101-1c97009ebab2'::uuid,
-        'DI-IH-028',
+        'DI-IH-B-028',
         'K3 Diesel/Genset Kelas 1 dan Kelas 2',
         'inhouse',
         'K3 UMUM',
-        3,
+        4,
         'days',
         'Training course: K3 Diesel/Genset Kelas 1 dan Kelas 2',
         1000000,
@@ -1699,11 +1699,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '66c7521f-aa33-4b12-abc0-a23375acac1c'::uuid,
-        'DI-KEM-029',
+        'DI-KEM-B-029',
         'Juru Las (Welder) Gas & Listrik Kelas I',
         'kemnaker',
         'ELECTRICAL',
-        3,
+        6,
         'days',
         'Training course: Juru Las (Welder) Gas & Listrik Kelas I',
         1000000,
@@ -1729,11 +1729,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'c34b4ecd-0141-4bb6-9984-621c326d23a5'::uuid,
-        'DI-IH-029',
+        'DI-IH-B-029',
         'Juru Las (Welder) Gas & Listrik Kelas I',
         'inhouse',
         'ELECTRICAL',
-        3,
+        6,
         'days',
         'Training course: Juru Las (Welder) Gas & Listrik Kelas I',
         1000000,
@@ -1759,11 +1759,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '721c6be5-567d-4db9-ad47-eb7627b34c64'::uuid,
-        'DI-KEM-030',
+        'DI-KEM-B-030',
         'Juru Las (Welder) Gas & Listrik Kelas II',
         'kemnaker',
         'ELECTRICAL',
-        3,
+        5,
         'days',
         'Training course: Juru Las (Welder) Gas & Listrik Kelas II',
         1000000,
@@ -1789,11 +1789,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '714e368e-d7e2-43b0-8ccc-dd8a60d60cb0'::uuid,
-        'DI-IH-030',
+        'DI-IH-B-030',
         'Juru Las (Welder) Gas & Listrik Kelas II',
         'inhouse',
         'ELECTRICAL',
-        3,
+        5,
         'days',
         'Training course: Juru Las (Welder) Gas & Listrik Kelas II',
         1000000,
@@ -1819,11 +1819,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '8be6a7a6-e52f-4c4b-8358-33c0d9ae04a3'::uuid,
-        'DI-KEM-031',
+        'DI-KEM-B-031',
         'Juru Las (Welder) Gas & Listrik Kelas III',
         'kemnaker',
         'ELECTRICAL',
-        3,
+        4,
         'days',
         'Training course: Juru Las (Welder) Gas & Listrik Kelas III',
         1000000,
@@ -1849,11 +1849,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'ee4a7cf8-2471-4f95-ae05-2c870226792b'::uuid,
-        'DI-IH-031',
+        'DI-IH-B-031',
         'Juru Las (Welder) Gas & Listrik Kelas III',
         'inhouse',
         'ELECTRICAL',
-        3,
+        4,
         'days',
         'Training course: Juru Las (Welder) Gas & Listrik Kelas III',
         1000000,
@@ -1879,7 +1879,7 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '2f7aa4b2-db46-43da-a7c7-c1623d80803b'::uuid,
-        'DI-KEM-032',
+        'DI-KEM-C-032',
         'K3 Asbes (PETUGAS)',
         'kemnaker',
         'K3 UMUM',
@@ -1909,7 +1909,7 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'a5cc9964-0741-41d7-9c41-cca942fb618a'::uuid,
-        'DI-IH-032',
+        'DI-IH-C-032',
         'K3 Asbes (PETUGAS)',
         'inhouse',
         'K3 UMUM',
@@ -1939,7 +1939,7 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'eb0126ec-18de-47d0-9ebd-ebfb0967cbd3'::uuid,
-        'DI-KEM-033',
+        'DI-KEM-C-033',
         'K3 Pestisida (TEKNISI)',
         'kemnaker',
         'K3 UMUM',
@@ -1969,7 +1969,7 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'bf4eee60-ecf7-4e86-914e-eeb656cfcc15'::uuid,
-        'DI-IH-033',
+        'DI-IH-C-033',
         'K3 Pestisida (TEKNISI)',
         'inhouse',
         'K3 UMUM',
@@ -1999,11 +1999,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '8c2c2970-baa6-4290-8960-f56177f0429d'::uuid,
-        'DI-KEM-034',
+        'DI-KEM-C-034',
         'K3 Deteksi Gas (TEKNISI)',
         'kemnaker',
         'K3 UMUM',
-        3,
+        2,
         'days',
         'Training course: K3 Deteksi Gas (TEKNISI)',
         1000000,
@@ -2029,11 +2029,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '6e921e4a-63e9-4f69-bfa5-e37aaabe459e'::uuid,
-        'DI-IH-034',
+        'DI-IH-C-034',
         'K3 Deteksi Gas (TEKNISI)',
         'inhouse',
         'K3 UMUM',
-        3,
+        2,
         'days',
         'Training course: K3 Deteksi Gas (TEKNISI)',
         1000000,
@@ -2059,11 +2059,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'd1dffa01-b3b4-4436-a6ec-fb763cfaf503'::uuid,
-        'DI-KEM-035',
+        'DI-KEM-C-035',
         'K3 Ruang Terbatas / Confined Space (TEKNISI)',
         'kemnaker',
         'K3 UMUM',
-        3,
+        5,
         'days',
         'Training course: K3 Ruang Terbatas / Confined Space (TEKNISI)',
         1000000,
@@ -2089,11 +2089,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '7909decd-da6d-41f5-bf7f-5da75cc41b7a'::uuid,
-        'DI-IH-035',
+        'DI-IH-C-035',
         'K3 Ruang Terbatas / Confined Space (TEKNISI)',
         'inhouse',
         'K3 UMUM',
-        3,
+        5,
         'days',
         'Training course: K3 Ruang Terbatas / Confined Space (TEKNISI)',
         1000000,
@@ -2119,7 +2119,7 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'd0972a44-9db3-459f-a5bb-e622c64fa5f7'::uuid,
-        'DI-KEM-036',
+        'DI-KEM-C-036',
         'K3 Penyelamat Ruang Terbatas (PETUGAS)',
         'kemnaker',
         'K3 UMUM',
@@ -2149,7 +2149,7 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '310e1fa8-fdc5-4e33-81a1-8de7e4c16e89'::uuid,
-        'DI-IH-036',
+        'DI-IH-C-036',
         'K3 Penyelamat Ruang Terbatas (PETUGAS)',
         'inhouse',
         'K3 UMUM',
@@ -2179,11 +2179,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'f72c8e51-3c42-40be-b45e-9d618d0d59f3'::uuid,
-        'DI-KEM-037',
+        'DI-KEM-C-037',
         'K3 Kimia (PETUGAS)',
         'kemnaker',
         'K3 UMUM',
-        3,
+        8,
         'days',
         'Training course: K3 Kimia (PETUGAS)',
         1000000,
@@ -2209,11 +2209,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '9c5710d2-a68b-4576-b5e7-0ffaa2a1a7a8'::uuid,
-        'DI-IH-037',
+        'DI-IH-C-037',
         'K3 Kimia (PETUGAS)',
         'inhouse',
         'K3 UMUM',
-        3,
+        8,
         'days',
         'Training course: K3 Kimia (PETUGAS)',
         1000000,
@@ -2239,11 +2239,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'f565db65-c112-452e-b628-d14c0b4ba4ef'::uuid,
-        'DI-KEM-038',
+        'DI-KEM-C-038',
         'K3 Kimia (AHLI)',
         'kemnaker',
         'K3 AHLI',
-        5,
+        12,
         'days',
         'Training course: K3 Kimia (AHLI)',
         1000000,
@@ -2269,11 +2269,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'd4c8e083-94ff-4e84-b1d6-305b65ff24dd'::uuid,
-        'DI-IH-038',
+        'DI-IH-C-038',
         'K3 Kimia (AHLI)',
         'inhouse',
         'K3 AHLI',
-        5,
+        12,
         'days',
         'Training course: K3 Kimia (AHLI)',
         1000000,
@@ -2299,11 +2299,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'dfa327ad-8253-400d-ac29-62af78f83787'::uuid,
-        'DI-KEM-039',
+        'DI-KEM-C-039',
         'Ahli K3 Muda Lingkungan Kerja',
         'kemnaker',
         'K3 UMUM',
-        3,
+        5,
         'days',
         'Training course: Ahli K3 Muda Lingkungan Kerja',
         1000000,
@@ -2329,11 +2329,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '1180189b-c683-47e8-9b63-b28ff582ddda'::uuid,
-        'DI-IH-039',
+        'DI-IH-C-039',
         'Ahli K3 Muda Lingkungan Kerja',
         'inhouse',
         'K3 UMUM',
-        3,
+        5,
         'days',
         'Training course: Ahli K3 Muda Lingkungan Kerja',
         1000000,
@@ -2359,11 +2359,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'c35efb16-55ed-41bf-91fe-d16a9c30a746'::uuid,
-        'DI-KEM-040',
+        'DI-KEM-C-040',
         'Ahli K3 Madya Lingkungan Kerja',
         'kemnaker',
         'K3 UMUM',
-        3,
+        5,
         'days',
         'Training course: Ahli K3 Madya Lingkungan Kerja',
         1000000,
@@ -2389,11 +2389,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '06888458-2dea-4ab7-97f2-3fdf4719ecbe'::uuid,
-        'DI-IH-040',
+        'DI-IH-C-040',
         'Ahli K3 Madya Lingkungan Kerja',
         'inhouse',
         'K3 UMUM',
-        3,
+        5,
         'days',
         'Training course: Ahli K3 Madya Lingkungan Kerja',
         1000000,
@@ -2419,11 +2419,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '154cff75-22b5-4fc4-8899-3db1b3d429bc'::uuid,
-        'DI-KEM-041',
+        'DI-KEM-C-041',
         'Ahli K3 Utama Lingkungan Kerja',
         'kemnaker',
         'K3 UMUM',
-        3,
+        5,
         'days',
         'Training course: Ahli K3 Utama Lingkungan Kerja',
         1000000,
@@ -2449,11 +2449,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'c4de19e2-b64a-4cec-a2c6-558a6f3618aa'::uuid,
-        'DI-IH-041',
+        'DI-IH-C-041',
         'Ahli K3 Utama Lingkungan Kerja',
         'inhouse',
         'K3 UMUM',
-        3,
+        5,
         'days',
         'Training course: Ahli K3 Utama Lingkungan Kerja',
         1000000,
@@ -2479,7 +2479,7 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'a1ae65d5-04f1-4a8e-97ac-a8eb48afbafb'::uuid,
-        'DI-KEM-042',
+        'DI-KEM-C-042',
         'Tenaga Kerja Bangunan Tinggi Tingkat 2',
         'kemnaker',
         'GENERAL',
@@ -2509,7 +2509,7 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'ae481879-1686-4ced-8a57-990dba89407e'::uuid,
-        'DI-IH-042',
+        'DI-IH-C-042',
         'Tenaga Kerja Bangunan Tinggi Tingkat 2',
         'inhouse',
         'GENERAL',
@@ -2539,11 +2539,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '6ee12c17-3f24-4c0f-aac1-83cbbfeed8d7'::uuid,
-        'DI-KEM-043',
+        'DI-KEM-C-043',
         'Tenaga Kerja Pada Ketinggian Tingkat 1',
         'kemnaker',
         'GENERAL',
-        3,
+        4,
         'days',
         'Training course: Tenaga Kerja Pada Ketinggian Tingkat 1',
         1000000,
@@ -2569,11 +2569,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '772de08f-dd87-4a63-99cc-ae1370ca6340'::uuid,
-        'DI-IH-043',
+        'DI-IH-C-043',
         'Tenaga Kerja Pada Ketinggian Tingkat 1',
         'inhouse',
         'GENERAL',
-        3,
+        4,
         'days',
         'Training course: Tenaga Kerja Pada Ketinggian Tingkat 1',
         1000000,
@@ -2599,11 +2599,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '546b44c4-b66e-4786-8d8a-127773c2aa02'::uuid,
-        'DI-KEM-044',
+        'DI-KEM-C-044',
         'Tenaga Kerja Pada Ketinggian Tingkat 2',
         'kemnaker',
         'GENERAL',
-        3,
+        4,
         'days',
         'Training course: Tenaga Kerja Pada Ketinggian Tingkat 2',
         1000000,
@@ -2629,11 +2629,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'f8e2295a-72c6-4563-a124-4a1b4dedcb47'::uuid,
-        'DI-IH-044',
+        'DI-IH-C-044',
         'Tenaga Kerja Pada Ketinggian Tingkat 2',
         'inhouse',
         'GENERAL',
-        3,
+        4,
         'days',
         'Training course: Tenaga Kerja Pada Ketinggian Tingkat 2',
         1000000,
@@ -2659,11 +2659,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '1674641c-bfc7-489f-a540-211bd0128537'::uuid,
-        'DI-KEM-045',
+        'DI-KEM-D-045',
         'Hyperkes Untuk Paramedis',
         'kemnaker',
         'GENERAL',
-        3,
+        5,
         'days',
         'Training course: Hyperkes Untuk Paramedis',
         1000000,
@@ -2689,11 +2689,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '537eb9b0-7d42-428f-a9d4-deabf559ce3d'::uuid,
-        'DI-IH-045',
+        'DI-IH-D-045',
         'Hyperkes Untuk Paramedis',
         'inhouse',
         'GENERAL',
-        3,
+        5,
         'days',
         'Training course: Hyperkes Untuk Paramedis',
         1000000,
@@ -2719,11 +2719,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '4fcce95a-cfb1-4a3d-9d9c-5400f08dea02'::uuid,
-        'DI-KEM-046',
+        'DI-KEM-D-046',
         'Hyperkes Untuk Dokter',
         'kemnaker',
         'GENERAL',
-        3,
+        6,
         'days',
         'Training course: Hyperkes Untuk Dokter',
         1000000,
@@ -2749,11 +2749,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '379e1c9f-4e9b-4612-96a7-443e964d1730'::uuid,
-        'DI-IH-046',
+        'DI-IH-D-046',
         'Hyperkes Untuk Dokter',
         'inhouse',
         'GENERAL',
-        3,
+        6,
         'days',
         'Training course: Hyperkes Untuk Dokter',
         1000000,
@@ -2779,7 +2779,7 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '3fb5527a-5f99-4fe6-ade1-6f424f5e5c18'::uuid,
-        'DI-KEM-047',
+        'DI-KEM-D-047',
         'P3K (First Aider )',
         'kemnaker',
         'GENERAL',
@@ -2809,7 +2809,7 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'a291b14d-0b01-4890-8163-9bce77b95d27'::uuid,
-        'DI-IH-047',
+        'DI-IH-D-047',
         'P3K (First Aider )',
         'inhouse',
         'GENERAL',
@@ -2839,7 +2839,7 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '20fc0f6b-f4ac-4e99-aaec-9dc2006e9755'::uuid,
-        'DI-KEM-048',
+        'DI-KEM-D-048',
         'K3 Rumah Sakit',
         'kemnaker',
         'K3 UMUM',
@@ -2869,7 +2869,7 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '1eb5fc1b-5dce-47d2-bcd4-ddc776e2fdb2'::uuid,
-        'DI-IH-048',
+        'DI-IH-D-048',
         'K3 Rumah Sakit',
         'inhouse',
         'K3 UMUM',
@@ -2899,11 +2899,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'd8f84aac-1aba-4f5a-85d5-6d02406308f8'::uuid,
-        'DI-KEM-049',
+        'DI-KEM-E-049',
         'Ahli K3 Umum',
         'kemnaker',
         'K3 UMUM',
-        3,
+        12,
         'days',
         'Training course: Ahli K3 Umum',
         1000000,
@@ -2929,11 +2929,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '9ba04964-5e24-4525-a9d6-aa2c221435a2'::uuid,
-        'DI-IH-049',
+        'DI-IH-E-049',
         'Ahli K3 Umum',
         'inhouse',
         'K3 UMUM',
-        3,
+        12,
         'days',
         'Training course: Ahli K3 Umum',
         1000000,
@@ -2959,7 +2959,7 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'e5fbb511-95fd-4cba-8075-e7e7fd35698f'::uuid,
-        'DI-KEM-050',
+        'DI-KEM-E-050',
         'P2K3  (Panitia Pembina K3) (non sertifikasi)',
         'kemnaker',
         'K3 UMUM',
@@ -2989,7 +2989,7 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '8013d9ee-ef96-4443-b054-b7269d483acc'::uuid,
-        'DI-IH-050',
+        'DI-IH-E-050',
         'P2K3  (Panitia Pembina K3) (non sertifikasi)',
         'inhouse',
         'K3 UMUM',
@@ -3019,11 +3019,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '156292c7-1223-461b-ad94-f6890464f668'::uuid,
-        'DI-KEM-051',
+        'DI-KEM-E-051',
         'Auditor SMK3  (Sistem Manajemen K3)',
         'kemnaker',
         'K3 UMUM',
-        3,
+        5,
         'days',
         'Training course: Auditor SMK3  (Sistem Manajemen K3)',
         1000000,
@@ -3049,11 +3049,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '7c5e7fc4-d199-4b0e-ac0b-eebd8b82eea2'::uuid,
-        'DI-IH-051',
+        'DI-IH-E-051',
         'Auditor SMK3  (Sistem Manajemen K3)',
         'inhouse',
         'K3 UMUM',
-        3,
+        5,
         'days',
         'Training course: Auditor SMK3  (Sistem Manajemen K3)',
         1000000,
@@ -3079,7 +3079,7 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'ad16cd6c-66f0-4592-8a13-ab20e4049ee6'::uuid,
-        'DI-KEM-052',
+        'DI-KEM-E-052',
         'Investigasi Kecelakaan (non sertifikasi)',
         'kemnaker',
         'GENERAL',
@@ -3109,7 +3109,7 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'b2288d8a-f7bc-4648-a033-ab20991eff60'::uuid,
-        'DI-IH-052',
+        'DI-IH-E-052',
         'Investigasi Kecelakaan (non sertifikasi)',
         'inhouse',
         'GENERAL',
@@ -3131,7 +3131,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 53. Fire Safety Manager (FSM) (KEMNAKER)
+    -- 53. Fire Safety Manager (FSM) (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3139,10 +3139,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'a4fe689c-cdf1-46eb-8762-3811ccffc275'::uuid,
-        'DI-KEM-053',
+        'DI-BNSP-053',
         'Fire Safety Manager (FSM)',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Fire Safety Manager (FSM)',
@@ -3161,7 +3161,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 53. Fire Safety Manager (FSM) (INHOUSE)
+    -- 53. Fire Safety Manager (FSM) (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3172,7 +3172,7 @@ BEGIN
         'DI-IH-053',
         'Fire Safety Manager (FSM)',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Fire Safety Manager (FSM)',
@@ -3191,7 +3191,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 54. Penanggung Jawab Pengendalian Pencemaran Udara (PPPU) (KEMNAKER)
+    -- 54. Penanggung Jawab Pengendalian Pencemaran Udara (PPPU) (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3199,10 +3199,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'fe1bcd03-c108-46b2-97d7-85e5f8fdeb89'::uuid,
-        'DI-KEM-054',
+        'DI-BNSP-054',
         'Penanggung Jawab Pengendalian Pencemaran Udara (PPPU)',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Penanggung Jawab Pengendalian Pencemaran Udara (PPPU)',
@@ -3221,7 +3221,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 54. Penanggung Jawab Pengendalian Pencemaran Udara (PPPU) (INHOUSE)
+    -- 54. Penanggung Jawab Pengendalian Pencemaran Udara (PPPU) (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3232,7 +3232,7 @@ BEGIN
         'DI-IH-054',
         'Penanggung Jawab Pengendalian Pencemaran Udara (PPPU)',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Penanggung Jawab Pengendalian Pencemaran Udara (PPPU)',
@@ -3251,7 +3251,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 55. Penanggung Jawab Pengendalian Pencemaran Air (PPPA) (KEMNAKER)
+    -- 55. Penanggung Jawab Pengendalian Pencemaran Air (PPPA) (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3259,10 +3259,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '56639175-e430-483c-b965-b0e3f5a98495'::uuid,
-        'DI-KEM-055',
+        'DI-BNSP-055',
         'Penanggung Jawab Pengendalian Pencemaran Air (PPPA)',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Penanggung Jawab Pengendalian Pencemaran Air (PPPA)',
@@ -3281,7 +3281,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 55. Penanggung Jawab Pengendalian Pencemaran Air (PPPA) (INHOUSE)
+    -- 55. Penanggung Jawab Pengendalian Pencemaran Air (PPPA) (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3292,7 +3292,7 @@ BEGIN
         'DI-IH-055',
         'Penanggung Jawab Pengendalian Pencemaran Air (PPPA)',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Penanggung Jawab Pengendalian Pencemaran Air (PPPA)',
@@ -3311,7 +3311,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 56. Pemantauan dan Analisis Pengelolaan Limbah B3 (PLB3) (KEMNAKER)
+    -- 56. Pemantauan dan Analisis Pengelolaan Limbah B3 (PLB3) (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3319,10 +3319,9 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '1c840954-6355-4e59-bd71-64ead83f7451'::uuid,
-        'DI-KEM-056',
-        'Pemantauan dan Analisis Pengelolaan Limbah B3 (PLB3)',
-        'kemnaker',
-        'GENERAL',
+        'DI-BNSP-056',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pemantauan dan Analisis Pengelolaan Limbah B3 (PLB3)',
@@ -3341,7 +3340,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 56. Pemantauan dan Analisis Pengelolaan Limbah B3 (PLB3) (INHOUSE)
+    -- 56. Pemantauan dan Analisis Pengelolaan Limbah B3 (PLB3) (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3352,7 +3351,7 @@ BEGIN
         'DI-IH-056',
         'Pemantauan dan Analisis Pengelolaan Limbah B3 (PLB3)',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Pemantauan dan Analisis Pengelolaan Limbah B3 (PLB3)',
@@ -3371,7 +3370,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 57. Penanggung Jawab Operasional Instalasi Pengendalian Pencemaran Udara (POPU) (KEMNAKER)
+    -- 57. Penanggung Jawab Operasional Instalasi Pengendalian Pencemaran Udara (POPU) (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3379,10 +3378,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '6e184d84-2803-492f-a6d7-1a52f69f0a2e'::uuid,
-        'DI-KEM-057',
+        'DI-BNSP-057',
         'Penanggung Jawab Operasional Instalasi Pengendalian Pencemaran Udara (POPU)',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Penanggung Jawab Operasional Instalasi Pengendalian Pencemaran Udara (POPU)',
@@ -3401,7 +3400,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 57. Penanggung Jawab Operasional Instalasi Pengendalian Pencemaran Udara (POPU) (INHOUSE)
+    -- 57. Penanggung Jawab Operasional Instalasi Pengendalian Pencemaran Udara (POPU) (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3412,7 +3411,7 @@ BEGIN
         'DI-IH-057',
         'Penanggung Jawab Operasional Instalasi Pengendalian Pencemaran Udara (POPU)',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Penanggung Jawab Operasional Instalasi Pengendalian Pencemaran Udara (POPU)',
@@ -3431,7 +3430,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 58. Penanggung jawab Operasional Pengolahan Air Limbah (POPAL)  (KEMNAKER)
+    -- 58. Penanggung jawab Operasional Pengolahan Air Limbah (POPAL)  (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3439,10 +3438,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '457b37c1-caa9-410a-99fc-30f4bd08b976'::uuid,
-        'DI-KEM-058',
+        'DI-BNSP-058',
         'Penanggung jawab Operasional Pengolahan Air Limbah (POPAL) ',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Penanggung jawab Operasional Pengolahan Air Limbah (POPAL) ',
@@ -3461,7 +3460,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 58. Penanggung jawab Operasional Pengolahan Air Limbah (POPAL)  (INHOUSE)
+    -- 58. Penanggung jawab Operasional Pengolahan Air Limbah (POPAL)  (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3472,7 +3471,7 @@ BEGIN
         'DI-IH-058',
         'Penanggung jawab Operasional Pengolahan Air Limbah (POPAL) ',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Penanggung jawab Operasional Pengolahan Air Limbah (POPAL) ',
@@ -3491,7 +3490,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 59. Pengoperasian Instalasi Pengelolaan limbah B3 (OLB3) (KEMNAKER)
+    -- 59. Pengoperasian Instalasi Pengelolaan limbah B3 (OLB3) (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3499,10 +3498,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '27e1fcaa-0532-4f41-8bfa-2b6f61feb376'::uuid,
-        'DI-KEM-059',
+        'DI-BNSP-059',
         'Pengoperasian Instalasi Pengelolaan limbah B3 (OLB3)',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Instalasi Pengelolaan limbah B3 (OLB3)',
@@ -3521,7 +3520,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 59. Pengoperasian Instalasi Pengelolaan limbah B3 (OLB3) (INHOUSE)
+    -- 59. Pengoperasian Instalasi Pengelolaan limbah B3 (OLB3) (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3532,7 +3531,7 @@ BEGIN
         'DI-IH-059',
         'Pengoperasian Instalasi Pengelolaan limbah B3 (OLB3)',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Instalasi Pengelolaan limbah B3 (OLB3)',
@@ -3551,7 +3550,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 60. HR Manager (KEMNAKER)
+    -- 60. HR Manager (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3559,11 +3558,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '9a6ca931-455c-4202-9e55-f8b6ff6c0254'::uuid,
-        'DI-KEM-060',
+        'DI-BNSP-060',
         'HR Manager',
-        'kemnaker',
-        'GENERAL',
-        3,
+        'BNSP',
+        'BNSP',
+        4,
         'days',
         'Training course: HR Manager',
         1000000,
@@ -3581,7 +3580,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 60. HR Manager (INHOUSE)
+    -- 60. HR Manager (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3592,8 +3591,8 @@ BEGIN
         'DI-IH-060',
         'HR Manager',
         'inhouse',
-        'GENERAL',
-        3,
+        'BNSP',
+        4,
         'days',
         'Training course: HR Manager',
         1000000,
@@ -3611,7 +3610,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 61. HR Supervisor (KEMNAKER)
+    -- 61. HR Supervisor (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3619,10 +3618,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '2772824a-76ae-4c02-bd6c-4f86ac2886c1'::uuid,
-        'DI-KEM-061',
+        'DI-BNSP-061',
         'HR Supervisor',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: HR Supervisor',
@@ -3641,7 +3640,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 61. HR Supervisor (INHOUSE)
+    -- 61. HR Supervisor (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3652,7 +3651,7 @@ BEGIN
         'DI-IH-061',
         'HR Supervisor',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: HR Supervisor',
@@ -3671,7 +3670,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 62. HR Staff (KEMNAKER)
+    -- 62. HR Staff (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3679,10 +3678,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'fa780255-6229-4371-a9cd-f1dd253ce98e'::uuid,
-        'DI-KEM-062',
+        'DI-BNSP-062',
         'HR Staff',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: HR Staff',
@@ -3701,7 +3700,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 62. HR Staff (INHOUSE)
+    -- 62. HR Staff (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3712,7 +3711,7 @@ BEGIN
         'DI-IH-062',
         'HR Staff',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: HR Staff',
@@ -3731,7 +3730,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 63. Operator K3  (KEMNAKER)
+    -- 63. Operator K3  (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3739,10 +3738,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'ed36d25a-1154-44e5-b103-8fbe84d550f7'::uuid,
-        'DI-KEM-063',
+        'DI-BNSP-063',
         'Operator K3 ',
-        'kemnaker',
-        'K3 UMUM',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Operator K3 ',
@@ -3761,7 +3760,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 63. Operator K3  (INHOUSE)
+    -- 63. Operator K3  (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3772,7 +3771,7 @@ BEGIN
         'DI-IH-063',
         'Operator K3 ',
         'inhouse',
-        'K3 UMUM',
+        'BNSP',
         3,
         'days',
         'Training course: Operator K3 ',
@@ -3791,7 +3790,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 64. Petugas K3  (KEMNAKER)
+    -- 64. Petugas K3  (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3799,10 +3798,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '5b8b9ae4-3f7d-4a7f-aeda-bb9d75805021'::uuid,
-        'DI-KEM-064',
+        'DI-BNSP-064',
         'Petugas K3 ',
-        'kemnaker',
-        'K3 UMUM',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Petugas K3 ',
@@ -3821,7 +3820,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 64. Petugas K3  (INHOUSE)
+    -- 64. Petugas K3  (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3832,7 +3831,7 @@ BEGIN
         'DI-IH-064',
         'Petugas K3 ',
         'inhouse',
-        'K3 UMUM',
+        'BNSP',
         3,
         'days',
         'Training course: Petugas K3 ',
@@ -3851,7 +3850,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 65. Ahli K3  (KEMNAKER)
+    -- 65. Ahli K3  (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3859,11 +3858,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '67f81941-4c9f-4a7e-a6bf-4fa99f08b025'::uuid,
-        'DI-KEM-065',
+        'DI-BNSP-065',
         'Ahli K3 ',
-        'kemnaker',
-        'K3 UMUM',
-        3,
+        'BNSP',
+        'BNSP',
+        4,
         'days',
         'Training course: Ahli K3 ',
         1000000,
@@ -3881,7 +3880,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 65. Ahli K3  (INHOUSE)
+    -- 65. Ahli K3  (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3892,8 +3891,8 @@ BEGIN
         'DI-IH-065',
         'Ahli K3 ',
         'inhouse',
-        'K3 UMUM',
-        3,
+        'BNSP',
+        4,
         'days',
         'Training course: Ahli K3 ',
         1000000,
@@ -3911,7 +3910,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 66. Pengelolaan K3 Listrik  (KEMNAKER)
+    -- 66. Pengelolaan K3 Listrik  (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3919,10 +3918,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '4572c13b-0528-4460-9ce1-28d35f0d0463'::uuid,
-        'DI-KEM-066',
+        'DI-BNSP-066',
         'Pengelolaan K3 Listrik ',
-        'kemnaker',
-        'K3 UMUM',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengelolaan K3 Listrik ',
@@ -3941,7 +3940,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 66. Pengelolaan K3 Listrik  (INHOUSE)
+    -- 66. Pengelolaan K3 Listrik  (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3952,7 +3951,7 @@ BEGIN
         'DI-IH-066',
         'Pengelolaan K3 Listrik ',
         'inhouse',
-        'K3 UMUM',
+        'BNSP',
         3,
         'days',
         'Training course: Pengelolaan K3 Listrik ',
@@ -3971,7 +3970,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 67. Penganalisa K3 Listrik  (KEMNAKER)
+    -- 67. Penganalisa K3 Listrik  (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -3979,11 +3978,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '01935cfe-ca6a-47ec-81cb-e636de18f117'::uuid,
-        'DI-KEM-067',
+        'DI-BNSP-067',
         'Penganalisa K3 Listrik ',
-        'kemnaker',
-        'K3 UMUM',
-        3,
+        'BNSP',
+        'BNSP',
+        4,
         'days',
         'Training course: Penganalisa K3 Listrik ',
         1000000,
@@ -4001,7 +4000,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 67. Penganalisa K3 Listrik  (INHOUSE)
+    -- 67. Penganalisa K3 Listrik  (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4012,8 +4011,8 @@ BEGIN
         'DI-IH-067',
         'Penganalisa K3 Listrik ',
         'inhouse',
-        'K3 UMUM',
-        3,
+        'BNSP',
+        4,
         'days',
         'Training course: Penganalisa K3 Listrik ',
         1000000,
@@ -4031,7 +4030,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 68. Pengawasan K3 Industri Migas  (KEMNAKER)
+    -- 68. Pengawasan K3 Industri Migas  (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4039,11 +4038,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '63ddd6d5-d395-454a-a1b1-3d34c69b8282'::uuid,
-        'DI-KEM-068',
+        'DI-BNSP-068',
         'Pengawasan K3 Industri Migas ',
-        'kemnaker',
-        'K3 UMUM',
-        3,
+        'BNSP',
+        'BNSP',
+        4,
         'days',
         'Training course: Pengawasan K3 Industri Migas ',
         1000000,
@@ -4061,7 +4060,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 68. Pengawasan K3 Industri Migas  (INHOUSE)
+    -- 68. Pengawasan K3 Industri Migas  (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4072,8 +4071,8 @@ BEGIN
         'DI-IH-068',
         'Pengawasan K3 Industri Migas ',
         'inhouse',
-        'K3 UMUM',
-        3,
+        'BNSP',
+        4,
         'days',
         'Training course: Pengawasan K3 Industri Migas ',
         1000000,
@@ -4091,7 +4090,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 69. Pengoperasian K3 Industrian Migas  (KEMNAKER)
+    -- 69. Pengoperasian K3 Industrian Migas  (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4099,10 +4098,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'd5999922-7803-4296-b2d5-3d61231d58ce'::uuid,
-        'DI-KEM-069',
+        'DI-BNSP-069',
         'Pengoperasian K3 Industrian Migas ',
-        'kemnaker',
-        'K3 UMUM',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian K3 Industrian Migas ',
@@ -4121,7 +4120,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 69. Pengoperasian K3 Industrian Migas  (INHOUSE)
+    -- 69. Pengoperasian K3 Industrian Migas  (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4132,7 +4131,7 @@ BEGIN
         'DI-IH-069',
         'Pengoperasian K3 Industrian Migas ',
         'inhouse',
-        'K3 UMUM',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian K3 Industrian Migas ',
@@ -4151,7 +4150,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 70. Paramedis K3 Muda  (KEMNAKER)
+    -- 70. Paramedis K3 Muda  (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4159,10 +4158,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '5304b634-df20-4ef0-a20b-085645f8a3dc'::uuid,
-        'DI-KEM-070',
+        'DI-BNSP-070',
         'Paramedis K3 Muda ',
-        'kemnaker',
-        'K3 UMUM',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Paramedis K3 Muda ',
@@ -4181,7 +4180,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 70. Paramedis K3 Muda  (INHOUSE)
+    -- 70. Paramedis K3 Muda  (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4192,7 +4191,7 @@ BEGIN
         'DI-IH-070',
         'Paramedis K3 Muda ',
         'inhouse',
-        'K3 UMUM',
+        'BNSP',
         3,
         'days',
         'Training course: Paramedis K3 Muda ',
@@ -4211,7 +4210,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 71. Paramedis K3 Madya  (KEMNAKER)
+    -- 71. Paramedis K3 Madya  (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4219,10 +4218,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '70f7f106-bfdd-48c5-9313-748c720991da'::uuid,
-        'DI-KEM-071',
+        'DI-BNSP-071',
         'Paramedis K3 Madya ',
-        'kemnaker',
-        'K3 UMUM',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Paramedis K3 Madya ',
@@ -4241,7 +4240,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 71. Paramedis K3 Madya  (INHOUSE)
+    -- 71. Paramedis K3 Madya  (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4252,7 +4251,7 @@ BEGIN
         'DI-IH-071',
         'Paramedis K3 Madya ',
         'inhouse',
-        'K3 UMUM',
+        'BNSP',
         3,
         'days',
         'Training course: Paramedis K3 Madya ',
@@ -4271,7 +4270,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 72. Paramedis K3 Utama  (KEMNAKER)
+    -- 72. Paramedis K3 Utama  (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4279,11 +4278,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '18145451-77d6-4ece-8687-a11a3fe1bbd0'::uuid,
-        'DI-KEM-072',
+        'DI-BNSP-072',
         'Paramedis K3 Utama ',
-        'kemnaker',
-        'K3 UMUM',
-        3,
+        'BNSP',
+        'BNSP',
+        4,
         'days',
         'Training course: Paramedis K3 Utama ',
         1000000,
@@ -4301,7 +4300,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 72. Paramedis K3 Utama  (INHOUSE)
+    -- 72. Paramedis K3 Utama  (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4312,8 +4311,8 @@ BEGIN
         'DI-IH-072',
         'Paramedis K3 Utama ',
         'inhouse',
-        'K3 UMUM',
-        3,
+        'BNSP',
+        4,
         'days',
         'Training course: Paramedis K3 Utama ',
         1000000,
@@ -4331,7 +4330,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 73. Dokter Perusahaan (KEMNAKER)
+    -- 73. Dokter Perusahaan (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4339,11 +4338,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'd7ce6f6f-7b0c-4a2b-ad58-e65fe952eeff'::uuid,
-        'DI-KEM-073',
+        'DI-BNSP-073',
         'Dokter Perusahaan',
-        'kemnaker',
-        'GENERAL',
-        3,
+        'BNSP',
+        'BNSP',
+        4,
         'days',
         'Training course: Dokter Perusahaan',
         1000000,
@@ -4361,7 +4360,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 73. Dokter Perusahaan (INHOUSE)
+    -- 73. Dokter Perusahaan (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4372,8 +4371,8 @@ BEGIN
         'DI-IH-073',
         'Dokter Perusahaan',
         'inhouse',
-        'GENERAL',
-        3,
+        'BNSP',
+        4,
         'days',
         'Training course: Dokter Perusahaan',
         1000000,
@@ -4391,7 +4390,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 74. Pengelolaan Laboratorium (KEMNAKER)
+    -- 74. Pengelolaan Laboratorium (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4399,11 +4398,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '11b2f8d6-1699-4f20-aeb5-59dafab1ea3b'::uuid,
-        'DI-KEM-074',
+        'DI-BNSP-074',
         'Pengelolaan Laboratorium',
-        'kemnaker',
-        'GENERAL',
-        3,
+        'BNSP',
+        'BNSP',
+        4,
         'days',
         'Training course: Pengelolaan Laboratorium',
         1000000,
@@ -4421,7 +4420,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 74. Pengelolaan Laboratorium (INHOUSE)
+    -- 74. Pengelolaan Laboratorium (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4432,8 +4431,8 @@ BEGIN
         'DI-IH-074',
         'Pengelolaan Laboratorium',
         'inhouse',
-        'GENERAL',
-        3,
+        'BNSP',
+        4,
         'days',
         'Training course: Pengelolaan Laboratorium',
         1000000,
@@ -4451,7 +4450,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 75. Pengelolaan P3K di tempat Kerja (KEMNAKER)
+    -- 75. Pengelolaan P3K di tempat Kerja (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4459,11 +4458,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'f3aed587-ac4b-4cd5-82b7-8e87b4ccf6e4'::uuid,
-        'DI-KEM-075',
+        'DI-BNSP-075',
         'Pengelolaan P3K di tempat Kerja',
-        'kemnaker',
-        'GENERAL',
-        3,
+        'BNSP',
+        'BNSP',
+        4,
         'days',
         'Training course: Pengelolaan P3K di tempat Kerja',
         1000000,
@@ -4481,7 +4480,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 75. Pengelolaan P3K di tempat Kerja (INHOUSE)
+    -- 75. Pengelolaan P3K di tempat Kerja (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4492,8 +4491,8 @@ BEGIN
         'DI-IH-075',
         'Pengelolaan P3K di tempat Kerja',
         'inhouse',
-        'GENERAL',
-        3,
+        'BNSP',
+        4,
         'days',
         'Training course: Pengelolaan P3K di tempat Kerja',
         1000000,
@@ -4511,7 +4510,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 76. Pemadaman Kebakaran Migas (KEMNAKER)
+    -- 76. Pemadaman Kebakaran Migas (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4519,11 +4518,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '8e1b7ea1-bdee-4779-9a3a-b5054e63add9'::uuid,
-        'DI-KEM-076',
+        'DI-BNSP-076',
         'Pemadaman Kebakaran Migas',
-        'kemnaker',
-        'DAMKAR',
-        3,
+        'BNSP',
+        'BNSP',
+        4,
         'days',
         'Training course: Pemadaman Kebakaran Migas',
         1000000,
@@ -4541,7 +4540,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 76. Pemadaman Kebakaran Migas (INHOUSE)
+    -- 76. Pemadaman Kebakaran Migas (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4552,8 +4551,8 @@ BEGIN
         'DI-IH-076',
         'Pemadaman Kebakaran Migas',
         'inhouse',
-        'DAMKAR',
-        3,
+        'BNSP',
+        4,
         'days',
         'Training course: Pemadaman Kebakaran Migas',
         1000000,
@@ -4571,7 +4570,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 77. Pengoperasian Forklift (KEMNAKER)
+    -- 77. Pengoperasian Forklift (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4579,10 +4578,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'cf004288-491e-4d23-9034-b156c1c2ffd8'::uuid,
-        'DI-KEM-077',
+        'DI-BNSP-077',
         'Pengoperasian Forklift',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Forklift',
@@ -4601,7 +4600,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 77. Pengoperasian Forklift (INHOUSE)
+    -- 77. Pengoperasian Forklift (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4612,7 +4611,7 @@ BEGIN
         'DI-IH-077',
         'Pengoperasian Forklift',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Forklift',
@@ -4631,7 +4630,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 78. Pengoperasian Crane Jembatan (KEMNAKER)
+    -- 78. Pengoperasian Crane Jembatan (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4639,10 +4638,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'a91cdefd-745e-4a34-8b68-fcd0a5971ca8'::uuid,
-        'DI-KEM-078',
+        'DI-BNSP-078',
         'Pengoperasian Crane Jembatan',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Crane Jembatan',
@@ -4661,7 +4660,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 78. Pengoperasian Crane Jembatan (INHOUSE)
+    -- 78. Pengoperasian Crane Jembatan (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4672,7 +4671,7 @@ BEGIN
         'DI-IH-078',
         'Pengoperasian Crane Jembatan',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Crane Jembatan',
@@ -4691,7 +4690,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 79. Pengoperasian Mobil Crane (KEMNAKER)
+    -- 79. Pengoperasian Mobil Crane (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4699,10 +4698,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'ebc91c90-11fb-4bb0-a6f6-52e1ecae6d2d'::uuid,
-        'DI-KEM-079',
+        'DI-BNSP-079',
         'Pengoperasian Mobil Crane',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Mobil Crane',
@@ -4721,7 +4720,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 79. Pengoperasian Mobil Crane (INHOUSE)
+    -- 79. Pengoperasian Mobil Crane (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4732,7 +4731,7 @@ BEGIN
         'DI-IH-079',
         'Pengoperasian Mobil Crane',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Mobil Crane',
@@ -4751,7 +4750,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 80. Pengoperasian Crane Putar Tetap (Pedestal Crane) (KEMNAKER)
+    -- 80. Pengoperasian Crane Putar Tetap (Pedestal Crane) (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4759,10 +4758,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '2ce75ada-b0e8-443d-8553-20abca0558c2'::uuid,
-        'DI-KEM-080',
+        'DI-BNSP-080',
         'Pengoperasian Crane Putar Tetap (Pedestal Crane)',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Crane Putar Tetap (Pedestal Crane)',
@@ -4781,7 +4780,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 80. Pengoperasian Crane Putar Tetap (Pedestal Crane) (INHOUSE)
+    -- 80. Pengoperasian Crane Putar Tetap (Pedestal Crane) (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4792,7 +4791,7 @@ BEGIN
         'DI-IH-080',
         'Pengoperasian Crane Putar Tetap (Pedestal Crane)',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Crane Putar Tetap (Pedestal Crane)',
@@ -4811,7 +4810,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 81. Inspektur Pesawat Angkat (KEMNAKER)
+    -- 81. Inspektur Pesawat Angkat (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4819,11 +4818,11 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'f7bc68fa-5462-45c7-bb22-8ff347d1ab3e'::uuid,
-        'DI-KEM-081',
+        'DI-BNSP-081',
         'Inspektur Pesawat Angkat',
-        'kemnaker',
-        'EQUIPMENT OPERATOR',
-        3,
+        'BNSP',
+        'BNSP',
+        4,
         'days',
         'Training course: Inspektur Pesawat Angkat',
         1000000,
@@ -4841,7 +4840,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 81. Inspektur Pesawat Angkat (INHOUSE)
+    -- 81. Inspektur Pesawat Angkat (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4852,8 +4851,8 @@ BEGIN
         'DI-IH-081',
         'Inspektur Pesawat Angkat',
         'inhouse',
-        'EQUIPMENT OPERATOR',
-        3,
+        'BNSP',
+        4,
         'days',
         'Training course: Inspektur Pesawat Angkat',
         1000000,
@@ -4871,7 +4870,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 82. Pengoperasian Pemindahan Beban (Rigger) (KEMNAKER)
+    -- 82. Pengoperasian Pemindahan Beban (Rigger) (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4879,10 +4878,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '73934093-bded-4973-8de5-edad3f419973'::uuid,
-        'DI-KEM-082',
+        'DI-BNSP-082',
         'Pengoperasian Pemindahan Beban (Rigger)',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Pemindahan Beban (Rigger)',
@@ -4901,7 +4900,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 82. Pengoperasian Pemindahan Beban (Rigger) (INHOUSE)
+    -- 82. Pengoperasian Pemindahan Beban (Rigger) (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4912,7 +4911,7 @@ BEGIN
         'DI-IH-082',
         'Pengoperasian Pemindahan Beban (Rigger)',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Pemindahan Beban (Rigger)',
@@ -4931,7 +4930,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 83. Pengendalian Pemindahan Beban (Asisten Rigger) (KEMNAKER)
+    -- 83. Pengendalian Pemindahan Beban (Asisten Rigger) (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4939,10 +4938,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'b9b05b3f-361e-4ba4-844b-372476a808a5'::uuid,
-        'DI-KEM-083',
+        'DI-BNSP-083',
         'Pengendalian Pemindahan Beban (Asisten Rigger)',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengendalian Pemindahan Beban (Asisten Rigger)',
@@ -4961,7 +4960,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 83. Pengendalian Pemindahan Beban (Asisten Rigger) (INHOUSE)
+    -- 83. Pengendalian Pemindahan Beban (Asisten Rigger) (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4972,7 +4971,7 @@ BEGIN
         'DI-IH-083',
         'Pengendalian Pemindahan Beban (Asisten Rigger)',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Pengendalian Pemindahan Beban (Asisten Rigger)',
@@ -4991,7 +4990,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 84. Pengoperasian Alat Gali Muat Excavator Backhoe (KEMNAKER)
+    -- 84. Pengoperasian Alat Gali Muat Excavator Backhoe (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -4999,10 +4998,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'bb8ce752-e36f-42f5-9f6a-ee040229b2b5'::uuid,
-        'DI-KEM-084',
+        'DI-BNSP-084',
         'Pengoperasian Alat Gali Muat Excavator Backhoe',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Alat Gali Muat Excavator Backhoe',
@@ -5021,7 +5020,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 84. Pengoperasian Alat Gali Muat Excavator Backhoe (INHOUSE)
+    -- 84. Pengoperasian Alat Gali Muat Excavator Backhoe (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5032,7 +5031,7 @@ BEGIN
         'DI-IH-084',
         'Pengoperasian Alat Gali Muat Excavator Backhoe',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Alat Gali Muat Excavator Backhoe',
@@ -5051,7 +5050,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 85. Pengoperasian Alat Gali Muat Excavator Front Shovel (KEMNAKER)
+    -- 85. Pengoperasian Alat Gali Muat Excavator Front Shovel (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5059,10 +5058,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '9c2a210e-3146-41f2-8f67-7fa230bcebcc'::uuid,
-        'DI-KEM-085',
+        'DI-BNSP-085',
         'Pengoperasian Alat Gali Muat Excavator Front Shovel',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Alat Gali Muat Excavator Front Shovel',
@@ -5081,7 +5080,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 85. Pengoperasian Alat Gali Muat Excavator Front Shovel (INHOUSE)
+    -- 85. Pengoperasian Alat Gali Muat Excavator Front Shovel (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5092,7 +5091,7 @@ BEGIN
         'DI-IH-085',
         'Pengoperasian Alat Gali Muat Excavator Front Shovel',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Alat Gali Muat Excavator Front Shovel',
@@ -5111,7 +5110,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 86. Pengoperasian Alat Gali Mekanis Kontinu Mining Auger (KEMNAKER)
+    -- 86. Pengoperasian Alat Gali Mekanis Kontinu Mining Auger (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5119,10 +5118,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'b26ca4ff-afbd-45d2-886b-81cd1757a697'::uuid,
-        'DI-KEM-086',
+        'DI-BNSP-086',
         'Pengoperasian Alat Gali Mekanis Kontinu Mining Auger',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Alat Gali Mekanis Kontinu Mining Auger',
@@ -5141,7 +5140,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 86. Pengoperasian Alat Gali Mekanis Kontinu Mining Auger (INHOUSE)
+    -- 86. Pengoperasian Alat Gali Mekanis Kontinu Mining Auger (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5152,7 +5151,7 @@ BEGIN
         'DI-IH-086',
         'Pengoperasian Alat Gali Mekanis Kontinu Mining Auger',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Alat Gali Mekanis Kontinu Mining Auger',
@@ -5171,7 +5170,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 87. Pengoperasian Alat Gali Mekanis Kontinu Surface Miner (KEMNAKER)
+    -- 87. Pengoperasian Alat Gali Mekanis Kontinu Surface Miner (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5179,10 +5178,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'f109ffa9-1b9b-4f97-9c36-37b190846211'::uuid,
-        'DI-KEM-087',
+        'DI-BNSP-087',
         'Pengoperasian Alat Gali Mekanis Kontinu Surface Miner',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Alat Gali Mekanis Kontinu Surface Miner',
@@ -5201,7 +5200,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 87. Pengoperasian Alat Gali Mekanis Kontinu Surface Miner (INHOUSE)
+    -- 87. Pengoperasian Alat Gali Mekanis Kontinu Surface Miner (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5212,7 +5211,7 @@ BEGIN
         'DI-IH-087',
         'Pengoperasian Alat Gali Mekanis Kontinu Surface Miner',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Alat Gali Mekanis Kontinu Surface Miner',
@@ -5231,7 +5230,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 88. Pengoperasian Alat Gali Mekanis Kontinu Bucket Wheel Excavator (KEMNAKER)
+    -- 88. Pengoperasian Alat Gali Mekanis Kontinu Bucket Wheel Excavator (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5239,10 +5238,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'd3d7f2fe-ec50-40d5-ba39-49466be11740'::uuid,
-        'DI-KEM-088',
+        'DI-BNSP-088',
         'Pengoperasian Alat Gali Mekanis Kontinu Bucket Wheel Excavator',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Alat Gali Mekanis Kontinu Bucket Wheel Excavator',
@@ -5261,7 +5260,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 88. Pengoperasian Alat Gali Mekanis Kontinu Bucket Wheel Excavator (INHOUSE)
+    -- 88. Pengoperasian Alat Gali Mekanis Kontinu Bucket Wheel Excavator (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5272,7 +5271,7 @@ BEGIN
         'DI-IH-088',
         'Pengoperasian Alat Gali Mekanis Kontinu Bucket Wheel Excavator',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Alat Gali Mekanis Kontinu Bucket Wheel Excavator',
@@ -5291,7 +5290,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 89. Pengoperasian Alat Angkat Dump Truck (KEMNAKER)
+    -- 89. Pengoperasian Alat Angkat Dump Truck (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5299,10 +5298,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '2b0aeae1-a1af-4762-93a6-ccaf69b027db'::uuid,
-        'DI-KEM-089',
+        'DI-BNSP-089',
         'Pengoperasian Alat Angkat Dump Truck',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Alat Angkat Dump Truck',
@@ -5321,7 +5320,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 89. Pengoperasian Alat Angkat Dump Truck (INHOUSE)
+    -- 89. Pengoperasian Alat Angkat Dump Truck (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5332,7 +5331,7 @@ BEGIN
         'DI-IH-089',
         'Pengoperasian Alat Angkat Dump Truck',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Alat Angkat Dump Truck',
@@ -5351,7 +5350,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 90. Pengoperasian Alat Gali Muat Angkut Wheel Loader (KEMNAKER)
+    -- 90. Pengoperasian Alat Gali Muat Angkut Wheel Loader (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5359,10 +5358,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'a01d2561-841e-44ec-bd64-1f91251bb209'::uuid,
-        'DI-KEM-090',
+        'DI-BNSP-090',
         'Pengoperasian Alat Gali Muat Angkut Wheel Loader',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Alat Gali Muat Angkut Wheel Loader',
@@ -5381,7 +5380,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 90. Pengoperasian Alat Gali Muat Angkut Wheel Loader (INHOUSE)
+    -- 90. Pengoperasian Alat Gali Muat Angkut Wheel Loader (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5392,7 +5391,7 @@ BEGIN
         'DI-IH-090',
         'Pengoperasian Alat Gali Muat Angkut Wheel Loader',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Alat Gali Muat Angkut Wheel Loader',
@@ -5411,7 +5410,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 91. Pengoperasian Peralatan Pendukung Bulldozer (KEMNAKER)
+    -- 91. Pengoperasian Peralatan Pendukung Bulldozer (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5419,10 +5418,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '7c1adb09-02e1-4d3e-9c30-5fe810028cb3'::uuid,
-        'DI-KEM-091',
+        'DI-BNSP-091',
         'Pengoperasian Peralatan Pendukung Bulldozer',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Peralatan Pendukung Bulldozer',
@@ -5441,7 +5440,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 91. Pengoperasian Peralatan Pendukung Bulldozer (INHOUSE)
+    -- 91. Pengoperasian Peralatan Pendukung Bulldozer (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5452,7 +5451,7 @@ BEGIN
         'DI-IH-091',
         'Pengoperasian Peralatan Pendukung Bulldozer',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Peralatan Pendukung Bulldozer',
@@ -5471,7 +5470,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 92. Pengoperasian Peralatan Pendukung Motor Grader (KEMNAKER)
+    -- 92. Pengoperasian Peralatan Pendukung Motor Grader (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5479,10 +5478,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'a7e575a7-972c-4c1c-8b03-b21559ff3dd4'::uuid,
-        'DI-KEM-092',
+        'DI-BNSP-092',
         'Pengoperasian Peralatan Pendukung Motor Grader',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Peralatan Pendukung Motor Grader',
@@ -5501,7 +5500,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 92. Pengoperasian Peralatan Pendukung Motor Grader (INHOUSE)
+    -- 92. Pengoperasian Peralatan Pendukung Motor Grader (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5512,7 +5511,7 @@ BEGIN
         'DI-IH-092',
         'Pengoperasian Peralatan Pendukung Motor Grader',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Peralatan Pendukung Motor Grader',
@@ -5531,7 +5530,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 93. Pengoperasian Peralatan Pendukung Water Truck (KEMNAKER)
+    -- 93. Pengoperasian Peralatan Pendukung Water Truck (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5539,10 +5538,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '7dab1106-e97a-4f04-8876-7364aa7abfa3'::uuid,
-        'DI-KEM-093',
+        'DI-BNSP-093',
         'Pengoperasian Peralatan Pendukung Water Truck',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Peralatan Pendukung Water Truck',
@@ -5561,7 +5560,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 93. Pengoperasian Peralatan Pendukung Water Truck (INHOUSE)
+    -- 93. Pengoperasian Peralatan Pendukung Water Truck (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5572,7 +5571,7 @@ BEGIN
         'DI-IH-093',
         'Pengoperasian Peralatan Pendukung Water Truck',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Peralatan Pendukung Water Truck',
@@ -5591,7 +5590,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 94. Pengoperasian Peralatan Pendukung Compactor (KEMNAKER)
+    -- 94. Pengoperasian Peralatan Pendukung Compactor (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5599,10 +5598,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '31dad6aa-74fa-4ac8-b823-fed649f00861'::uuid,
-        'DI-KEM-094',
+        'DI-BNSP-094',
         'Pengoperasian Peralatan Pendukung Compactor',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Peralatan Pendukung Compactor',
@@ -5621,7 +5620,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 94. Pengoperasian Peralatan Pendukung Compactor (INHOUSE)
+    -- 94. Pengoperasian Peralatan Pendukung Compactor (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5632,7 +5631,7 @@ BEGIN
         'DI-IH-094',
         'Pengoperasian Peralatan Pendukung Compactor',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Peralatan Pendukung Compactor',
@@ -5651,7 +5650,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 95. Pengoperasian Peralatan Pendukung Service Truck (KEMNAKER)
+    -- 95. Pengoperasian Peralatan Pendukung Service Truck (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5659,10 +5658,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'c30b2b7d-ca40-4b5c-adfd-f1cca8824b02'::uuid,
-        'DI-KEM-095',
+        'DI-BNSP-095',
         'Pengoperasian Peralatan Pendukung Service Truck',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Peralatan Pendukung Service Truck',
@@ -5681,7 +5680,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 95. Pengoperasian Peralatan Pendukung Service Truck (INHOUSE)
+    -- 95. Pengoperasian Peralatan Pendukung Service Truck (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5692,7 +5691,7 @@ BEGIN
         'DI-IH-095',
         'Pengoperasian Peralatan Pendukung Service Truck',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Peralatan Pendukung Service Truck',
@@ -5711,7 +5710,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 96. Pengoperasian Peralatan Pendukung Fuel Truck (KEMNAKER)
+    -- 96. Pengoperasian Peralatan Pendukung Fuel Truck (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5719,10 +5718,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '84f75740-262b-416b-9809-85327b76590d'::uuid,
-        'DI-KEM-096',
+        'DI-BNSP-096',
         'Pengoperasian Peralatan Pendukung Fuel Truck',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Peralatan Pendukung Fuel Truck',
@@ -5741,7 +5740,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 96. Pengoperasian Peralatan Pendukung Fuel Truck (INHOUSE)
+    -- 96. Pengoperasian Peralatan Pendukung Fuel Truck (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5752,7 +5751,7 @@ BEGIN
         'DI-IH-096',
         'Pengoperasian Peralatan Pendukung Fuel Truck',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Peralatan Pendukung Fuel Truck',
@@ -5771,7 +5770,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 97. Pengoperasian Alat Angkat Telehandler (KEMNAKER)
+    -- 97. Pengoperasian Alat Angkat Telehandler (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5779,10 +5778,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '0fda4eab-abd1-4f4e-bb7f-e2b058ccb84b'::uuid,
-        'DI-KEM-097',
+        'DI-BNSP-097',
         'Pengoperasian Alat Angkat Telehandler',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Alat Angkat Telehandler',
@@ -5801,7 +5800,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 97. Pengoperasian Alat Angkat Telehandler (INHOUSE)
+    -- 97. Pengoperasian Alat Angkat Telehandler (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5812,7 +5811,7 @@ BEGIN
         'DI-IH-097',
         'Pengoperasian Alat Angkat Telehandler',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Alat Angkat Telehandler',
@@ -5831,7 +5830,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 98. Pengoperasian Mesin Bor untuk Lubang Ledak Tambang Terbuka Mineral dan Batubara (KEMNAKER)
+    -- 98. Pengoperasian Mesin Bor untuk Lubang Ledak Tambang Terbuka Mineral dan Batubara (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5839,10 +5838,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '9dcae8e7-5846-440c-9023-b03d6d02039a'::uuid,
-        'DI-KEM-098',
+        'DI-BNSP-098',
         'Pengoperasian Mesin Bor untuk Lubang Ledak Tambang Terbuka Mineral dan Batubara',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Mesin Bor untuk Lubang Ledak Tambang Terbuka Mineral dan Batubara',
@@ -5861,7 +5860,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 98. Pengoperasian Mesin Bor untuk Lubang Ledak Tambang Terbuka Mineral dan Batubara (INHOUSE)
+    -- 98. Pengoperasian Mesin Bor untuk Lubang Ledak Tambang Terbuka Mineral dan Batubara (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5872,7 +5871,7 @@ BEGIN
         'DI-IH-098',
         'Pengoperasian Mesin Bor untuk Lubang Ledak Tambang Terbuka Mineral dan Batubara',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Pengoperasian Mesin Bor untuk Lubang Ledak Tambang Terbuka Mineral dan Batubara',
@@ -5891,7 +5890,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 99. Pemandu Kegiatan Pengeboran tambang Terbuka Mineral dan Batubara (KEMNAKER)
+    -- 99. Pemandu Kegiatan Pengeboran tambang Terbuka Mineral dan Batubara (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5899,10 +5898,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '0f3624cb-a628-4d17-8989-021ae8175f53'::uuid,
-        'DI-KEM-099',
+        'DI-BNSP-099',
         'Pemandu Kegiatan Pengeboran tambang Terbuka Mineral dan Batubara',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pemandu Kegiatan Pengeboran tambang Terbuka Mineral dan Batubara',
@@ -5921,7 +5920,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 99. Pemandu Kegiatan Pengeboran tambang Terbuka Mineral dan Batubara (INHOUSE)
+    -- 99. Pemandu Kegiatan Pengeboran tambang Terbuka Mineral dan Batubara (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5932,7 +5931,7 @@ BEGIN
         'DI-IH-099',
         'Pemandu Kegiatan Pengeboran tambang Terbuka Mineral dan Batubara',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Pemandu Kegiatan Pengeboran tambang Terbuka Mineral dan Batubara',
@@ -5951,7 +5950,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 100. Pengkaji Muda Teknis Proteksi Kebakaran (KEMNAKER)
+    -- 100. Pengkaji Muda Teknis Proteksi Kebakaran (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5959,10 +5958,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '769b50f7-d799-40ca-bcbd-6266f2c8ec6e'::uuid,
-        'DI-KEM-100',
+        'DI-BNSP-100',
         'Pengkaji Muda Teknis Proteksi Kebakaran',
-        'kemnaker',
-        'DAMKAR',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengkaji Muda Teknis Proteksi Kebakaran',
@@ -5981,7 +5980,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 100. Pengkaji Muda Teknis Proteksi Kebakaran (INHOUSE)
+    -- 100. Pengkaji Muda Teknis Proteksi Kebakaran (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -5992,7 +5991,7 @@ BEGIN
         'DI-IH-100',
         'Pengkaji Muda Teknis Proteksi Kebakaran',
         'inhouse',
-        'DAMKAR',
+        'BNSP',
         3,
         'days',
         'Training course: Pengkaji Muda Teknis Proteksi Kebakaran',
@@ -6011,7 +6010,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 101. Pengkaji Madya Teknis Proteksi Kebakaran (KEMNAKER)
+    -- 101. Pengkaji Madya Teknis Proteksi Kebakaran (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6019,10 +6018,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'f6cfee40-6dab-4f09-a4a0-5962eedc0ee9'::uuid,
-        'DI-KEM-101',
+        'DI-BNSP-101',
         'Pengkaji Madya Teknis Proteksi Kebakaran',
-        'kemnaker',
-        'DAMKAR',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengkaji Madya Teknis Proteksi Kebakaran',
@@ -6041,7 +6040,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 101. Pengkaji Madya Teknis Proteksi Kebakaran (INHOUSE)
+    -- 101. Pengkaji Madya Teknis Proteksi Kebakaran (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6052,7 +6051,7 @@ BEGIN
         'DI-IH-101',
         'Pengkaji Madya Teknis Proteksi Kebakaran',
         'inhouse',
-        'DAMKAR',
+        'BNSP',
         3,
         'days',
         'Training course: Pengkaji Madya Teknis Proteksi Kebakaran',
@@ -6071,7 +6070,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 102. Pengkaji Teknis Proteksi Kebakaran (KEMNAKER)
+    -- 102. Pengkaji Teknis Proteksi Kebakaran (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6079,10 +6078,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'a689323e-ee5a-4855-8a74-69456289640e'::uuid,
-        'DI-KEM-102',
+        'DI-BNSP-102',
         'Pengkaji Teknis Proteksi Kebakaran',
-        'kemnaker',
-        'DAMKAR',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengkaji Teknis Proteksi Kebakaran',
@@ -6101,7 +6100,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 102. Pengkaji Teknis Proteksi Kebakaran (INHOUSE)
+    -- 102. Pengkaji Teknis Proteksi Kebakaran (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6112,7 +6111,7 @@ BEGIN
         'DI-IH-102',
         'Pengkaji Teknis Proteksi Kebakaran',
         'inhouse',
-        'DAMKAR',
+        'BNSP',
         3,
         'days',
         'Training course: Pengkaji Teknis Proteksi Kebakaran',
@@ -6131,7 +6130,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 103. Teknisi Fire Alarm (KEMNAKER)
+    -- 103. Teknisi Fire Alarm (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6139,10 +6138,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'c16a5564-ba41-4f80-b720-0314bf4adc17'::uuid,
-        'DI-KEM-103',
+        'DI-BNSP-103',
         'Teknisi Fire Alarm',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Teknisi Fire Alarm',
@@ -6161,7 +6160,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 103. Teknisi Fire Alarm (INHOUSE)
+    -- 103. Teknisi Fire Alarm (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6172,7 +6171,7 @@ BEGIN
         'DI-IH-103',
         'Teknisi Fire Alarm',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Teknisi Fire Alarm',
@@ -6191,7 +6190,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 104. Ahli Muda Pesawat Lift dan Eskalator (KEMNAKER)
+    -- 104. Ahli Muda Pesawat Lift dan Eskalator (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6199,10 +6198,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '9650c62d-5a35-49fd-95be-bc09f36531bc'::uuid,
-        'DI-KEM-104',
+        'DI-BNSP-104',
         'Ahli Muda Pesawat Lift dan Eskalator',
-        'kemnaker',
-        'EQUIPMENT OPERATOR',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Ahli Muda Pesawat Lift dan Eskalator',
@@ -6221,7 +6220,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 104. Ahli Muda Pesawat Lift dan Eskalator (INHOUSE)
+    -- 104. Ahli Muda Pesawat Lift dan Eskalator (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6232,7 +6231,7 @@ BEGIN
         'DI-IH-104',
         'Ahli Muda Pesawat Lift dan Eskalator',
         'inhouse',
-        'EQUIPMENT OPERATOR',
+        'BNSP',
         3,
         'days',
         'Training course: Ahli Muda Pesawat Lift dan Eskalator',
@@ -6251,7 +6250,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 105. Ahli Madya Pesawat Lift dan Eskalator (KEMNAKER)
+    -- 105. Ahli Madya Pesawat Lift dan Eskalator (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6259,10 +6258,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'e3dd8277-3117-4daf-8eef-d1cbd2167393'::uuid,
-        'DI-KEM-105',
+        'DI-BNSP-105',
         'Ahli Madya Pesawat Lift dan Eskalator',
-        'kemnaker',
-        'EQUIPMENT OPERATOR',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Ahli Madya Pesawat Lift dan Eskalator',
@@ -6281,7 +6280,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 105. Ahli Madya Pesawat Lift dan Eskalator (INHOUSE)
+    -- 105. Ahli Madya Pesawat Lift dan Eskalator (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6292,7 +6291,7 @@ BEGIN
         'DI-IH-105',
         'Ahli Madya Pesawat Lift dan Eskalator',
         'inhouse',
-        'EQUIPMENT OPERATOR',
+        'BNSP',
         3,
         'days',
         'Training course: Ahli Madya Pesawat Lift dan Eskalator',
@@ -6311,7 +6310,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 106. Ahli Utama Pesawat Lift dan Eskalator (KEMNAKER)
+    -- 106. Ahli Utama Pesawat Lift dan Eskalator (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6319,10 +6318,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '812b93d0-62b5-4959-a211-fd66c1c54f50'::uuid,
-        'DI-KEM-106',
+        'DI-BNSP-106',
         'Ahli Utama Pesawat Lift dan Eskalator',
-        'kemnaker',
-        'EQUIPMENT OPERATOR',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Ahli Utama Pesawat Lift dan Eskalator',
@@ -6341,7 +6340,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 106. Ahli Utama Pesawat Lift dan Eskalator (INHOUSE)
+    -- 106. Ahli Utama Pesawat Lift dan Eskalator (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6352,7 +6351,7 @@ BEGIN
         'DI-IH-106',
         'Ahli Utama Pesawat Lift dan Eskalator',
         'inhouse',
-        'EQUIPMENT OPERATOR',
+        'BNSP',
         3,
         'days',
         'Training course: Ahli Utama Pesawat Lift dan Eskalator',
@@ -6371,7 +6370,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 107. Ahli Muda Elektrikal Konstruksi Bangunan Gd. (KEMNAKER)
+    -- 107. Ahli Muda Elektrikal Konstruksi Bangunan Gd. (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6379,10 +6378,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '2bee0c19-8db3-449e-bc14-045d7f343269'::uuid,
-        'DI-KEM-107',
+        'DI-BNSP-107',
         'Ahli Muda Elektrikal Konstruksi Bangunan Gd.',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Ahli Muda Elektrikal Konstruksi Bangunan Gd.',
@@ -6401,7 +6400,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 107. Ahli Muda Elektrikal Konstruksi Bangunan Gd. (INHOUSE)
+    -- 107. Ahli Muda Elektrikal Konstruksi Bangunan Gd. (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6412,7 +6411,7 @@ BEGIN
         'DI-IH-107',
         'Ahli Muda Elektrikal Konstruksi Bangunan Gd.',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Ahli Muda Elektrikal Konstruksi Bangunan Gd.',
@@ -6431,7 +6430,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 108. Ahli Madya Elektrikal Konstruksi Bangunan Gd. (KEMNAKER)
+    -- 108. Ahli Madya Elektrikal Konstruksi Bangunan Gd. (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6439,10 +6438,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '97c6c60a-b103-4c79-80b9-b479ee5661e1'::uuid,
-        'DI-KEM-108',
+        'DI-BNSP-108',
         'Ahli Madya Elektrikal Konstruksi Bangunan Gd.',
-        'kemnaker',
-        'GENERAL',
+        'kemnBNSPBNSPaker',
+        'BNSP',
         3,
         'days',
         'Training course: Ahli Madya Elektrikal Konstruksi Bangunan Gd.',
@@ -6461,7 +6460,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 108. Ahli Madya Elektrikal Konstruksi Bangunan Gd. (INHOUSE)
+    -- 108. Ahli Madya Elektrikal Konstruksi Bangunan Gd. (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6472,7 +6471,7 @@ BEGIN
         'DI-IH-108',
         'Ahli Madya Elektrikal Konstruksi Bangunan Gd.',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Ahli Madya Elektrikal Konstruksi Bangunan Gd.',
@@ -6491,7 +6490,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 109. Pengawas Scaffolding (KEMNAKER)
+    -- 109. Pengawas Scaffolding (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6499,10 +6498,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'c572ccb4-6ad3-49d8-add5-7e551319edb6'::uuid,
-        'DI-KEM-109',
+        'DI-BNSP-109',
         'Pengawas Scaffolding',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Pengawas Scaffolding',
@@ -6521,7 +6520,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 109. Pengawas Scaffolding (INHOUSE)
+    -- 109. Pengawas Scaffolding (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6532,7 +6531,7 @@ BEGIN
         'DI-IH-109',
         'Pengawas Scaffolding',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Pengawas Scaffolding',
@@ -6551,7 +6550,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 110. Operator Dump Truck (KEMNAKER)
+    -- 110. Operator Dump Truck (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6559,10 +6558,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'bff41efd-91ba-4c3a-8a63-14a5dc567263'::uuid,
-        'DI-KEM-110',
+        'DI-BNSP-110',
         'Operator Dump Truck',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Operator Dump Truck',
@@ -6581,7 +6580,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 110. Operator Dump Truck (INHOUSE)
+    -- 110. Operator Dump Truck (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6592,7 +6591,7 @@ BEGIN
         'DI-IH-110',
         'Operator Dump Truck',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Operator Dump Truck',
@@ -6611,7 +6610,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 111. Operator Backhoe Loader (KEMNAKER)
+    -- 111. Operator Backhoe Loader (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6619,10 +6618,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '6e01ab0c-8517-430f-9a92-b16388d64c8a'::uuid,
-        'DI-KEM-111',
+        'DI-BNSP-111',
         'Operator Backhoe Loader',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Operator Backhoe Loader',
@@ -6641,7 +6640,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 111. Operator Backhoe Loader (INHOUSE)
+    -- 111. Operator Backhoe Loader (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6652,7 +6651,7 @@ BEGIN
         'DI-IH-111',
         'Operator Backhoe Loader',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Operator Backhoe Loader',
@@ -6671,7 +6670,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 112. Operator Wheel Excavator Yunior (KEMNAKER)
+    -- 112. Operator Wheel Excavator Yunior (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6679,10 +6678,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'c59efc1e-23b0-426b-a4ff-d1c4e1a0afd7'::uuid,
-        'DI-KEM-112',
+        'DI-BNSP-112',
         'Operator Wheel Excavator Yunior',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Operator Wheel Excavator Yunior',
@@ -6701,7 +6700,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 112. Operator Wheel Excavator Yunior (INHOUSE)
+    -- 112. Operator Wheel Excavator Yunior (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6712,7 +6711,7 @@ BEGIN
         'DI-IH-112',
         'Operator Wheel Excavator Yunior',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Operator Wheel Excavator Yunior',
@@ -6731,7 +6730,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 113. Operator Scaffolding (KEMNAKER)
+    -- 113. Operator Scaffolding (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6739,10 +6738,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         '0150c25c-087f-4a95-97d3-1efd9bea5bfe'::uuid,
-        'DI-KEM-113',
+        'DI-BNSP-113',
         'Operator Scaffolding',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Operator Scaffolding',
@@ -6761,7 +6760,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 113. Operator Scaffolding (INHOUSE)
+    -- 113. Operator Scaffolding (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6772,7 +6771,7 @@ BEGIN
         'DI-IH-113',
         'Operator Scaffolding',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Operator Scaffolding',
@@ -6791,7 +6790,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 114. Operator Gondola pada Bangunan Gedung (KEMNAKER)
+    -- 114. Operator Gondola pada Bangunan Gedung (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6799,10 +6798,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'a9cec87a-cfdc-4307-ac75-0eb5aa4afa4d'::uuid,
-        'DI-KEM-114',
+        'DI-BNSP-114',
         'Operator Gondola pada Bangunan Gedung',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Operator Gondola pada Bangunan Gedung',
@@ -6821,7 +6820,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 114. Operator Gondola pada Bangunan Gedung (INHOUSE)
+    -- 114. Operator Gondola pada Bangunan Gedung (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6832,7 +6831,7 @@ BEGIN
         'DI-IH-114',
         'Operator Gondola pada Bangunan Gedung',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Operator Gondola pada Bangunan Gedung',
@@ -6851,7 +6850,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 115. Operator Slinging and Rigging (KEMNAKER)
+    -- 115. Operator Slinging and Rigging (BNSP)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6859,10 +6858,10 @@ BEGIN
         "createdAt", "updatedAt"
     ) VALUES (
         'de131ba8-3524-4cf3-8179-7f24fcafb871'::uuid,
-        'DI-KEM-115',
+        'DI-BNSP-115',
         'Operator Slinging and Rigging',
-        'kemnaker',
-        'GENERAL',
+        'BNSP',
+        'BNSP',
         3,
         'days',
         'Training course: Operator Slinging and Rigging',
@@ -6881,7 +6880,7 @@ BEGIN
 
     v_courseCount := v_courseCount + 1;
 
-    -- 115. Operator Slinging and Rigging (INHOUSE)
+    -- 115. Operator Slinging and Rigging (BNSP INHOUSE)
     INSERT INTO "courses" (
         "id", "code", "name", "category", "certification", "durationValue", "durationUnit",
         "description", "priceRegular", "priceEarlyBird", "priceGroup", "currency",
@@ -6892,7 +6891,7 @@ BEGIN
         'DI-IH-115',
         'Operator Slinging and Rigging',
         'inhouse',
-        'GENERAL',
+        'BNSP',
         3,
         'days',
         'Training course: Operator Slinging and Rigging',

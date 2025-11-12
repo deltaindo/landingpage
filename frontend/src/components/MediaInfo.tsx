@@ -79,10 +79,12 @@ const MediaInfo = () => {
       <div className="max-w-7xl mx-auto px-6">
         {/* Header - FIXED: Removed duplicate text */}
         <div className="mb-12">
-          <h2 className="text-4xl font-bold text-dark mb-4">Latest Updates</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-dark mt-1">
+            Berita Terbaru
+          </h2>
           <p className="text-lg text-gray-600 max-w-3xl">
-            Stay informed with our latest media releases, featuring key
-            announcements, insights, and developments.
+            Tetap terinformasi dengan rilis media terbaru kami yang menampilkan
+            pengumuman penting, wawasan mendalam, serta perkembangan terkini.
           </p>
         </div>
 

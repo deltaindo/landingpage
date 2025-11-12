@@ -14,11 +14,9 @@ const About = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section title (stick to left) */}
         <div className="mb-6">
-          <p className="text-sm font-semibold text-primary uppercase tracking-wider">
-            Tentang Kami
-          </p>
+          <p className="text-sm font-semibold text-primary uppercase tracking-wider"></p>
           <h2 className="text-3xl md:text-4xl font-bold text-dark mt-1">
-            About Us
+            Tentang Kami
           </h2>
         </div>
 

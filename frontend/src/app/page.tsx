@@ -4,7 +4,6 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import MediaInfo from "@/components/MediaInfo";
-import SafetyServices from "@/components/SafetyServices";
 import Services from "@/components/Services";
 import Training from "@/components/Training";
 import WhyUs from "@/components/WhyUs";
@@ -22,7 +21,6 @@ export default function Home() {
       <About />
       <MediaInfo />
       <Services />
-      <SafetyServices />
       <Training />
       <WhyUs />
       <Clients />

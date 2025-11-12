@@ -28,7 +28,7 @@ const SafetyServices = () => {
         {/* Header */}
         <div className="flex justify-between items-center mb-12">
           <div>
-            <h2 className="text-3xl font-bold text-dark mb-2">
+            <h2 className="text-3xl md:text-4xl font-bold text-dark mt-1">
               Our Safety & Services
             </h2>
             <p className="text-gray-600">Get Info</p>
