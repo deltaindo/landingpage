@@ -8,34 +8,34 @@ CREATE TABLE users (
     name VARCHAR(255) NOT NULL,
     role VARCHAR(20) DEFAULT 'viewer' CHECK (role IN ('admin', 'editor', 'viewer')),
     is_active BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- =====================================================
 -- BLOG POSTS TABLE
 -- =====================================================
-CREATE TABLE blog_posts (
+CREATE TABLE "blogPosts" (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     title VARCHAR(255) NOT NULL,
     slug VARCHAR(255) UNIQUE NOT NULL,
     type VARCHAR(20) DEFAULT 'media-release' CHECK (type IN ('featured', 'media-release')),
     content TEXT NOT NULL,
     excerpt VARCHAR(200) NOT NULL,
-    featured_image VARCHAR(500) NOT NULL,
+    "featuredImage" VARCHAR(500) NOT NULL,
     author VARCHAR(100) DEFAULT 'Delta Indonesia',
     category VARCHAR(100) DEFAULT 'Media Release',
     tags TEXT[],
     status VARCHAR(20) DEFAULT 'draft' CHECK (status IN ('draft', 'published', 'archived')),
-    published_at TIMESTAMP,
+    "publishedAt" TIMESTAMP,
     views INTEGER DEFAULT 0,
     seo JSONB DEFAULT '{}'::jsonb,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX idx_blog_posts_slug ON blog_posts(slug);
-CREATE INDEX idx_blog_posts_status ON blog_posts(status);
+CREATE INDEX idx_blogPosts_slug ON "blogPosts"(slug);
+CREATE INDEX idx_blogPosts_status ON "blogPosts"(status);
 
 -- =====================================================
 -- COURSES TABLE (camelCase to match Sequelize)
@@ -231,7 +231,7 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
-CREATE TRIGGER update_blog_posts_updated_at BEFORE UPDATE ON blog_posts
+CREATE TRIGGER update_blogPosts_updated_at BEFORE UPDATE ON "blogPosts"
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 CREATE TRIGGER update_courses_updated_at BEFORE UPDATE ON courses

@@ -3320,6 +3320,7 @@ BEGIN
     ) VALUES (
         '1c840954-6355-4e59-bd71-64ead83f7451'::uuid,
         'DI-BNSP-056',
+        'Pemantauan dan Analisis Pengelolaan Limbah B3 (PLB3)',
         'BNSP',
         'BNSP',
         3,
@@ -6440,7 +6441,7 @@ BEGIN
         '97c6c60a-b103-4c79-80b9-b479ee5661e1'::uuid,
         'DI-BNSP-108',
         'Ahli Madya Elektrikal Konstruksi Bangunan Gd.',
-        'kemnBNSPBNSPaker',
+        'BNSP',
         'BNSP',
         3,
         'days',
