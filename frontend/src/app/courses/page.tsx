@@ -3,7 +3,9 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { courseAPI } from "@/lib/api";
+import { Search, ChevronLeft, ChevronRight } from "lucide-react";
 
+// ==================== TYPES ====================
 interface Course {
   id: string;
   code: string;
@@ -17,11 +19,182 @@ interface Course {
   featured: boolean;
 }
 
+// ==================== CONSTANTS ====================
+const ITEMS_PER_PAGE = 9;
+
+// ==================== PAGINATION COMPONENT ====================
+interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}
+
+function Pagination({
+  currentPage,
+  totalPages,
+  onPageChange,
+}: PaginationProps) {
+  if (totalPages <= 1) return null;
+
+  return (
+    <div className="flex items-center justify-center gap-2 mt-12 pb-8">
+      {/* Previous Button */}
+      <button
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+        className="p-2 rounded-lg border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        aria-label="Halaman sebelumnya"
+      >
+        <ChevronLeft className="w-5 h-5" />
+      </button>
+
+      {/* Page Numbers */}
+      <div className="flex items-center gap-1">
+        {Array.from({ length: totalPages }).map((_, index) => {
+          const page = index + 1;
+          const isActive = page === currentPage;
+
+          // Show first, last, current, and adjacent pages
+          const showPage =
+            page === 1 ||
+            page === totalPages ||
+            page === currentPage ||
+            Math.abs(page - currentPage) <= 1;
+
+          if (!showPage && index > 0 && index < totalPages - 1) {
+            if (index === 1)
+              return (
+                <span key="dots-start" className="text-gray-500">
+                  ...
+                </span>
+              );
+            if (index === totalPages - 2)
+              return (
+                <span key="dots-end" className="text-gray-500">
+                  ...
+                </span>
+              );
+            return null;
+          }
+
+          return (
+            <button
+              key={page}
+              onClick={() => onPageChange(page)}
+              className={`px-3 py-2 rounded-lg font-semibold transition-colors ${
+                isActive
+                  ? "bg-blue-600 text-white"
+                  : "border border-gray-300 hover:bg-gray-100"
+              }`}
+              aria-label={`Halaman ${page}`}
+              aria-current={isActive ? "page" : undefined}
+            >
+              {page}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Next Button */}
+      <button
+        onClick={() => onPageChange(currentPage + 1)}
+        disabled={currentPage === totalPages}
+        className="p-2 rounded-lg border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        aria-label="Halaman berikutnya"
+      >
+        <ChevronRight className="w-5 h-5" />
+      </button>
+    </div>
+  );
+}
+
+// ==================== COURSE CARD COMPONENT ====================
+function CourseCard({ course }: { course: Course }) {
+  return (
+    <article className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group">
+      {/* Card Header */}
+      <div className="relative bg-gradient-to-br from-blue-600 to-indigo-700 p-6 pb-8">
+        {course.featured && (
+          <span className="absolute top-4 left-4 bg-amber-400 text-amber-900 text-xs font-bold px-3 py-1 rounded-full">
+            Featured
+          </span>
+        )}
+        <span className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1 rounded-full">
+          {course.category.toUpperCase()}
+        </span>
+        <h3 className="text-white font-bold text-lg line-clamp-2 mt-6">
+          {course.name}
+        </h3>
+      </div>
+
+      {/* Card Body */}
+      <div className="p-6">
+        {/* Duration */}
+        <div className="mb-3 flex items-center gap-2 text-sm text-gray-600">
+          <span className="font-semibold">Durasi:</span>
+          <span>
+            {course.durationValue} {course.durationUnit}
+          </span>
+        </div>
+
+        {/* Description */}
+        <p className="text-gray-700 text-sm line-clamp-2 mb-4">
+          {course.description}
+        </p>
+
+        {/* Code & Certification */}
+        <div className="space-y-2 mb-6">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-semibold text-gray-500 uppercase min-w-[70px]">
+              Kode
+            </span>
+            <span className="text-sm font-mono text-gray-900 bg-gray-50 px-2 py-1 rounded border border-gray-200">
+              {course.code}
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-semibold text-gray-500 uppercase min-w-[70px]">
+              Sertifikat
+            </span>
+            <span className="text-sm text-amber-800 bg-amber-50 px-2 py-1 rounded border border-amber-200 font-medium">
+              {course.certification}
+            </span>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex gap-3">
+          <Link
+            href={`/courses/${course.id}`}
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-center text-sm"
+          >
+            Detail
+          </Link>
+          <button className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
+            Daftar
+          </button>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+// ==================== MAIN COMPONENT ====================
 export default function CoursesPage() {
   const [courses, setCourses] = useState<Course[]>([]);
+  const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
+  const categories = [
+    { value: "all", label: "Semua Pelatihan" },
+    { value: "kemnaker", label: "Reguler" },
+    { value: "inhouse", label: "In-House" },
+  ];
+
+  // Fetch courses
   useEffect(() => {
     fetchCourses();
   }, [filter]);
@@ -34,6 +207,8 @@ export default function CoursesPage() {
         status: "active",
       });
       setCourses(response.data);
+      setFilteredCourses(response.data);
+      setCurrentPage(1);
     } catch (error) {
       console.error("Error fetching courses:", error);
     } finally {
@@ -41,232 +216,131 @@ export default function CoursesPage() {
     }
   };
 
-  const categories = [
-    { value: "all", label: "Semua Pelatihan" },
-    { value: "kemnaker", label: "Reguler" },
-    /*{ value: "bnsp", label: "BNSP" },*/
-    /*{ value: "migas", label: "Migas" },*/
-    { value: "inhouse", label: "In-House" },
-  ];
+  // Filter courses based on search query
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setFilteredCourses(courses);
+    } else {
+      const query = searchQuery.toLowerCase();
+      const filtered = courses.filter(
+        (course) =>
+          course.name.toLowerCase().includes(query) ||
+          course.code.toLowerCase().includes(query) ||
+          course.description.toLowerCase().includes(query) ||
+          course.certification.toLowerCase().includes(query)
+      );
+      setFilteredCourses(filtered);
+    }
+    setCurrentPage(1); // Reset to first page when searching
+  }, [searchQuery, courses]);
+
+  // Pagination calculation
+  const totalPages = Math.ceil(filteredCourses.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedCourses = filteredCourses.slice(
+    startIndex,
+    startIndex + ITEMS_PER_PAGE
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Navbar */}
-      <nav className="bg-white shadow-md sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-3">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-primary"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                />
-              </svg>
-              <span className="text-xl font-bold text-primary">
-                Kembali ke Beranda
-              </span>
-            </Link>
-            <div className="flex items-center gap-6">
-              <Link
-                href="/"
-                className="text-gray-700 hover:text-primary transition"
-              >
-                Beranda
-              </Link>
-              <Link
-                href="/about"
-                className="text-gray-700 hover:text-primary transition"
-              >
-                Tentang
-              </Link>
-              <Link
-                href="/contact"
-                className="text-gray-700 hover:text-primary transition"
-              >
-                Kontak
-              </Link>
-            </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Header */}
+        <header className="mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+            Program Pelatihan K3
+          </h1>
+          <p className="text-gray-600 text-lg">
+            Pilih program pelatihan yang sesuai dengan kebutuhan Anda
+          </p>
+        </header>
+
+        {/* Search Bar */}
+        <div className="mb-8">
+          <div className="relative w-full">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Cari pelatihan berdasarkan nama, kode, atau sertifikasi..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-base"
+            />
           </div>
         </div>
-      </nav>
 
-      {/* Main Content */}
-      <div className="py-12">
-        <div className="max-w-7xl mx-auto px-6">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-dark mb-4">
-              Program Pelatihan K3
-            </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Pilih program pelatihan yang sesuai dengan kebutuhan Anda
+        {/* Category Filter */}
+        <div className="mb-8 flex flex-wrap gap-3">
+          {categories.map((cat) => (
+            <button
+              key={cat.value}
+              onClick={() => {
+                setFilter(cat.value);
+                setSearchQuery("");
+              }}
+              className={`px-6 py-3 rounded-lg font-semibold transition-all ${
+                filter === cat.value
+                  ? "bg-blue-600 text-white shadow-md"
+                  : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-100"
+              }`}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Results Count */}
+        <div className="mb-6">
+          <span className="text-sm text-gray-600">
+            Menampilkan{" "}
+            <span className="font-semibold text-gray-900">
+              {paginatedCourses.length}
+            </span>{" "}
+            dari{" "}
+            <span className="font-semibold text-gray-900">
+              {filteredCourses.length}
+            </span>{" "}
+            pelatihan
+            {searchQuery && ` (hasil pencarian: "${searchQuery}")`}
+          </span>
+        </div>
+
+        {/* Courses Grid or Empty State */}
+        {loading ? (
+          <div className="text-center py-16">
+            <p className="text-gray-600 font-medium">Memuat pelatihan...</p>
+          </div>
+        ) : filteredCourses.length === 0 ? (
+          <div className="text-center py-16">
+            <div className="text-6xl mb-4">📚</div>
+            <h3 className="text-xl font-semibold text-gray-800 mb-2">
+              {searchQuery ? "Tidak Ada Hasil" : "Tidak ada pelatihan tersedia"}
+            </h3>
+            <p className="text-gray-600">
+              {searchQuery
+                ? `Tidak ditemukan pelatihan untuk "${searchQuery}"`
+                : "Coba ubah filter atau cari dengan kata kunci lain"}
             </p>
           </div>
-
-          {/* Filter Categories */}
-          <div className="flex flex-wrap justify-center gap-4 mb-12">
-            {categories.map((cat) => (
-              <button
-                key={cat.value}
-                onClick={() => setFilter(cat.value)}
-                className={`px-6 py-3 rounded-lg font-semibold transition ${
-                  filter === cat.value
-                    ? "bg-primary text-white"
-                    : "bg-white text-gray-700 hover:bg-gray-100"
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Courses Grid */}
-          {loading ? (
-            <div className="text-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-              <p className="mt-4 text-gray-600">Memuat pelatihan...</p>
-            </div>
-          ) : courses.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-gray-600">Tidak ada pelatihan tersedia</p>
-            </div>
-          ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {courses.map((course) => (
+        ) : (
+          <>
+            <section
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              aria-label="Daftar program pelatihan"
+            >
+              {paginatedCourses.map((course) => (
                 <CourseCard key={course.id} course={course} />
               ))}
-            </div>
-          )}
-        </div>
-      </div>
+            </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12 mt-16">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-xl font-bold mb-4">Delta Indonesia</h3>
-              <p className="text-gray-400">
-                Pusat Pelatihan K3 Terpercaya di Indonesia
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Layanan</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li>
-                  <Link href="/courses">Pelatihan K3</Link>
-                </li>
-                <li>
-                  <Link href="/certification">Sertifikasi</Link>
-                </li>
-                <li>
-                  <Link href="/consulting">Konsultasi</Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Perusahaan</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li>
-                  <Link href="/about">Tentang Kami</Link>
-                </li>
-                <li>
-                  <Link href="/contact">Kontak</Link>
-                </li>
-                <li>
-                  <Link href="/blog">Blog</Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Kontak</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li>Email: info@deltaindo.co.id</li>
-                <li>Telp: (021) 1234-5678</li>
-                <li>WhatsApp: +62 812-3456-7890</li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2025 Delta Indonesia. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
-    </div>
-  );
-}
-
-// Course Card Component - PRICING HIDDEN
-function CourseCard({ course }: { course: Course }) {
-  return (
-    <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition group">
-      {/* Course Image */}
-      <div className="h-48 bg-gradient-to-br from-primary to-blue-600 relative overflow-hidden">
-        {course.featured && (
-          <span className="absolute top-4 right-4 bg-secondary text-white px-3 py-1 rounded-full text-sm font-semibold">
-            Featured
-          </span>
+            {/* Pagination */}
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          </>
         )}
-        <div className="absolute inset-0 flex items-center justify-center text-white text-6xl opacity-50">
-          🎓
-        </div>
-      </div>
-
-      {/* Course Info */}
-      <div className="p-6">
-        <div className="flex items-center justify-between mb-3">
-          <span className="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full font-semibold">
-            {course.category.toUpperCase()}
-          </span>
-          <span className="text-gray-600 text-sm">
-            {course.durationValue} {course.durationUnit}
-          </span>
-        </div>
-
-        <h3 className="text-xl font-bold text-dark mb-2 group-hover:text-primary transition">
-          {course.name}
-        </h3>
-
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-          {course.description}
-        </p>
-
-        <div className="flex items-center justify-between mb-4">
-          <div className="text-sm text-gray-500">{course.certification}</div>
-        </div>
-
-        {/* ❌ PRICING SECTION REMOVED */}
-        {/* <div className="flex items-center justify-between border-t border-gray-200 pt-4">
-          <div>
-            <p className="text-2xl font-bold text-primary">
-              Rp {course.priceRegular?.toLocaleString('id-ID')}
-            </p>
-          </div>
-        </div> */}
-
-        {/* Action Buttons */}
-        <div className="flex gap-3 mt-4">
-          <Link
-            href={`/courses/${course.id}/detail`}
-            className="flex-1 text-center px-4 py-2 border border-primary text-primary rounded-lg hover:bg-primary hover:text-white transition"
-          >
-            Detail
-          </Link>
-          <Link
-            href={`/courses/${course.id}/register`}
-            className="flex-1 text-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 transition font-semibold"
-          >
-            Daftar Sekarang
-          </Link>
-        </div>
       </div>
     </div>
   );
