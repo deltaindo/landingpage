@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { courseAPI } from "@/lib/api";
-import { Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight, Filter } from "lucide-react";
 
 // ==================== TYPES ====================
 interface Course {
@@ -18,6 +18,9 @@ interface Course {
   priceRegular: number;
   featured: boolean;
 }
+
+type SortField = "name" | "code" | "category";
+type SortOrder = "asc" | "desc";
 
 // ==================== CONSTANTS ====================
 const ITEMS_PER_PAGE = 9;
@@ -165,14 +168,17 @@ function CourseCard({ course }: { course: Course }) {
         {/* Action Buttons */}
         <div className="flex gap-3">
           <Link
-            href={`/courses/${course.id}`}
+            href={`/courses/${course.id}/detail`}
             className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-center text-sm"
           >
             Detail
           </Link>
-          <button className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
+          <Link
+            href={`/courses/${course.id}/register`}
+            className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold py-2 px-4 rounded-lg transition-colors text-center text-sm"
+          >
             Daftar
-          </button>
+          </Link>
         </div>
       </div>
     </article>
@@ -188,13 +194,21 @@ export default function CoursesPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
+  // NEW: Sort states
+  const [sortField, setSortField] = useState<SortField>("name");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
+  const [showSortMenu, setShowSortMenu] = useState(false);
+
+  // NEW: Get unique categories from courses
+  const [availableCategories, setAvailableCategories] = useState<string[]>([]);
+
   const categories = [
     { value: "all", label: "Semua Pelatihan" },
     { value: "kemnaker", label: "Reguler" },
     { value: "inhouse", label: "In-House" },
   ];
 
-  // Fetch courses
+  // Fetch courses - FIXED: Remove limit to get all courses
   useEffect(() => {
     fetchCourses();
   }, [filter]);
@@ -202,11 +216,31 @@ export default function CoursesPage() {
   const fetchCourses = async () => {
     try {
       setLoading(true);
+
+      // CRITICAL FIX: Add limit parameter with a large value or no limit
+      // Option 1: Use a very large limit
       const response = await courseAPI.getAll({
         category: filter === "all" ? "" : filter,
         status: "active",
+        limit: 10000, // Set a very large limit to get all courses
+        // Option 2: If your API supports it, you can also try:
+        // limit: 0, // Some APIs use 0 to mean "no limit"
+        // or remove the limit parameter entirely if the API allows it
       });
+
       setCourses(response.data);
+
+      // Extract unique categories from all courses
+      const uniqueCategories: string[] = Array.from(
+        new Set(
+          response.data
+            .map((course: Course) => course.category)
+            .filter((category): category is string => !!category)
+        )
+      );
+
+      setAvailableCategories(uniqueCategories);
+
       setFilteredCourses(response.data);
       setCurrentPage(1);
     } catch (error) {
@@ -216,23 +250,53 @@ export default function CoursesPage() {
     }
   };
 
-  // Filter courses based on search query
+  // Filter and search courses
   useEffect(() => {
-    if (searchQuery.trim() === "") {
-      setFilteredCourses(courses);
-    } else {
+    let result = [...courses];
+
+    // Apply search filter
+    if (searchQuery.trim() !== "") {
       const query = searchQuery.toLowerCase();
-      const filtered = courses.filter(
+      result = result.filter(
         (course) =>
           course.name.toLowerCase().includes(query) ||
           course.code.toLowerCase().includes(query) ||
           course.description.toLowerCase().includes(query) ||
           course.certification.toLowerCase().includes(query)
       );
-      setFilteredCourses(filtered);
     }
-    setCurrentPage(1); // Reset to first page when searching
-  }, [searchQuery, courses]);
+
+    // Apply sorting
+    result.sort((a, b) => {
+      let aValue: string | number;
+      let bValue: string | number;
+
+      switch (sortField) {
+        case "name":
+          aValue = a.name.toLowerCase();
+          bValue = b.name.toLowerCase();
+          break;
+        case "code":
+          aValue = a.code.toLowerCase();
+          bValue = b.code.toLowerCase();
+          break;
+        case "category":
+          aValue = a.category.toLowerCase();
+          bValue = b.category.toLowerCase();
+          break;
+        default:
+          aValue = a.name.toLowerCase();
+          bValue = b.name.toLowerCase();
+      }
+
+      if (aValue < bValue) return sortOrder === "asc" ? -1 : 1;
+      if (aValue > bValue) return sortOrder === "asc" ? 1 : -1;
+      return 0;
+    });
+
+    setFilteredCourses(result);
+    setCurrentPage(1); // Reset to first page when filtering/sorting
+  }, [searchQuery, courses, sortField, sortOrder]);
 
   // Pagination calculation
   const totalPages = Math.ceil(filteredCourses.length / ITEMS_PER_PAGE);
@@ -241,6 +305,13 @@ export default function CoursesPage() {
     startIndex,
     startIndex + ITEMS_PER_PAGE
   );
+
+  // Sort options
+  const sortOptions = [
+    { field: "name" as SortField, label: "Nama" },
+    { field: "code" as SortField, label: "Kode" },
+    { field: "category" as SortField, label: "Kategori" },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -269,24 +340,97 @@ export default function CoursesPage() {
           </div>
         </div>
 
-        {/* Category Filter */}
-        <div className="mb-8 flex flex-wrap gap-3">
-          {categories.map((cat) => (
+        {/* Filters and Sort */}
+        <div className="mb-8 flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
+          {/* Category Filter */}
+          <div className="flex flex-wrap gap-3">
+            {categories.map((cat) => (
+              <button
+                key={cat.value}
+                onClick={() => {
+                  setFilter(cat.value);
+                  setSearchQuery("");
+                }}
+                className={`px-6 py-3 rounded-lg font-semibold transition-all ${
+                  filter === cat.value
+                    ? "bg-blue-600 text-white shadow-md"
+                    : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-100"
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Sort Dropdown */}
+          <div className="relative">
             <button
-              key={cat.value}
-              onClick={() => {
-                setFilter(cat.value);
-                setSearchQuery("");
-              }}
-              className={`px-6 py-3 rounded-lg font-semibold transition-all ${
-                filter === cat.value
-                  ? "bg-blue-600 text-white shadow-md"
-                  : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-100"
-              }`}
+              onClick={() => setShowSortMenu(!showSortMenu)}
+              className="flex items-center gap-2 px-6 py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-semibold text-gray-700"
             >
-              {cat.label}
+              <Filter className="w-4 h-4" />
+              <span>Urutkan</span>
             </button>
-          ))}
+
+            {showSortMenu && (
+              <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                <div className="p-3">
+                  <p className="text-xs font-semibold text-gray-500 uppercase mb-2">
+                    Urutkan Berdasarkan
+                  </p>
+                  {sortOptions.map((option) => (
+                    <button
+                      key={option.field}
+                      onClick={() => {
+                        setSortField(option.field);
+                        setShowSortMenu(false);
+                      }}
+                      className={`w-full text-left px-3 py-2 rounded-md mb-1 transition-colors ${
+                        sortField === option.field
+                          ? "bg-blue-50 text-blue-700 font-semibold"
+                          : "hover:bg-gray-100 text-gray-700"
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+                <div className="border-t border-gray-200 p-3">
+                  <p className="text-xs font-semibold text-gray-500 uppercase mb-2">
+                    Urutan
+                  </p>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => {
+                        setSortOrder("asc");
+                        setShowSortMenu(false);
+                      }}
+                      className={`flex-1 px-3 py-2 rounded-md transition-colors ${
+                        sortOrder === "asc"
+                          ? "bg-blue-600 text-white font-semibold"
+                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      }`}
+                    >
+                      A → Z
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSortOrder("desc");
+                        setShowSortMenu(false);
+                      }}
+                      className={`flex-1 px-3 py-2 rounded-md transition-colors ${
+                        sortOrder === "desc"
+                          ? "bg-blue-600 text-white font-semibold"
+                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      }`}
+                    >
+                      Z → A
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Results Count */}
@@ -294,7 +438,8 @@ export default function CoursesPage() {
           <span className="text-sm text-gray-600">
             Menampilkan{" "}
             <span className="font-semibold text-gray-900">
-              {paginatedCourses.length}
+              {Math.min(startIndex + 1, filteredCourses.length)}-
+              {Math.min(startIndex + ITEMS_PER_PAGE, filteredCourses.length)}
             </span>{" "}
             dari{" "}
             <span className="font-semibold text-gray-900">
