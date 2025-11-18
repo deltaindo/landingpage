@@ -232,14 +232,8 @@ export default function CoursesPage() {
 
       // Extract unique categories from all courses
       const uniqueCategories = Array.from(
-        new Set(
-          response.data
-            .map((course: Course) => course.category)
-            .filter(
-              (category: string | undefined): category is string => !!category
-            )
-        )
-      );
+        new Set(response.data.map((course: Course) => course.category))
+      ).filter(Boolean) as string[];
 
       setAvailableCategories(uniqueCategories);
 
