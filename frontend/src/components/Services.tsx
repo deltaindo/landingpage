@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 
 const Services = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -25,72 +25,114 @@ const Services = () => {
     return () => observer.disconnect();
   }, []);
 
-  const services = [
-    {
-      icon: "📚",
-      title: "Pelatihan K3",
-      description:
-        "Pelatihan keselamatan dan kesehatan kerja bersertifikat Kemnaker RI",
-    },
-    {
-      icon: "🎓",
-      title: "Sertifikasi K3",
-      description:
-        "Sertifikasi kompetensi BNSP dan Kemnaker untuk berbagai bidang",
-    },
-    {
-      icon: "🔧",
-      title: "Riksa Uji Alat",
-      description: "Pemeriksaan dan pengujian alat K3 sesuai standar",
-    },
-    {
-      icon: "💼",
-      title: "Konsultan K3",
-      description: "Konsultasi sistem manajemen K3 dan produktivitas",
-    },
-    {
-      icon: "📋",
-      title: "Audit SMK3",
-      description: "Audit Sistem Manajemen K3 sesuai PP No. 50 Tahun 2012",
-    },
-    {
-      icon: "🏗️",
-      title: "Kajian Teknik",
-      description: "Kajian teknik untuk SKK, SLF, dan perizinan",
-    },
-  ];
+  const trainingService = {
+    title: "Pelatihan dan Sertifikasi K3",
+    items: [
+      {
+        icon: "",
+        subtitle: "Pelatihan K3",
+        description:
+          "Pelatihan keselamatan dan kesehatan kerja bersertifikat Kemnaker RI",
+      },
+      {
+        icon: "",
+        subtitle: "Sertifikasi K3",
+        description:
+          "Sertifikasi kompetensi BNSP dan Kemnaker untuk berbagai bidang",
+      },
+    ],
+  };
+
+  const consultationService = {
+    title: "Konsultasi dan Audit SMK3",
+    items: [
+      {
+        icon: "",
+        subtitle: "Konsultan K3",
+        description: "Konsultasi sistem manajemen K3 dan produktivitas",
+      },
+      {
+        icon: "",
+        subtitle: "Audit SMK3",
+        description: "Audit Sistem Manajemen K3 sesuai PP No. 50 Tahun 2012",
+      },
+    ],
+  };
+
+  const testingService = {
+    icon: "",
+    title: "Riksa Uji Alat",
+    description: "Pemeriksaan dan pengujian alat K3 sesuai standar",
+  };
 
   return (
-    <section id="layanan" className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="mb-6">
-          <h2 className="text-3xl md:text-4xl font-bold text-dark mt-1">
-            Layanan Kami
-          </h2>
-          <p className="text-lg text-gray-600 max-w-3xl">
-            Layanan komprehensif untuk kebutuhan K3 perusahaan Anda
-          </p>
+    <section ref={sectionRef} className="py-12 px-6 md:px-12 lg:px-24 bg-white">
+      {/* Header */}
+      <div className="mb-8">
+        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+          Layanan Kami
+        </h2>
+        <p className="text-gray-600">
+          Layanan komprehensif untuk kebutuhan K3 perusahaan Anda
+        </p>
+      </div>
+
+      {/* Services Grid Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        {/* Left Side - Training & Consultation (stacked, full width on left) */}
+        <div className="lg:col-span-3 space-y-6">
+          {/* Training & Sertifikasi Services Block */}
+          <div className="service-card bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-all duration-300">
+            <h3 className="text-lg font-bold text-gray-900 mb-6">
+              {trainingService.title}
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {trainingService.items.map((item, index) => (
+                <div key={index} className="flex flex-col">
+                  <div className="text-4xl mb-3">{item.icon}</div>
+                  <h4 className="text-base font-semibold text-gray-800 mb-2">
+                    {item.subtitle}
+                  </h4>
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Consultation & Audit Services Block */}
+          <div className="service-card bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-all duration-300">
+            <h3 className="text-lg font-bold text-gray-900 mb-6">
+              {consultationService.title}
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {consultationService.items.map((item, index) => (
+                <div key={index} className="flex flex-col">
+                  <div className="text-4xl mb-3">{item.icon}</div>
+                  <h4 className="text-base font-semibold text-gray-800 mb-2">
+                    {item.subtitle}
+                  </h4>
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
-        <div
-          ref={sectionRef}
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
-          {services.map((service, index) => (
-            <div
-              key={index}
-              className="service-card opacity-0 bg-white border border-gray-200 rounded-xl p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group"
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              <div className="text-5xl mb-4 group-hover:scale-110 transition-transform">
-                {service.icon}
-              </div>
-              <h3 className="text-xl font-bold text-dark mb-3">
-                {service.title}
-              </h3>
-              <p className="text-gray-600">{service.description}</p>
-            </div>
-          ))}
+        {/* Right Side - Testing Service (expanded, tall block) */}
+        <div className="lg:col-span-1 lg:row-span-2">
+          <div className="service-card bg-white rounded-lg border border-gray-200 p-8 hover:shadow-lg transition-all duration-300 h-full flex flex-col justify-center items-center text-center">
+            <div className="text-6xl mb-6">{testingService.icon}</div>
+            <h3 className="text-xl font-bold text-gray-900 mb-4">
+              {testingService.title}
+            </h3>
+            <p className="text-sm text-gray-600 leading-relaxed">
+              {testingService.description}
+            </p>
+          </div>
         </div>
       </div>
     </section>
