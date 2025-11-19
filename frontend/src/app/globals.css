@@ -110,65 +110,6 @@ iframe {
   }
 }
 
-/* White glass cards used in WhyUs.tsx */
-.whyus-card {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 12px;
-  padding: 16px 20px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  animation: whyus-slide-in 0.6s ease-out forwards;
-  opacity: 0;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-}
-
-.whyus-card:hover {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-color: rgba(255, 255, 255, 0.6);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
-  transform: translateY(-4px);
-}
-
-.whyus-card:active {
-  transform: translateY(-2px);
-}
-
-/* Optional: tweak spacing on smaller screens just for WhyUs cards */
-@media (max-width: 1024px) {
-  .whyus-card {
-    padding: 14px 18px;
-  }
-}
-
-@media (max-width: 768px) {
-  .whyus-card {
-    padding: 12px 16px;
-  }
-}
-
-@media (max-width: 480px) {
-  .whyus-card {
-    padding: 10px 14px;
-  }
-}
-
-/* Slide-in animation stays scoped to WhyUs only */
-@keyframes whyus-slide-in {
-  from {
-    opacity: 0;
-    transform: translateX(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
 /* White glass cards */
 .whyus-card {
   background: rgba(255, 255, 255, 0.7); /* Semi-transparent white */

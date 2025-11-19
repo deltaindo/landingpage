@@ -1,3 +1,5 @@
+// components/WhyUs.tsx - only layout changed
+
 import React from "react";
 import Image from "next/image";
 
@@ -73,6 +75,7 @@ const WhyUs: React.FC = () => {
             objectPosition: "center",
           }}
         />
+
         <div
           style={{
             position: "absolute",
@@ -81,7 +84,7 @@ const WhyUs: React.FC = () => {
             width: "100%",
             height: "100%",
             background:
-              "linear-gradient(135deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.25) 100%)",
+              "linear-gradient(135deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.25) 20%)",
             zIndex: 1,
           }}
         />
@@ -93,19 +96,25 @@ const WhyUs: React.FC = () => {
           position: "relative",
           zIndex: 2,
           width: "100%",
-          maxWidth: "1400px",
+          maxWidth: "1200px", // was 1400 – makes whole block a bit more centered
           margin: "0 auto",
           display: "grid",
-          gridTemplateColumns: "1fr 1.2fr",
-          gap: "60px",
+          gridTemplateColumns: "1.1fr 1.1fr", // slightly more balanced left/right
+          columnGap: "40px",
           alignItems: "flex-start",
+          padding: "0 24px", // nudges everything a bit to the right
         }}
       >
-        {/* Left Side - Heading */}
-        <div style={{ color: "white", padding: "20px 0" }}>
+        {/* Left Side - Heading (moved a bit to the right via padding) */}
+        <div
+          style={{
+            color: "white",
+            padding: "20px 0 20px 16px", // extra left padding → heading moves right
+          }}
+        >
           <h2
             style={{
-              fontSize: "2.8rem",
+              fontSize: "2.6rem",
               fontWeight: 700,
               lineHeight: 1.2,
               margin: "0 0 20px 0",
@@ -128,10 +137,10 @@ const WhyUs: React.FC = () => {
           </h2>
           <p
             style={{
-              fontSize: "1.1rem",
+              fontSize: "1.05rem",
               color: "rgba(255, 255, 255, 0.9)",
               lineHeight: 1.6,
-              maxWidth: "400px",
+              maxWidth: "420px",
               margin: 0,
               fontWeight: 300,
             }}
@@ -141,12 +150,14 @@ const WhyUs: React.FC = () => {
           </p>
         </div>
 
-        {/* Right Side - Grid with Glass Cards (1x6) */}
+        {/* Right Side - 1x6 Cards (narrower + pulled left) */}
         <div
           style={{
             display: "grid",
             gridTemplateColumns: "1fr",
-            gap: "16px",
+            rowGap: "12px",
+            maxWidth: "640px", // makes cards narrower → look smaller
+            margin: "0 auto 0 0", // align to the left of right column
           }}
         >
           {reasons.map((reason, index) => (
@@ -162,7 +173,7 @@ const WhyUs: React.FC = () => {
                   fontSize: "1rem",
                   fontWeight: 600,
                   color: "#1f2937",
-                  margin: "0 0 8px 0",
+                  margin: "0 0 6px 0",
                   letterSpacing: "-0.3px",
                 }}
               >
@@ -171,7 +182,7 @@ const WhyUs: React.FC = () => {
               <p
                 style={{
                   fontSize: "0.85rem",
-                  color: "#0334a9",
+                  color: "#6b7280",
                   lineHeight: 1.4,
                   margin: 0,
                   fontWeight: 300,
