@@ -1,10 +1,7 @@
-// components/WhyUs.tsx - Enhanced with Background Image, Glass Effect & Slide-in Animation
-
 import React from "react";
 import Image from "next/image";
 
 interface Reason {
-  icon: string;
   title: string;
   description: string;
 }
@@ -12,35 +9,29 @@ interface Reason {
 const WhyUs: React.FC = () => {
   const reasons: Reason[] = [
     {
-      icon: "✓",
       title: "Terakreditasi Resmi",
       description:
         "Ditunjuk dan diakui oleh Kementerian Ketenagakerjaan RI dan BNSP",
     },
     {
-      icon: "🏫",
       title: "Instruktur Profesional",
       description: "Instruktur bersertifikat dan berpengalaman di bidangnya",
     },
     {
-      icon: "🏢",
       title: "Fasilitas Modern",
       description:
         "Ruang pelatihan lengkap dengan alat praktik standar industri",
     },
     {
-      icon: "🔄",
       title: "Fleksibel",
       description:
         "Public training dan in-house training sesuai kebutuhan perusahaan",
     },
     {
-      icon: "💬",
       title: "Konsultasi Gratis",
       description: "Konsultasi program pelatihan dan sertifikasi tanpa biaya",
     },
     {
-      icon: "🏆",
       title: "Terpercaya",
       description:
         "Dipercaya oleh BUMN, instansi pemerintah, dan perusahaan swasta",
@@ -124,7 +115,7 @@ const WhyUs: React.FC = () => {
             Mengapa Memilih{" "}
             <span
               style={{
-                background: "linear-gradient(135deg, #0334a9 0%, #064ec0 100%)",
+                background: "linear-gradient(135deg, #064ec0 0%, #0334a9 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -150,12 +141,12 @@ const WhyUs: React.FC = () => {
           </p>
         </div>
 
-        {/* Right Side - Grid with White Cards */}
+        {/* Right Side - Grid with Glass Cards (1x6) */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(2, 1fr)",
-            gap: "24px",
+            gridTemplateColumns: "1fr",
+            gap: "16px",
           }}
         >
           {reasons.map((reason, index) => (
@@ -163,18 +154,15 @@ const WhyUs: React.FC = () => {
               key={index}
               className="whyus-card"
               style={{
-                animationDelay: `${index * 0.1}s`,
+                animationDelay: `${index * 0.05}s`,
               }}
             >
-              <div style={{ fontSize: "2.5rem", marginBottom: "16px" }}>
-                <span className="whyus-icon">{reason.icon}</span>
-              </div>
               <h3
                 style={{
-                  fontSize: "1.25rem",
+                  fontSize: "1rem",
                   fontWeight: 600,
-                  color: "#0034a9",
-                  margin: "0 0 12px 0",
+                  color: "#1f2937",
+                  margin: "0 0 8px 0",
                   letterSpacing: "-0.3px",
                 }}
               >
@@ -182,9 +170,9 @@ const WhyUs: React.FC = () => {
               </h3>
               <p
                 style={{
-                  fontSize: "0.95rem",
-                  color: "#ffffff",
-                  lineHeight: 1.5,
+                  fontSize: "0.85rem",
+                  color: "#0334a9",
+                  lineHeight: 1.4,
                   margin: 0,
                   fontWeight: 300,
                 }}
