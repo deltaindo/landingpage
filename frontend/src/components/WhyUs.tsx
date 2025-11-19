@@ -1,143 +1,85 @@
-// components/WhyUs.tsx - Version 6: Full-Width Image with Glass Effect
+// components/WhyUs.tsx - Version 3: Two-Column Layout
 import React from "react";
-import Image from "next/image";
 
-interface Benefit {
+interface Reason {
+  icon: string;
   title: string;
   description: string;
-  image?: string;
-  imageAlt?: string;
 }
 
-interface WhyUsProps {
-  title?: string;
-  subtitle?: string;
-  benefits?: Benefit[];
-}
-
-const WhyUs: React.FC<WhyUsProps> = ({
-  title = "Mengapa Memilih Delta Indonesia?",
-  subtitle = "Semua keunggulan yang Anda butuhkan dalam satu tempat",
-  benefits = [
+const WhyUs: React.FC = () => {
+  const reasons: Reason[] = [
     {
+      icon: "✓",
       title: "Terakreditasi Resmi",
-      description: "Kementerian Ketenagakerjaan RI dan BNSP",
-      image: "/slides/slide1.jpg",
-      imageAlt: "Sertifikasi Resmi",
+      description:
+        "Ditunjuk dan diakui oleh Kementerian Ketenagakerjaan RI dan BNSP",
     },
     {
+      icon: "👨‍🏫",
       title: "Instruktur Profesional",
-      description: "Bersertifikat dan berpengalaman",
-      image: "/slides/slide1.jpg",
-      imageAlt: "Instruktur",
+      description: "Instruktur bersertifikat dan berpengalaman di bidangnya",
     },
     {
+      icon: "🏢",
       title: "Fasilitas Modern",
-      description: "Alat praktik standar industri",
-      image: "/slides/slide1.jpg",
-      imageAlt: "Fasilitas",
+      description:
+        "Ruang pelatihan lengkap dengan alat praktik standar industri",
     },
     {
-      title: "Training Fleksibel",
-      description: "Public & in-house training",
-      image: "/slides/slide1.jpg",
-      imageAlt: "Training Fleksibel",
+      icon: "🔄",
+      title: "Fleksibel",
+      description:
+        "Public training dan in-house training sesuai kebutuhan perusahaan",
     },
     {
+      icon: "💬",
       title: "Konsultasi Gratis",
-      description: "Tanpa biaya konsultasi program",
-      image: "/slides/slide1.jpg",
-      imageAlt: "Konsultasi",
+      description: "Konsultasi program pelatihan dan sertifikasi tanpa biaya",
     },
     {
+      icon: "🏆",
       title: "Terpercaya",
-      description: "BUMN, pemerintah, dan swasta",
-      image: "/slides/slide1.jpg",
-      imageAlt: "Terpercaya",
+      description:
+        "Dipercaya oleh BUMN, instansi pemerintah, dan perusahaan swasta",
     },
-  ],
-}) => {
+  ];
+
   return (
     <section className="why-us-section">
       <div className="container">
-        {/* Header */}
-        <div className="section-header">
-          <h2 className="section-title">{title}</h2>
-          <p className="section-subtitle">{subtitle}</p>
-        </div>
+        <div className="content-wrapper">
+          {/* Left Side - Heading */}
+          <div className="heading-side">
+            <h2 className="section-title">
+              Mengapa Memilih <br />
+              <span className="highlight">Delta Indonesia?</span>
+            </h2>
+            <p className="section-description">
+              Keunggulan yang membuat kami menjadi pilihan terbaik untuk
+              pelatihan K3
+            </p>
+          </div>
 
-        {/* Benefits List */}
-        <div className="benefits-list">
-          {benefits.map((benefit, index) => (
-            <div key={index} className="benefit-row">
-              {/* Full-Width Image with Glass Effect */}
-              <div className="image-container">
-                {benefit.image ? (
-                  <div className="image-wrapper">
-                    <Image
-                      src={benefit.image}
-                      alt={benefit.imageAlt || benefit.title}
-                      fill
-                      sizes="100%"
-                      objectFit="cover"
-                      className="benefit-image"
-                    />
-                    {/* Glass Effect Overlay on Hover */}
-                    <div className="glass-overlay"></div>
-                  </div>
-                ) : (
-                  <div className="image-placeholder">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-                      <rect
-                        x="3"
-                        y="3"
-                        width="18"
-                        height="18"
-                        rx="2"
-                        stroke="#ccc"
-                        strokeWidth="2"
-                      />
-                      <circle cx="8.5" cy="8.5" r="1.5" fill="#ccc" />
-                      <path
-                        d="M3 14l5-5 7 7 9-9"
-                        stroke="#ccc"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                    <span className="placeholder-text">Image</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Content */}
-              <div className="content-container">
-                <div className="check-icon">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <circle cx="12" cy="12" r="10" fill="#0066cc" />
-                    <path
-                      d="M7 12l3 3 7-7"
-                      stroke="white"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </div>
-                <div className="text-content">
-                  <h3 className="benefit-title">{benefit.title}</h3>
-                  <p className="benefit-description">{benefit.description}</p>
+          {/* Right Side - Grid */}
+          <div className="reasons-grid">
+            {reasons.map((reason, index) => (
+              <div key={index} className="reason-item">
+                <span className="reason-icon">{reason.icon}</span>
+                <div className="reason-text">
+                  <h3 className="reason-title">{reason.title}</h3>
+                  <p className="reason-description">{reason.description}</p>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 
       <style jsx>{`
         .why-us-section {
           padding: 80px 0;
-          background: #f8f9fa;
+          background: white;
         }
 
         .container {
@@ -146,140 +88,78 @@ const WhyUs: React.FC<WhyUsProps> = ({
           padding: 0 24px;
         }
 
-        /* Header */
-        .section-header {
-          text-align: center;
-          margin-bottom: 48px;
+        .content-wrapper {
+          display: grid;
+          grid-template-columns: 1fr 2fr;
+          gap: 60px;
+          align-items: start;
+        }
+
+        /* Heading Side */
+        .heading-side {
+          position: sticky;
+          top: 100px;
         }
 
         .section-title {
           font-size: 2.5rem;
           font-weight: 700;
           color: #1a1a1a;
-          margin-bottom: 16px;
+          line-height: 1.2;
+          margin-bottom: 24px;
         }
 
-        .section-subtitle {
-          font-size: 1.125rem;
+        .highlight {
+          color: #0066cc;
+        }
+
+        .section-description {
+          font-size: 1rem;
           color: #666;
+          line-height: 1.6;
           margin: 0;
         }
 
-        /* Benefits List */
-        .benefits-list {
-          display: flex;
-          flex-direction: column;
-          gap: 20px;
-        }
-
-        /* Benefit Row */
-        .benefit-row {
+        /* Reasons Grid */
+        .reasons-grid {
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 32px;
-          background: white;
-          border-radius: 12px;
-          overflow: hidden;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-          transition: all 0.3s ease;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 24px;
         }
 
-        .benefit-row:hover {
-          box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
-          transform: translateY(-4px);
-        }
-
-        /* Image Container - Full Width */
-        .image-container {
-          position: relative;
-          width: 100%;
-          height: 100%;
-          min-height: 280px;
-        }
-
-        .image-wrapper {
-          position: relative;
-          width: 100%;
-          height: 100%;
-          overflow: hidden;
-        }
-
-        .benefit-image {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          display: block;
-          transition: transform 0.3s ease;
-        }
-
-        /* Glass Overlay Effect */
-        .glass-overlay {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: rgba(255, 255, 255, 0);
-          backdrop-filter: blur(0px);
-          transition: all 0.3s ease;
-          pointer-events: none;
-        }
-
-        /* Hover Glass Effect */
-        .benefit-row:hover .glass-overlay {
-          background: rgba(255, 255, 255, 0.15);
-          backdrop-filter: blur(8px);
-        }
-
-        /* Slight zoom on image hover */
-        .benefit-row:hover .benefit-image {
-          transform: scale(1.03);
-        }
-
-        .image-placeholder {
-          width: 100%;
-          height: 100%;
-          min-height: 280px;
-          background: linear-gradient(135deg, #f0f0f0, #e8e8e8);
+        .reason-item {
           display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
-          color: #999;
-          border: 2px dashed #ddd;
-        }
-
-        .placeholder-text {
-          font-size: 0.875rem;
-          font-weight: 500;
-        }
-
-        /* Content Container */
-        .content-container {
-          display: flex;
-          align-items: center;
           gap: 16px;
-          padding: 32px;
+          padding: 24px;
+          background: #f8f9fa;
+          border-radius: 12px;
+          transition: all 0.3s ease;
         }
 
-        .check-icon {
+        .reason-item:hover {
+          background: #e8f4f8;
+          transform: translateY(-2px);
+        }
+
+        .reason-icon {
           flex-shrink: 0;
+          font-size: 2rem;
+          line-height: 1;
         }
 
-        .text-content {
+        .reason-text {
           flex: 1;
         }
 
-        .benefit-title {
-          font-size: 1.5rem;
+        .reason-title {
+          font-size: 1.125rem;
           font-weight: 600;
           color: #1a1a1a;
-          margin: 0 0 12px 0;
+          margin: 0 0 8px 0;
         }
 
-        .benefit-description {
-          font-size: 1rem;
+        .reason-description {
+          font-size: 0.875rem;
           color: #666;
           line-height: 1.6;
           margin: 0;
@@ -287,17 +167,17 @@ const WhyUs: React.FC<WhyUsProps> = ({
 
         /* Responsive Design */
         @media (max-width: 1024px) {
-          .benefit-row {
+          .content-wrapper {
             grid-template-columns: 1fr;
-            gap: 0;
+            gap: 40px;
           }
 
-          .image-container {
-            min-height: 240px;
+          .heading-side {
+            position: static;
           }
 
-          .content-container {
-            padding: 24px;
+          .reasons-grid {
+            grid-template-columns: 1fr;
           }
         }
 
@@ -310,39 +190,8 @@ const WhyUs: React.FC<WhyUsProps> = ({
             font-size: 2rem;
           }
 
-          .image-container {
-            min-height: 200px;
-          }
-
-          .content-container {
+          .reason-item {
             padding: 20px;
-          }
-
-          .benefit-title {
-            font-size: 1.25rem;
-          }
-
-          .benefit-description {
-            font-size: 0.9375rem;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .section-title {
-            font-size: 1.75rem;
-          }
-
-          .image-container {
-            min-height: 160px;
-          }
-
-          .content-container {
-            padding: 16px;
-            gap: 12px;
-          }
-
-          .benefit-title {
-            font-size: 1.125rem;
           }
         }
       `}</style>
