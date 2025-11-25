@@ -65,7 +65,7 @@ const WhyUs: React.FC = () => {
         }}
       >
         <Image
-          src="/images/WhyUs1.jpg"
+          src="/images/WhyUs3.jpg"
           alt="Why Us Background"
           fill
           priority
@@ -84,7 +84,7 @@ const WhyUs: React.FC = () => {
             width: "100%",
             height: "100%",
             background:
-              "linear-gradient(135deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.25) 20%)",
+              "linear-gradient(135deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.25) 100%)",
             zIndex: 1,
           }}
         />
@@ -124,7 +124,7 @@ const WhyUs: React.FC = () => {
             Mengapa Memilih{" "}
             <span
               style={{
-                background: "linear-gradient(135deg, #064ec0 0%, #0334a9 100%)",
+                background: "linear-gradient(135deg, #ffffff 0%, #ffffff 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -132,17 +132,18 @@ const WhyUs: React.FC = () => {
                 marginTop: "10px",
               }}
             >
-              Delta Indonesia?
+              Delta Indonesia
             </span>
           </h2>
           <p
             style={{
-              fontSize: "1.05rem",
-              color: "rgba(255, 255, 255, 0.9)",
-              lineHeight: 1.6,
-              maxWidth: "420px",
-              margin: 0,
-              fontWeight: 300,
+              fontSize: "1.2rem", // bigger text
+              color: "#ffffff", // full white
+              lineHeight: 1.7,
+              maxWidth: "520px", // slightly wider for readability
+              margin: "8px 0 0 0",
+              fontWeight: 400, // a bit bolder
+              textShadow: "0 2px 6px rgba(0, 0, 0, 0.6)", // glow for contrast on photo
             }}
           >
             Keunggulan yang membuat kami menjadi pilihan terbaik untuk pelatihan

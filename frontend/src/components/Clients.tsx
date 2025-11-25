@@ -9,8 +9,7 @@ const Clients = () => {
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-dark mb-4">Dipercaya Oleh</h2>
           <p className="text-lg text-gray-600">
-            Melayani BUMN, instansi pemerintah, dan perusahaan swasta di seluruh
-            Indonesia
+            Instansi pemerintah, BUMN dan perusahaan swasta di seluruh Indonesia
           </p>
         </div>
 

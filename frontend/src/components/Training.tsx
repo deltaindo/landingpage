@@ -328,7 +328,7 @@ export default function Trainings() {
             Pelatihan Profesional
           </h1>
           <p className="text-gray-600 text-lg">
-            Tingkatkan skill Anda dengan pelatihan terbaik dari Delta Indonesia
+            Tingkatkan skill Kami dengan pelatihan terbaik dari Delta Indonesia
           </p>
         </header>
 
