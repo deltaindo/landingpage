@@ -169,3 +169,101 @@ exports.publishBlog = async (req, res, next) => {
     next(error);
   }
 };
+
+// Add these new methods to existing blogController.js
+
+exports.bulkPublish = async (req, res, next) => {
+  try {
+    const { ids } = req.body;
+    await Blog.updateMany(
+      { _id: { $in: ids } },
+      { status: "published", publishedAt: new Date() }
+    );
+    res.json({ success: true, message: "Blogs published successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.bulkDelete = async (req, res, next) => {
+  try {
+    const { ids } = req.body;
+    await Blog.deleteMany({ _id: { $in: ids } });
+    res.json({ success: true, message: "Blogs deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.scheduleBlog = async (req, res, next) => {
+  try {
+    const { scheduledAt } = req.body;
+    const blog = await Blog.findByIdAndUpdate(
+      req.params.id,
+      { scheduledAt, status: "draft" },
+      { new: true }
+    );
+    res.json({ success: true, data: blog });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.duplicateBlog = async (req, res, next) => {
+  try {
+    const original = await Blog.findById(req.params.id);
+    if (!original) {
+      return res.status(404).json({
+        success: false,
+        error: "Blog not found",
+      });
+    }
+
+    const duplicate = new Blog({
+      ...original.toObject(),
+      _id: undefined,
+      title: `${original.title} (Copy)`,
+      slug: `${original.slug}-copy-${Date.now()}`,
+      status: "draft",
+      publishedAt: null,
+      views: 0,
+    });
+
+    await duplicate.save();
+    res.status(201).json({ success: true, data: duplicate });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getBlogStats = async (req, res, next) => {
+  try {
+    const stats = await Blog.aggregate([
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    const totalViews = await Blog.aggregate([
+      {
+        $group: {
+          _id: null,
+          total: { $sum: "$views" },
+        },
+      },
+    ]);
+
+    res.json({
+      success: true,
+      data: {
+        byStatus: stats,
+        totalViews: totalViews[0]?.total || 0,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};

@@ -7,6 +7,11 @@ const path = require("path");
 const { connectDB } = require("./src/config/database");
 const errorHandler = require("./src/middleware/errorHandler");
 const { sequelize } = require("./src/config/database");
+const publishScheduledBlogs = require("./src/jobs/publishScheduledBlogs");
+
+// Start cron job
+publishScheduledBlogs.start();
+
 // Load environment variables
 dotenv.config();
 
@@ -54,6 +59,9 @@ app.get("/api", (req, res) => {
 app.use("/api/courses", require("./src/routes/course"));
 app.use("/api/registrations", require("./src/routes/registration"));
 app.use("/api/schedules", require("./src/routes/schedule"));
+app.use("/api/categories", require("./src/routes/category"));
+app.use("/api/tags", require("./src/routes/tag"));
+app.use("/api/media", require("./src/routes/media"));
 
 // Error Handler (must be last)
 app.use(errorHandler);

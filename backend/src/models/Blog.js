@@ -72,4 +72,55 @@ const Blog = sequelize.define(
   }
 );
 
+// Add validation and relationships
+const mongoose = require("mongoose");
+
+const blogSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true, maxlength: 255 },
+    slug: { type: String, required: true, unique: true },
+    type: {
+      type: String,
+      enum: ["featured", "media-release"],
+      default: "media-release",
+    },
+    content: { type: String, required: true },
+    excerpt: { type: String, required: true, maxlength: 200 },
+    featuredImage: { type: String, required: true },
+    author: { type: String, default: "Delta Indonesia" },
+    categoryId: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
+    tags: [{ type: mongoose.Schema.Types.ObjectId, ref: "Tag" }],
+    status: {
+      type: String,
+      enum: ["draft", "published", "archived"],
+      default: "draft",
+    },
+    publishedAt: Date,
+    scheduledAt: Date, // For scheduled publishing
+    views: { type: Number, default: 0 },
+    seo: {
+      metaTitle: String,
+      metaDescription: String,
+      keywords: [String],
+      ogImage: String,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+// Auto-generate slug from title
+blogSchema.pre("save", function (next) {
+  if (this.isModified("title") && !this.slug) {
+    this.slug = this.title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+  }
+  next();
+});
+
+module.exports = mongoose.model("Blog", blogSchema);
+
 module.exports = Blog;

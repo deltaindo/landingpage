@@ -39,4 +39,41 @@ router.patch(
   blogController.publishBlog
 );
 
+// Add these routes to existing blog.js
+
+router.post(
+  "/bulk/publish",
+  authenticate,
+  authorize("admin"),
+  blogController.bulkPublish
+);
+
+router.post(
+  "/bulk/delete",
+  authenticate,
+  authorize("admin"),
+  blogController.bulkDelete
+);
+
+router.patch(
+  "/:id/schedule",
+  authenticate,
+  authorize("admin"),
+  blogController.scheduleBlog
+);
+
+router.post(
+  "/:id/duplicate",
+  authenticate,
+  authorize("admin"),
+  blogController.duplicateBlog
+);
+
+router.get(
+  "/stats/overview",
+  authenticate,
+  authorize("admin"),
+  blogController.getBlogStats
+);
+
 module.exports = router;
