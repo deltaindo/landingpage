@@ -108,7 +108,10 @@ function TrainingCard({ training }: TrainingCardProps) {
   return (
     <article className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group">
       {/* Card Header */}
-      <div className="relative bg-gradient-to-br from-blue-600 to-indigo-700 p-6 pb-8">
+      <div
+        className="relative bg-cover bg-center bg-no-repeat p-6 pb-8"
+        style={{ backgroundImage: "url('/images/training-card-bg.jpg')" }}
+      >
         <span className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1 rounded-full">
           {training.category}
         </span>

@@ -116,7 +116,10 @@ function CourseCard({ course }: { course: Course }) {
   return (
     <article className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group">
       {/* Card Header */}
-      <div className="relative bg-gradient-to-br from-blue-600 to-indigo-700 p-6 pb-8">
+      <div
+        className="relative bg-cover bg-center bg-no-repeat p-6 pb-8"
+        style={{ backgroundImage: "url('/images/training-card-bg.jpg')" }}
+      >
         {course.featured && (
           <span className="absolute top-4 left-4 bg-amber-400 text-amber-900 text-xs font-bold px-3 py-1 rounded-full">
             Featured
