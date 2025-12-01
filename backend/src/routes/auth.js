@@ -4,6 +4,77 @@ const jwt = require("jsonwebtoken");
 const { User } = require("../models");
 const { body, validationResult } = require("express-validator");
 
+// Add this route to your existing auth.js routes
+
+/**
+ * 🔐 SSO Token Validation Endpoint
+ *
+ * This endpoint validates SSO tokens received from the SSO provider
+ * When WireGuard VPN is active, this validation happens over encrypted tunnel
+ */
+router.post("/sso/validate", async (req, res, next) => {
+  try {
+    const { token } = req.body;
+
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        error: "SSO token required",
+      });
+    }
+
+    // TODO: Implement actual SSO token validation
+    // This should verify the token with your SSO provider
+    // For now, this is a placeholder
+
+    /*
+     * WireGuard VPN Integration:
+     * When VPN is active, you can add additional security checks:
+     * 1. Verify request came through VPN (check X-VPN-Tunnel header)
+     * 2. Validate client certificate if using mutual TLS
+     * 3. Check IP is from VPN subnet
+     */
+
+    const isVPNRequest = req.headers["x-vpn-tunnel"] === "true";
+
+    if (process.env.REQUIRE_VPN === "true" && !isVPNRequest) {
+      return res.status(403).json({
+        success: false,
+        error: "VPN connection required for SSO",
+      });
+    }
+
+    // Placeholder: Validate with SSO provider
+    // const ssoValidation = await validateWithSSOProvider(token);
+
+    // For now, return mock validation (REPLACE WITH ACTUAL IMPLEMENTATION)
+    const user = {
+      id: "123",
+      email: "admin@deltaindonesia.com",
+      name: "Admin User",
+      role: "admin",
+    };
+
+    // Generate JWT token for your application
+    const jwt = require("jsonwebtoken");
+    const appToken = jwt.sign(
+      { userId: user.id, email: user.email, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "24h" }
+    );
+
+    res.json({
+      success: true,
+      data: {
+        token: appToken,
+        user,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Register (only for initial setup - remove in production)
 router.post(
   "/register",
