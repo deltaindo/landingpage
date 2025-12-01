@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
+import BlogEditor from "../../new/page";
+import { use } from "react";
 
 // Import React Quill dynamically (client-side only)
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
@@ -11,6 +13,16 @@ import "react-quill/dist/quill.snow.css";
 interface BlogEditorProps {
   blogId?: string;
   isNew?: boolean;
+}
+
+export default function EditBlogPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = use(params);
+
+  return <BlogEditor blogId={id} isNew={false} />;
 }
 
 export default function BlogEditor({ blogId, isNew = false }: BlogEditorProps) {

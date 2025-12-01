@@ -79,7 +79,8 @@ exports.updateMedia = async (req, res, next) => {
 
 exports.deleteMedia = async (req, res, next) => {
   try {
-    const media = await Media.findById(req.params.id);
+    const media = await Media.findByIdAndDelete(req.params.id);
+
     if (!media) {
       return res.status(404).json({
         success: false,
@@ -87,12 +88,18 @@ exports.deleteMedia = async (req, res, next) => {
       });
     }
 
-    // Delete from storage (if you have this function)
-    // await deleteFromStorage(media.fileUrl);
+    // Delete physical file
+    const fs = require("fs");
+    const path = require("path");
+    const filePath = path.join(__dirname, "../../uploads", media.fileName);
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
 
-    await media.deleteOne();
-
-    res.json({ success: true, message: "Media deleted successfully" });
+    res.json({
+      success: true,
+      message: "Media deleted successfully",
+    });
   } catch (error) {
     next(error);
   }

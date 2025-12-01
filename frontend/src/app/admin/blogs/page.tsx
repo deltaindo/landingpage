@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
+import { debounce } from "lodash"; // or create custom debounce
 
 interface BlogPost {
   id: string;
@@ -23,6 +24,8 @@ export default function BlogsListPage() {
     search: "",
     page: 1,
   });
+  
+
 
   useEffect(() => {
     fetchBlogs();
@@ -261,4 +264,14 @@ export default function BlogsListPage() {
       </div>
     </div>
   );
+  const debouncedSearch = useCallback(
+    debounce((searchTerm: string) => {
+      setFilters(prev => ({ ...prev, search: searchTerm, page: 1 }));
+    }, 500),
+    []
+  );
+
+  // In the search input
+  onChange={(e) => debouncedSearch(e.target.value)} 
+
 }

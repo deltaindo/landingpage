@@ -72,6 +72,24 @@ exports.getBlogBySlug = async (req, res, next) => {
 // Create new blog
 exports.createBlog = async (req, res, next) => {
   try {
+    // Add validation
+    const { title, content, excerpt, featuredImage } = req.body;
+
+    if (!title || !content || !excerpt || !featuredImage) {
+      return res.status(400).json({
+        success: false,
+        error:
+          "Missing required fields: title, content, excerpt, featuredImage",
+      });
+    }
+
+    if (excerpt.length > 200) {
+      return res.status(400).json({
+        success: false,
+        error: "Excerpt must be 200 characters or less",
+      });
+    }
+
     const blogData = req.body;
 
     // Handle image upload if provided
