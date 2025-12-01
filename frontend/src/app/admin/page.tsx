@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { FiFileText, FiBook, FiUsers, FiImage } from "react-icons/fi";
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState({
-    totalPosts: 0,
-    published: 0,
-    drafts: 0,
-    totalViews: 0,
+    blogs: 0,
+    courses: 0,
+    registrations: 0,
+    media: 0,
   });
 
   useEffect(() => {
@@ -16,101 +17,113 @@ export default function AdminDashboard() {
 
   const fetchStats = async () => {
     try {
-      const response = await fetch("/api/blogs/stats/overview");
-      const data = await response.json();
+      const [blogs, courses, registrations, media] = await Promise.all([
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/blogs`).then((r) =>
+          r.json()
+        ),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/courses`).then((r) =>
+          r.json()
+        ),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/registrations`).then(
+          (r) => r.json()
+        ),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/media`).then((r) =>
+          r.json()
+        ),
+      ]);
 
-      if (data.success) {
-        const byStatus = data.data.byStatus.reduce((acc: any, item: any) => {
-          acc[item._id] = item.count;
-          return acc;
-        }, {});
-
-        setStats({
-          totalPosts: (byStatus.published || 0) + (byStatus.draft || 0),
-          published: byStatus.published || 0,
-          drafts: byStatus.draft || 0,
-          totalViews: data.data.totalViews,
-        });
-      }
+      setStats({
+        blogs: blogs.data?.length || 0,
+        courses: courses.data?.length || 0,
+        registrations: registrations.data?.length || 0,
+        media: media.data?.length || 0,
+      });
     } catch (error) {
       console.error("Error fetching stats:", error);
     }
   };
 
-  const statCards = [
+  const cards = [
     {
-      title: "Total Posts",
-      value: stats.totalPosts,
-      icon: "📄",
+      title: "Total Blogs",
+      value: stats.blogs,
+      icon: FiFileText,
       color: "bg-blue-500",
+      href: "/admin/blogs",
     },
     {
-      title: "Published",
-      value: stats.published,
-      icon: "✅",
+      title: "Total Courses",
+      value: stats.courses,
+      icon: FiBook,
       color: "bg-green-500",
+      href: "/admin/courses",
     },
     {
-      title: "Drafts",
-      value: stats.drafts,
-      icon: "📝",
+      title: "Registrations",
+      value: stats.registrations,
+      icon: FiUsers,
       color: "bg-yellow-500",
+      href: "/admin/registrations",
     },
     {
-      title: "Total Views",
-      value: stats.totalViews.toLocaleString(),
-      icon: "👁️",
+      title: "Media Files",
+      value: stats.media,
+      icon: FiImage,
       color: "bg-purple-500",
+      href: "/admin/media",
     },
   ];
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">Dashboard</h1>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
+        <p className="text-gray-600 mt-1">Welcome to your CMS</p>
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {statCards.map((card) => (
-          <div
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {cards.map((card) => (
+          <a
             key={card.title}
+            href={card.href}
             className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600 mb-1">{card.title}</p>
-                <p className="text-3xl font-bold text-gray-800">{card.value}</p>
+                <p className="text-gray-600 text-sm">{card.title}</p>
+                <p className="text-3xl font-bold text-gray-800 mt-2">
+                  {card.value}
+                </p>
               </div>
-              <div
-                className={`${card.color} w-12 h-12 rounded-full flex items-center justify-center text-2xl`}
-              >
-                {card.icon}
+              <div className={`${card.color} p-3 rounded-lg text-white`}>
+                <card.icon size={24} />
               </div>
             </div>
-          </div>
+          </a>
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
-          <div className="space-y-3">
-            <button className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-              ➕ Create New Post
-            </button>
-            <button className="w-full px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-              📤 Upload Media
-            </button>
-            <button className="w-full px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
-              📁 Manage Categories
-            </button>
-          </div>
+          <h3 className="text-lg font-semibold mb-4">Recent Activity</h3>
+          <p className="text-gray-600 text-sm">Activity feed coming soon...</p>
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
-          <div className="space-y-3">
-            <div className="text-sm text-gray-600">
-              No recent activity to display
-            </div>
+          <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
+          <div className="space-y-2">
+            <a
+              href="/admin/blogs/new"
+              className="block px-4 py-2 text-blue-600 hover:bg-blue-50 rounded"
+            >
+              + New Blog Post
+            </a>
+            <a
+              href="/admin/courses/new"
+              className="block px-4 py-2 text-green-600 hover:bg-green-50 rounded"
+            >
+              + New Course
+            </a>
           </div>
         </div>
       </div>

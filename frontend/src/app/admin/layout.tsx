@@ -12,13 +12,15 @@ export default function AdminLayout({
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
+  // Add to navigation array
   const navigation = [
     { name: "Dashboard", href: "/admin", icon: "📊" },
-    { name: "Blog Posts", href: "/admin/blogs", icon: "📝" },
-    { name: "Media Library", href: "/admin/media", icon: "🖼️" },
+    { name: "Blogs", href: "/admin/blogs", icon: "📝" },
+    { name: "Courses", href: "/admin/courses", icon: "🎓" }, // ADD THIS
+    { name: "Registrations", href: "/admin/registrations", icon: "📋" }, // ADD THIS
     { name: "Categories", href: "/admin/categories", icon: "📁" },
     { name: "Tags", href: "/admin/tags", icon: "🏷️" },
-    { name: "Settings", href: "/admin/settings", icon: "⚙️" },
+    { name: "Media", href: "/admin/media", icon: "🖼️" },
   ];
 
   return (
