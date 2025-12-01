@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { courseAPI } from "@/lib/api";
+import { courseAPI } from "@/lib/Oldapi";
 import { Search, ChevronLeft, ChevronRight, Filter } from "lucide-react";
 
 // ==================== TYPES ====================

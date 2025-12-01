@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { courseAPI } from "@/lib/api";
+import { courseAPI } from "@/lib/Oldapi";
 
 interface Course {
   id: string;

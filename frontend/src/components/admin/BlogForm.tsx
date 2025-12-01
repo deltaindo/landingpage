@@ -12,7 +12,7 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import AdminLayout from "@/components/admin/AdminLayout";
-import { blogAPI } from "@/lib/api";
+import { blogAPI } from "@/lib/Oldapi";
 
 interface BlogPost {
   id: string;

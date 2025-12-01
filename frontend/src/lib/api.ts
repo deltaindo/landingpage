@@ -1,323 +1,346 @@
-// API Base URL
+/**
+ * API Client with WireGuard VPN-Enhanced SSO Support
+ *
+ * WireGuard VPN Integration Points:
+ * 1. When VPN is active, all API calls route through VPN gateway
+ * 2. SSO token validation happens over encrypted VPN tunnel
+ * 3. Certificate-based authentication can be added for VPN clients
+ */
+
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+const USE_VPN_TUNNEL = process.env.NEXT_PUBLIC_USE_VPN_TUNNEL === "true";
+const VPN_GATEWAY_URL = process.env.NEXT_PUBLIC_VPN_GATEWAY_URL;
+const SSO_ENABLED = process.env.NEXT_PUBLIC_SSO_ENABLED === "true";
 
-// Generic API call function
-async function apiCall(endpoint: string, options: RequestInit = {}) {
-  try {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-      ...options,
-      headers: {
-        "Content-Type": "application/json",
-        ...options.headers,
-      },
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.error || `API Error: ${response.status}`);
-    }
-
-    return response.json();
-  } catch (error) {
-    console.error("API Call Error:", error);
-    throw error;
-  }
+interface RequestConfig extends RequestInit {
+  requiresAuth?: boolean;
 }
 
-// =====================================================
-// COURSE API
-// =====================================================
-export const courseAPI = {
-  // Get all courses with filters
-  getAll: async (params?: {
-    category?: string;
-    status?: string;
-    featured?: string;
-    search?: string;
-    page?: number;
-    limit?: number;
-  }) => {
-    const queryString = params
-      ? new URLSearchParams(params as any).toString()
-      : "";
-    return apiCall(`/courses${queryString ? `?${queryString}` : ""}`);
-  },
+interface ApiResponse<T = any> {
+  success: boolean;
+  data?: T;
+  error?: string;
+  message?: string;
+}
 
-  // Get single course by ID
-  getById: (id: string) => {
-    return apiCall(`/courses/${id}`);
-  },
+class ApiClient {
+  private baseURL: string;
 
-  // Get featured courses
-  getFeatured: () => {
-    return apiCall("/courses/featured/list");
-  },
+  constructor() {
+    // 🔐 WireGuard VPN: When VPN is active, route through VPN gateway
+    this.baseURL =
+      USE_VPN_TUNNEL && VPN_GATEWAY_URL
+        ? VPN_GATEWAY_URL + "/api"
+        : API_BASE_URL;
 
-  // Create course (admin)
-  create: (data: any) => {
-    return apiCall("/courses", {
+    console.log(`API Client initialized: ${this.baseURL}`);
+    if (USE_VPN_TUNNEL) {
+      console.log("🔒 WireGuard VPN tunnel active");
+    }
+  }
+
+  private getToken(): string | null {
+    if (typeof window === "undefined") return null;
+    return localStorage.getItem("authToken");
+  }
+
+  /**
+   * 🔐 WireGuard VPN Enhancement:
+   * When VPN is active, this can include client certificate validation
+   * Add X-VPN-Client-Cert header for mutual TLS authentication
+   */
+  private async request<T>(
+    endpoint: string,
+    config: RequestConfig = {}
+  ): Promise<ApiResponse<T>> {
+    const { requiresAuth = true, ...options } = config;
+
+    const headers: HeadersInit = {
+      "Content-Type": "application/json",
+      ...options.headers,
+    };
+
+    // Add auth token if required
+    if (requiresAuth) {
+      const token = this.getToken();
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+    }
+
+    // 🔐 WireGuard VPN: Add VPN-specific headers when tunnel is active
+    if (USE_VPN_TUNNEL) {
+      headers["X-VPN-Tunnel"] = "true";
+      // TODO: Add client certificate fingerprint when implementing mutual TLS
+      // headers['X-VPN-Client-Cert'] = await this.getClientCertFingerprint();
+    }
+
+    try {
+      const response = await fetch(`${this.baseURL}${endpoint}`, {
+        ...options,
+        headers,
+      });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          // Token expired or invalid
+          this.handleAuthError();
+        }
+        const error = await response
+          .json()
+          .catch(() => ({ error: "Request failed" }));
+        throw new Error(error.error || `HTTP ${response.status}`);
+      }
+
+      return response.json();
+    } catch (error: any) {
+      console.error("API Request failed:", error);
+      throw error;
+    }
+  }
+
+  private handleAuthError() {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("authToken");
+      // If SSO is enabled, redirect to SSO logout
+      if (SSO_ENABLED) {
+        this.logoutSSO();
+      } else {
+        window.location.href = "/admin/login";
+      }
+    }
+  }
+
+  /**
+   * 🔐 SSO Authentication Methods
+   */
+
+  // Standard login (bypassed when SSO is enabled)
+  async login(email: string, password: string): Promise<ApiResponse> {
+    if (SSO_ENABLED) {
+      throw new Error("Direct login disabled. Please use SSO.");
+    }
+
+    return this.request("/auth/login", {
+      method: "POST",
+      requiresAuth: false,
+      body: JSON.stringify({ email, password }),
+    });
+  }
+
+  /**
+   * 🔐 WireGuard VPN + SSO: Validate SSO token through VPN tunnel
+   * This provides end-to-end encryption for token validation
+   *
+   * @param ssoToken - Token received from SSO provider
+   */
+  async validateSSOToken(ssoToken: string): Promise<ApiResponse> {
+    return this.request("/auth/sso/validate", {
+      method: "POST",
+      requiresAuth: false,
+      body: JSON.stringify({ token: ssoToken }),
+      headers: {
+        // 🔐 WireGuard VPN: Mark as SSO validation request
+        "X-SSO-Validation": "true",
+      },
+    });
+  }
+
+  /**
+   * 🔐 SSO Logout: Clear session on SSO provider
+   */
+  logoutSSO() {
+    if (typeof window !== "undefined") {
+      const ssoProviderUrl = process.env.NEXT_PUBLIC_SSO_PROVIDER_URL;
+      const callbackUrl = encodeURIComponent(
+        window.location.origin + "/admin/login"
+      );
+      window.location.href = `${ssoProviderUrl}/logout?redirect=${callbackUrl}`;
+    }
+  }
+
+  // Standard logout
+  logout() {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("authToken");
+      if (SSO_ENABLED) {
+        this.logoutSSO();
+      }
+    }
+  }
+
+  // Get current user
+  async getCurrentUser(): Promise<ApiResponse> {
+    return this.request("/auth/me");
+  }
+
+  /**
+   * Blog API Methods
+   */
+
+  async getBlogs(params?: Record<string, any>): Promise<ApiResponse> {
+    const query = params ? `?${new URLSearchParams(params).toString()}` : "";
+    return this.request(`/blogs${query}`, { requiresAuth: false });
+  }
+
+  async getBlog(id: string): Promise<ApiResponse> {
+    return this.request(`/blogs/${id}`);
+  }
+
+  async createBlog(data: any): Promise<ApiResponse> {
+    return this.request("/blogs", {
       method: "POST",
       body: JSON.stringify(data),
     });
-  },
+  }
 
-  // Update course (admin)
-  update: (id: string, data: any) => {
-    return apiCall(`/courses/${id}`, {
+  async updateBlog(id: string, data: any): Promise<ApiResponse> {
+    return this.request(`/blogs/${id}`, {
       method: "PUT",
       body: JSON.stringify(data),
     });
-  },
+  }
 
-  // Delete course (admin)
-  delete: (id: string) => {
-    return apiCall(`/courses/${id}`, {
+  async deleteBlog(id: string): Promise<ApiResponse> {
+    return this.request(`/blogs/${id}`, {
       method: "DELETE",
     });
-  },
-};
+  }
 
-// =====================================================
-// FORM TEMPLATE API
-// =====================================================
-export const formTemplateAPI = {
-  // Get all form templates
-  getAll: () => {
-    return apiCall("/form-templates");
-  },
+  async bulkPublishBlogs(ids: string[]): Promise<ApiResponse> {
+    return this.request("/blogs/bulk/publish", {
+      method: "POST",
+      body: JSON.stringify({ ids }),
+    });
+  }
 
-  // Get form template by ID
-  getById: (id: string) => {
-    return apiCall(`/form-templates/${id}`);
-  },
+  async bulkDeleteBlogs(ids: string[]): Promise<ApiResponse> {
+    return this.request("/blogs/bulk/delete", {
+      method: "POST",
+      body: JSON.stringify({ ids }),
+    });
+  }
 
-  // Get default form template
-  getDefault: () => {
-    return apiCall("/form-templates/default");
-  },
+  async scheduleBlog(id: string, scheduledAt: string): Promise<ApiResponse> {
+    return this.request(`/blogs/${id}/schedule`, {
+      method: "PATCH",
+      body: JSON.stringify({ scheduledAt }),
+    });
+  }
 
-  // Create form template (admin)
-  create: (data: any) => {
-    return apiCall("/form-templates", {
+  async duplicateBlog(id: string): Promise<ApiResponse> {
+    return this.request(`/blogs/${id}/duplicate`, {
+      method: "POST",
+    });
+  }
+
+  async getBlogStats(): Promise<ApiResponse> {
+    return this.request("/blogs/stats/overview");
+  }
+
+  /**
+   * Category API Methods
+   */
+
+  async getCategories(): Promise<ApiResponse> {
+    return this.request("/categories", { requiresAuth: false });
+  }
+
+  async createCategory(data: any): Promise<ApiResponse> {
+    return this.request("/categories", {
       method: "POST",
       body: JSON.stringify(data),
     });
-  },
-};
+  }
 
-// =====================================================
-// REGISTRATION API
-// =====================================================
-export const registrationAPI = {
-  // Create new registration with file uploads
-  create: async (formData: FormData) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/registrations`, {
-        method: "POST",
-        body: formData, // Don't set Content-Type for FormData
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || "Registration failed");
-      }
-
-      return response.json();
-    } catch (error) {
-      console.error("Registration Error:", error);
-      throw error;
-    }
-  },
-
-  // Get all registrations (admin)
-  getAll: (params?: { status?: string; page?: number; limit?: number }) => {
-    const queryString = params
-      ? new URLSearchParams(params as any).toString()
-      : "";
-    return apiCall(`/registrations${queryString ? `?${queryString}` : ""}`);
-  },
-
-  // Get registration by ID
-  getById: (id: string) => {
-    return apiCall(`/registrations/${id}`);
-  },
-
-  // Update registration status (admin)
-  updateStatus: (id: string, status: string) => {
-    return apiCall(`/registrations/${id}/status`, {
-      method: "PATCH",
-      body: JSON.stringify({ status }),
+  async updateCategory(id: string, data: any): Promise<ApiResponse> {
+    return this.request(`/categories/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
     });
-  },
-};
+  }
 
-// =====================================================
-// BLOG API
-// =====================================================
-export const blogAPI = {
-  // Get all blog posts
-  getAll: (params?: {
-    type?: string;
-    status?: string;
-    category?: string;
-    search?: string;
-    page?: number;
-    limit?: number;
-  }) => {
-    const queryString = params
-      ? new URLSearchParams(params as any).toString()
-      : "";
-    return apiCall(`/blog${queryString ? `?${queryString}` : ""}`);
-  },
-
-  // Get blog post by slug
-  getBySlug: (slug: string) => {
-    return apiCall(`/blog/${slug}`);
-  },
-
-  // Get blog post by ID
-  getById: (id: string) => {
-    return apiCall(`/blog/id/${id}`);
-  },
-
-  // Create blog post (admin)
-  create: async (formData: FormData) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/blog`, {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || "Failed to create blog post");
-      }
-
-      return response.json();
-    } catch (error) {
-      console.error("Blog Create Error:", error);
-      throw error;
-    }
-  },
-
-  // Update blog post (admin)
-  update: async (id: string, formData: FormData) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/blog/${id}`, {
-        method: "PUT",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || "Failed to update blog post");
-      }
-
-      return response.json();
-    } catch (error) {
-      console.error("Blog Update Error:", error);
-      throw error;
-    }
-  },
-
-  // Delete blog post (admin)
-  delete: (id: string) => {
-    return apiCall(`/blog/${id}`, {
+  async deleteCategory(id: string): Promise<ApiResponse> {
+    return this.request(`/categories/${id}`, {
       method: "DELETE",
     });
-  },
+  }
 
-  // Publish blog post (admin)
-  publish: (id: string) => {
-    return apiCall(`/blog/${id}/publish`, {
-      method: "PATCH",
-    });
-  },
+  /**
+   * Tag API Methods
+   */
 
-  // Increment view count
-  incrementView: (id: string) => {
-    return apiCall(`/blog/${id}/view`, {
-      method: "POST",
-    });
-  },
-};
+  async getTags(): Promise<ApiResponse> {
+    return this.request("/tags", { requiresAuth: false });
+  }
 
-// =====================================================
-// CONTACT API
-// =====================================================
-export const contactAPI = {
-  // Submit contact form
-  submit: (data: {
-    name: string;
-    email: string;
-    phone: string;
-    message: string;
-  }) => {
-    return apiCall("/contact", {
+  async createTag(data: any): Promise<ApiResponse> {
+    return this.request("/tags", {
       method: "POST",
       body: JSON.stringify(data),
     });
-  },
-};
+  }
 
-// =====================================================
-// SUBSCRIPTION API
-// =====================================================
-export const subscriptionAPI = {
-  // Subscribe to newsletter
-  subscribe: (email: string) => {
-    return apiCall("/subscription", {
+  async bulkCreateTags(tags: string[]): Promise<ApiResponse> {
+    return this.request("/tags/bulk", {
       method: "POST",
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ tags }),
     });
-  },
-};
+  }
 
-// =====================================================
-// AUTH API
-// =====================================================
-export const authAPI = {
-  // Login
-  login: (email: string, password: string) => {
-    return apiCall("/auth/login", {
+  /**
+   * Media API Methods
+   */
+
+  async getMedia(params?: Record<string, any>): Promise<ApiResponse> {
+    const query = params ? `?${new URLSearchParams(params).toString()}` : "";
+    return this.request(`/media${query}`);
+  }
+
+  async uploadMedia(
+    file: File,
+    metadata?: { alt?: string; caption?: string }
+  ): Promise<ApiResponse> {
+    const formData = new FormData();
+    formData.append("file", file);
+    if (metadata?.alt) formData.append("alt", metadata.alt);
+    if (metadata?.caption) formData.append("caption", metadata.caption);
+
+    const token = this.getToken();
+    const headers: HeadersInit = {};
+    if (token) headers["Authorization"] = `Bearer ${token}`;
+
+    // 🔐 WireGuard VPN: Add VPN headers for file upload
+    if (USE_VPN_TUNNEL) {
+      headers["X-VPN-Tunnel"] = "true";
+    }
+
+    const response = await fetch(`${this.baseURL}/media`, {
       method: "POST",
-      body: JSON.stringify({ email, password }),
+      headers,
+      body: formData,
     });
-  },
 
-  // Register (for initial setup)
-  register: (data: {
-    email: string;
-    password: string;
-    name: string;
-    role?: string;
-  }) => {
-    return apiCall("/auth/register", {
-      method: "POST",
+    if (!response.ok) throw new Error("Upload failed");
+    return response.json();
+  }
+
+  async updateMedia(
+    id: string,
+    data: { alt?: string; caption?: string }
+  ): Promise<ApiResponse> {
+    return this.request(`/media/${id}`, {
+      method: "PUT",
       body: JSON.stringify(data),
     });
-  },
+  }
 
-  // Get current user
-  getMe: (token: string) => {
-    return apiCall("/auth/me", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+  async deleteMedia(id: string): Promise<ApiResponse> {
+    return this.request(`/media/${id}`, {
+      method: "DELETE",
     });
-  },
-};
+  }
+}
 
-// =====================================================
-// EXPORT ALL
-// =====================================================
-export default {
-  course: courseAPI,
-  formTemplate: formTemplateAPI,
-  registration: registrationAPI,
-  blog: blogAPI,
-  contact: contactAPI,
-  subscription: subscriptionAPI,
-  auth: authAPI,
-};
+export const api = new ApiClient();

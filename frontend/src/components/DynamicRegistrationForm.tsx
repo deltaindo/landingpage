@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { registrationAPI, formTemplateAPI } from "@/lib/api";
+import { registrationAPI, formTemplateAPI } from "@/lib/Oldapi";
 
 interface Field {
   name: string;

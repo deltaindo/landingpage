@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { contactAPI } from "@/lib/api";
+import { contactAPI } from "@/lib/Oldapi";
 import type { ContactFormData } from "@/types";
 
 const Contact = () => {
