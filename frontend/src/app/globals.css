@@ -172,7 +172,17 @@ iframe {
   margin-top: 1em;
 }
 
+.ProseMirror h3 {
+  font-size: 1.25em;
+  font-weight: bold;
+  margin-top: 0.75em;
+}
+
 .ProseMirror ul,
 .ProseMirror ol {
   padding-left: 2em;
+}
+
+.ProseMirror li {
+  margin: 0.5em 0;
 }
