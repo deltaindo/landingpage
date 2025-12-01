@@ -22,7 +22,16 @@ exports.updateCategory = async (req, res, next) => {
   try {
     const category = await Category.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
+      runValidators: true,
     });
+
+    if (!category) {
+      return res.status(404).json({
+        success: false,
+        error: "Category not found",
+      });
+    }
+
     res.json({ success: true, data: category });
   } catch (error) {
     next(error);
@@ -31,8 +40,16 @@ exports.updateCategory = async (req, res, next) => {
 
 exports.deleteCategory = async (req, res, next) => {
   try {
-    await Category.findByIdAndDelete(req.params.id);
-    res.json({ success: true, message: "Category deleted" });
+    const category = await Category.findByIdAndDelete(req.params.id);
+
+    if (!category) {
+      return res.status(404).json({
+        success: false,
+        error: "Category not found",
+      });
+    }
+
+    res.json({ success: true, message: "Category deleted successfully" });
   } catch (error) {
     next(error);
   }

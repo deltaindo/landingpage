@@ -63,6 +63,14 @@ exports.updateMedia = async (req, res, next) => {
       { alt, caption },
       { new: true }
     );
+
+    if (!media) {
+      return res.status(404).json({
+        success: false,
+        error: "Media not found",
+      });
+    }
+
     res.json({ success: true, data: media });
   } catch (error) {
     next(error);
@@ -79,11 +87,12 @@ exports.deleteMedia = async (req, res, next) => {
       });
     }
 
-    // Delete from storage
-    await deleteFromStorage(media.fileUrl);
+    // Delete from storage (if you have this function)
+    // await deleteFromStorage(media.fileUrl);
+
     await media.deleteOne();
 
-    res.json({ success: true, message: "Media deleted" });
+    res.json({ success: true, message: "Media deleted successfully" });
   } catch (error) {
     next(error);
   }

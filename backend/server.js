@@ -56,6 +56,7 @@ app.get("/api", (req, res) => {
 });
 
 // Routes
+app.use("/api/blogs", require("./src/routes/blog"));
 app.use("/api/courses", require("./src/routes/course"));
 app.use("/api/registrations", require("./src/routes/registration"));
 app.use("/api/schedules", require("./src/routes/schedule"));

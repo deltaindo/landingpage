@@ -7,6 +7,7 @@ router.get("/", tagController.getAllTags);
 
 router.post("/", authenticate, authorize("admin"), tagController.createTag);
 
+// ADD THIS ROUTE
 router.post(
   "/bulk",
   authenticate,
