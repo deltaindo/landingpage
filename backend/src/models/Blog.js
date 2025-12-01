@@ -39,12 +39,18 @@ const Blog = sequelize.define(
       type: DataTypes.STRING(100),
       defaultValue: "Delta Indonesia",
     },
-    category: {
-      type: DataTypes.STRING(100),
-      defaultValue: "Media Release",
+    categoryId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      field: "category_id",
+      references: {
+        model: "blog_categories",
+        key: "id",
+      },
     },
     tags: {
-      type: DataTypes.ARRAY(DataTypes.TEXT),
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      defaultValue: [],
     },
     status: {
       type: DataTypes.ENUM("draft", "published", "archived"),
@@ -52,7 +58,13 @@ const Blog = sequelize.define(
     },
     publishedAt: {
       type: DataTypes.DATE,
+      allowNull: true,
       field: "published_at",
+    },
+    scheduledAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      field: "scheduled_at",
     },
     views: {
       type: DataTypes.INTEGER,
@@ -60,7 +72,12 @@ const Blog = sequelize.define(
     },
     seo: {
       type: DataTypes.JSONB,
-      defaultValue: {},
+      defaultValue: {
+        metaTitle: null,
+        metaDescription: null,
+        keywords: [],
+        ogImage: null,
+      },
     },
   },
   {
@@ -69,58 +86,18 @@ const Blog = sequelize.define(
     underscored: true,
     createdAt: "created_at",
     updatedAt: "updated_at",
+    hooks: {
+      beforeValidate: (blog) => {
+        // Auto-generate slug from title if not provided
+        if (blog.title && !blog.slug) {
+          blog.slug = blog.title
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-|-$/g, "");
+        }
+      },
+    },
   }
 );
-
-// Add validation and relationships
-const mongoose = require("mongoose");
-
-const blogSchema = new mongoose.Schema(
-  {
-    title: { type: String, required: true, maxlength: 255 },
-    slug: { type: String, required: true, unique: true },
-    type: {
-      type: String,
-      enum: ["featured", "media-release"],
-      default: "media-release",
-    },
-    content: { type: String, required: true },
-    excerpt: { type: String, required: true, maxlength: 200 },
-    featuredImage: { type: String, required: true },
-    author: { type: String, default: "Delta Indonesia" },
-    categoryId: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
-    tags: [{ type: mongoose.Schema.Types.ObjectId, ref: "Tag" }],
-    status: {
-      type: String,
-      enum: ["draft", "published", "archived"],
-      default: "draft",
-    },
-    publishedAt: Date,
-    scheduledAt: Date, // For scheduled publishing
-    views: { type: Number, default: 0 },
-    seo: {
-      metaTitle: String,
-      metaDescription: String,
-      keywords: [String],
-      ogImage: String,
-    },
-  },
-  {
-    timestamps: true,
-  }
-);
-
-// Auto-generate slug from title
-blogSchema.pre("save", function (next) {
-  if (this.isModified("title") && !this.slug) {
-    this.slug = this.title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-|-$/g, "");
-  }
-  next();
-});
-
-module.exports = mongoose.model("Blog", blogSchema);
 
 module.exports = Blog;

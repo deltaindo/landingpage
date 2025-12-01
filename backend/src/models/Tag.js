@@ -1,13 +1,42 @@
-const mongoose = require("mongoose");
+const { DataTypes } = require("sequelize");
+const { sequelize } = require("../config/database");
 
-const tagSchema = new mongoose.Schema(
+const Tag = sequelize.define(
+  "Tag",
   {
-    name: { type: String, required: true, unique: true },
-    slug: { type: String, required: true, unique: true },
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    name: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      unique: true,
+    },
+    slug: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      unique: true,
+    },
   },
   {
+    tableName: "blog_tags",
     timestamps: true,
+    underscored: true,
+    createdAt: "created_at",
+    updatedAt: "updated_at",
+    hooks: {
+      beforeValidate: (tag) => {
+        if (tag.name && !tag.slug) {
+          tag.slug = tag.name
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-|-$/g, "");
+        }
+      },
+    },
   }
 );
 
-module.exports = mongoose.model("Tag", tagSchema);
+module.exports = Tag;

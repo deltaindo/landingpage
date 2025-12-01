@@ -2,7 +2,7 @@ const Tag = require("../models/Tag");
 
 exports.getAllTags = async (req, res, next) => {
   try {
-    const tags = await Tag.find().sort("name");
+    const tags = await Tag.findAll({ order: [["name", "ASC"]] });
     res.json({ success: true, data: tags });
   } catch (error) {
     next(error);
@@ -21,15 +21,20 @@ exports.createTag = async (req, res, next) => {
 exports.bulkCreateTags = async (req, res, next) => {
   try {
     const { tags } = req.body; // Array of tag names
+
     const createdTags = await Promise.all(
-      tags.map((name) =>
-        Tag.findOneAndUpdate(
-          { name },
-          { name, slug: name.toLowerCase().replace(/\s+/g, "-") },
-          { upsert: true, new: true }
-        )
-      )
+      tags.map(async (name) => {
+        const [tag] = await Tag.findOrCreate({
+          where: { name },
+          defaults: {
+            name,
+            slug: name.toLowerCase().replace(/\s+/g, "-"),
+          },
+        });
+        return tag;
+      })
     );
+
     res.status(201).json({ success: true, data: createdTags });
   } catch (error) {
     next(error);
