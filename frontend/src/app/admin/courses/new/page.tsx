@@ -1,11 +1,163 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import dynamic from "next/dynamic";
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Underline from "@tiptap/extension-underline";
+import Link from "@tiptap/extension-link";
+import TextAlign from "@tiptap/extension-text-align";
+import Image from "@tiptap/extension-image";
 
-const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
-import "react-quill-new/dist/quill.snow.css";
+// Tiptap Toolbar Component
+function TiptapToolbar({ editor }: { editor: any }) {
+  if (!editor) return null;
+
+  return (
+    <div className="border border-gray-300 border-b-0 rounded-t-lg p-2 flex flex-wrap gap-1 bg-gray-50">
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().toggleBold().run()}
+        className={`px-3 py-1 rounded hover:bg-gray-200 ${
+          editor.isActive("bold") ? "bg-gray-300 font-bold" : ""
+        }`}
+      >
+        B
+      </button>
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().toggleItalic().run()}
+        className={`px-3 py-1 rounded hover:bg-gray-200 italic ${
+          editor.isActive("italic") ? "bg-gray-300" : ""
+        }`}
+      >
+        I
+      </button>
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().toggleUnderline().run()}
+        className={`px-3 py-1 rounded hover:bg-gray-200 underline ${
+          editor.isActive("underline") ? "bg-gray-300" : ""
+        }`}
+      >
+        U
+      </button>
+      <div className="w-px h-6 bg-gray-300 mx-1" />
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+        className={`px-3 py-1 rounded hover:bg-gray-200 ${
+          editor.isActive("heading", { level: 2 })
+            ? "bg-gray-300 font-bold"
+            : ""
+        }`}
+      >
+        H2
+      </button>
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+        className={`px-3 py-1 rounded hover:bg-gray-200 ${
+          editor.isActive("heading", { level: 3 })
+            ? "bg-gray-300 font-bold"
+            : ""
+        }`}
+      >
+        H3
+      </button>
+      <div className="w-px h-6 bg-gray-300 mx-1" />
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().toggleBulletList().run()}
+        className={`px-3 py-1 rounded hover:bg-gray-200 ${
+          editor.isActive("bulletList") ? "bg-gray-300" : ""
+        }`}
+      >
+        • List
+      </button>
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().toggleOrderedList().run()}
+        className={`px-3 py-1 rounded hover:bg-gray-200 ${
+          editor.isActive("orderedList") ? "bg-gray-300" : ""
+        }`}
+      >
+        1. List
+      </button>
+      <div className="w-px h-6 bg-gray-300 mx-1" />
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().setTextAlign("left").run()}
+        className={`px-3 py-1 rounded hover:bg-gray-200 ${
+          editor.isActive({ textAlign: "left" }) ? "bg-gray-300" : ""
+        }`}
+      >
+        ←
+      </button>
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().setTextAlign("center").run()}
+        className={`px-3 py-1 rounded hover:bg-gray-200 ${
+          editor.isActive({ textAlign: "center" }) ? "bg-gray-300" : ""
+        }`}
+      >
+        ↔
+      </button>
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().setTextAlign("right").run()}
+        className={`px-3 py-1 rounded hover:bg-gray-200 ${
+          editor.isActive({ textAlign: "right" }) ? "bg-gray-300" : ""
+        }`}
+      >
+        →
+      </button>
+    </div>
+  );
+}
+
+// Tiptap Editor Component
+function TiptapEditor({
+  content,
+  onChange,
+}: {
+  content: string;
+  onChange: (content: string) => void;
+}) {
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Underline,
+      Link.configure({
+        openOnClick: false,
+      }),
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+      }),
+      Image,
+    ],
+    content,
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML());
+    },
+    editorProps: {
+      attributes: {
+        class:
+          "prose prose-sm max-w-none focus:outline-none min-h-[200px] px-4 py-3",
+      },
+    },
+  });
+
+  return (
+    <div className="border border-gray-300 rounded-lg">
+      <TiptapToolbar editor={editor} />
+      <EditorContent
+        editor={editor}
+        className="border-t border-gray-300 bg-white rounded-b-lg"
+      />
+    </div>
+  );
+}
 
 export default function NewCoursePage() {
   const router = useRouter();
@@ -178,18 +330,16 @@ export default function NewCoursePage() {
             </div>
           </div>
 
-          {/* Description */}
+          {/* Description with Tiptap */}
           <div className="bg-white rounded-lg shadow-md p-6">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Description
             </label>
-            <ReactQuill
-              theme="snow"
-              value={formData.description}
+            <TiptapEditor
+              content={formData.description}
               onChange={(content) =>
                 setFormData({ ...formData, description: content })
               }
-              className="bg-white"
             />
           </div>
 

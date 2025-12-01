@@ -8,6 +8,9 @@ const { connectDB } = require("./src/config/database");
 const errorHandler = require("./src/middleware/errorHandler");
 const { sequelize } = require("./src/config/database");
 const publishScheduledBlogs = require("./src/jobs/publishScheduledBlogs");
+const cmsAdminRoutes = require("./src/routes/cmsAdmin");
+
+app.use("/api/cms/admin", cmsAdminRoutes);
 
 // Start cron job
 publishScheduledBlogs.start();
