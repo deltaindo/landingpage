@@ -4,23 +4,26 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
 
-interface BlogPost {
+interface RegistrationDocument {
   id: string;
   uuid: string;
-  code: string;
-  name: string;
-  category: string;
-  certification: string;
-  createdAt: string;
-  updatedAt: string;
+  documentType: string;
+  fileName: string;
+  fileUrl: string;
+  uploadedAt: string;
+  registration: {
+    id: string;
+    fullName: string;
+    email: string;
+  };
 }
 
-export default function BlogsListPage() {
+export default function RegistrationDocumentsPage() {
   const { user } = useAuth();
-  const [blogs, setBlogs] = useState<BlogPost[]>([]);
+  const [documents, setDocuments] = useState<RegistrationDocument[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
-    search: "",
+    registrationId: "",
     page: 1,
     limit: 230,
   });
@@ -31,88 +34,89 @@ export default function BlogsListPage() {
   });
 
   useEffect(() => {
-    fetchBlogs();
+    fetchDocuments();
   }, [filters, user]);
 
-  const fetchBlogs = async () => {
+  const fetchDocuments = async () => {
     if (!user) return;
 
     setLoading(true);
     try {
-      // Role-based endpoint
       const baseEndpoint =
-        user.role === "editor" ? "/api/cms/editor" : "/api/cms/admin";
+        user.role === "pic" ? "/api/cms/pic" : "/api/cms/admin";
 
       const params = new URLSearchParams({
         page: filters.page.toString(),
         limit: filters.limit.toString(),
-        ...(filters.search && { search: filters.search }),
+        ...(filters.registrationId && {
+          registrationId: filters.registrationId,
+        }),
       });
 
-      const response = await fetch(`${baseEndpoint}/blogs?${params}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await fetch(
+        `${baseEndpoint}/registration-documents?${params}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
 
       const data = await response.json();
 
       if (data.success) {
-        setBlogs(data.data);
+        setDocuments(data.data);
         setPagination(data.pagination);
       }
     } catch (error) {
-      console.error("Error fetching blogs:", error);
+      console.error("Error fetching documents:", error);
     } finally {
       setLoading(false);
     }
   };
 
+  const getDocumentIcon = (type: string) => {
+    const icons: Record<string, string> = {
+      "ID Card": "🪪",
+      Resume: "📄",
+      Certificate: "🎓",
+      Photo: "📷",
+      Other: "📎",
+    };
+    return icons[type] || "📎";
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Blog Posts</h1>
-        <Link
-          href="/admin/blogs/new"
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          ➕ New Post
-        </Link>
+        <h1 className="text-3xl font-bold text-gray-800">
+          Registration Documents
+        </h1>
       </div>
 
-      {/* Search Filter */}
+      {/* Info */}
       <div className="bg-white rounded-lg shadow-md p-4 mb-6">
-        <input
-          type="text"
-          placeholder="Search blog posts..."
-          value={filters.search}
-          onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-          className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <p className="text-sm text-gray-500 mt-2">
-          Showing {pagination.showing} of {pagination.total} posts
+        <p className="text-sm text-gray-500">
+          Showing {pagination.showing} of {pagination.total} documents
         </p>
       </div>
 
-      {/* Blogs Table */}
+      {/* Documents Table */}
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Code
+                Type
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Name
+                File Name
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Category
+                Participant
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Certification
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Created
+                Uploaded
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Actions
@@ -122,43 +126,52 @@ export default function BlogsListPage() {
           <tbody className="bg-white divide-y divide-gray-200">
             {loading ? (
               <tr>
-                <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
+                <td colSpan={5} className="px-6 py-4 text-center text-gray-500">
                   Loading...
                 </td>
               </tr>
-            ) : blogs.length === 0 ? (
+            ) : documents.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
-                  No blog posts found
+                <td colSpan={5} className="px-6 py-4 text-center text-gray-500">
+                  No documents found
                 </td>
               </tr>
             ) : (
-              blogs.map((blog) => (
-                <tr key={blog.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                    {blog.code}
+              documents.map((doc) => (
+                <tr key={doc.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 text-sm">
+                    <span className="text-2xl">
+                      {getDocumentIcon(doc.documentType)}
+                    </span>
+                    <span className="ml-2 text-gray-900">
+                      {doc.documentType}
+                    </span>
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-900">
-                    {blog.name}
+                    {doc.fileName}
+                  </td>
+                  <td className="px-6 py-4 text-sm">
+                    <div className="font-medium text-gray-900">
+                      {doc.registration.fullName}
+                    </div>
+                    <div className="text-gray-500 text-xs">
+                      {doc.registration.email}
+                    </div>
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-500">
-                    {blog.category}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-500">
-                    {blog.certification}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-500">
-                    {new Date(blog.createdAt).toLocaleDateString()}
+                    {new Date(doc.uploadedAt).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 text-sm font-medium space-x-2">
-                    <Link
-                      href={`/admin/blogs/${blog.id}/edit`}
+                    <a
+                      href={doc.fileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="text-blue-600 hover:text-blue-900"
                     >
-                      Edit
-                    </Link>
+                      Download
+                    </a>
                     <Link
-                      href={`/admin/blogs/${blog.id}`}
+                      href={`/admin/registration-documents/${doc.id}`}
                       className="text-green-600 hover:text-green-900"
                     >
                       View

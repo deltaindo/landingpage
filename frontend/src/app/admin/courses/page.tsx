@@ -1,38 +1,67 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { FiEdit, FiTrash2, FiPlus, FiEye } from "react-icons/fi";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import Link from "next/link";
 
 interface Course {
   id: string;
-  name: string;
+  uuid: string;
   code: string;
+  name: string;
   category: string;
-  duration: string;
-  price: number;
-  status: string;
+  certification: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-export default function CoursesPage() {
-  const router = useRouter();
+export default function CoursesListPage() {
+  const { user } = useAuth();
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState("all");
-  const [searchTerm, setSearchTerm] = useState("");
+  const [filters, setFilters] = useState({
+    search: "",
+    category: "",
+    page: 1,
+    limit: 230,
+  });
+  const [pagination, setPagination] = useState({
+    total: 0,
+    totalPages: 0,
+    showing: "",
+  });
 
   useEffect(() => {
     fetchCourses();
-  }, []);
+  }, [filters, user]);
 
   const fetchCourses = async () => {
+    if (!user) return;
+
+    setLoading(true);
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/courses`
-      );
+      // Role-based endpoint (Admin or PIC)
+      const baseEndpoint =
+        user.role === "pic" ? "/api/cms/pic" : "/api/cms/admin";
+
+      const params = new URLSearchParams({
+        page: filters.page.toString(),
+        limit: filters.limit.toString(),
+        ...(filters.search && { search: filters.search }),
+        ...(filters.category && { category: filters.category }),
+      });
+
+      const response = await fetch(`${baseEndpoint}/courses?${params}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
       const data = await response.json();
+
       if (data.success) {
         setCourses(data.data);
+        setPagination(data.pagination);
       }
     } catch (error) {
       console.error("Error fetching courses:", error);
@@ -41,157 +70,121 @@ export default function CoursesPage() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this course?")) return;
-
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/courses/${id}`,
-        { method: "DELETE" }
-      );
-
-      if (response.ok) {
-        setCourses(courses.filter((course) => course.id !== id));
-      }
-    } catch (error) {
-      console.error("Error deleting course:", error);
-    }
-  };
-
-  const filteredCourses = courses.filter((course) => {
-    const matchesFilter = filter === "all" || course.status === filter;
-    const matchesSearch =
-      course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      course.code.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesFilter && matchesSearch;
-  });
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-800">Courses</h1>
-          <p className="text-gray-600 mt-1">Manage training courses</p>
-        </div>
-        <button
-          onClick={() => router.push("/admin/courses/new")}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-        >
-          <FiPlus /> Add New Course
-        </button>
+    <div>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-3xl font-bold text-gray-800">Courses</h1>
+        {(user?.role === "admin" ||
+          user?.role === "superadmin" ||
+          user?.role === "pic") && (
+          <Link
+            href="/admin/courses/new"
+            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+          >
+            ➕ New Course
+          </Link>
+        )}
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-lg shadow-md p-4">
-        <div className="flex flex-col md:flex-row gap-4">
+      <div className="bg-white rounded-lg shadow-md p-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <input
             type="text"
             placeholder="Search courses..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={filters.search}
+            onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
           />
           <select
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={filters.category}
+            onChange={(e) =>
+              setFilters({ ...filters, category: e.target.value })
+            }
+            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
           >
-            <option value="all">All Status</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
+            <option value="">All Categories</option>
+            <option value="K3">K3</option>
+            <option value="ISO">ISO</option>
+            <option value="SMK3">SMK3</option>
           </select>
         </div>
+        <p className="text-sm text-gray-500 mt-2">
+          Showing {pagination.showing} of {pagination.total} courses
+        </p>
       </div>
 
-      {/* Table */}
+      {/* Courses Table */}
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-50 border-b">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Course Name
+                Code
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Code
+                Name
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Category
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Duration
+                Certification
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Status
+                Created
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
-            {filteredCourses.length === 0 ? (
+          <tbody className="bg-white divide-y divide-gray-200">
+            {loading ? (
               <tr>
-                <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
+                <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
+                  Loading...
+                </td>
+              </tr>
+            ) : courses.length === 0 ? (
+              <tr>
+                <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
                   No courses found
                 </td>
               </tr>
             ) : (
-              filteredCourses.map((course) => (
+              courses.map((course) => (
                 <tr key={course.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                    {course.name}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-900">
                     {course.code}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-900">
-                    {course.category}
+                    {course.name}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-900">
-                    {course.duration}
-                  </td>
-                  <td className="px-6 py-4">
-                    <span
-                      className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        course.status === "active"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-gray-100 text-gray-800"
-                      }`}
-                    >
-                      {course.status}
+                  <td className="px-6 py-4 text-sm text-gray-500">
+                    <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
+                      {course.category}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <button
-                        onClick={() => router.push(`/courses/${course.id}`)}
-                        className="text-gray-600 hover:text-gray-900"
-                      >
-                        <FiEye size={18} />
-                      </button>
-                      <button
-                        onClick={() =>
-                          router.push(`/admin/courses/${course.id}`)
-                        }
-                        className="text-blue-600 hover:text-blue-900"
-                      >
-                        <FiEdit size={18} />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(course.id)}
-                        className="text-red-600 hover:text-red-900"
-                      >
-                        <FiTrash2 size={18} />
-                      </button>
-                    </div>
+                  <td className="px-6 py-4 text-sm text-gray-500">
+                    {course.certification}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-500">
+                    {new Date(course.createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="px-6 py-4 text-sm font-medium space-x-2">
+                    <Link
+                      href={`/admin/courses/${course.id}/edit`}
+                      className="text-blue-600 hover:text-blue-900"
+                    >
+                      Edit
+                    </Link>
+                    <Link
+                      href={`/admin/courses/${course.id}`}
+                      className="text-green-600 hover:text-green-900"
+                    >
+                      View
+                    </Link>
                   </td>
                 </tr>
               ))

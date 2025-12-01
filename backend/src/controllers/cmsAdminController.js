@@ -61,7 +61,7 @@ exports.getAllBlogs = async (req, res) => {
       pool.query(countQuery, [searchPattern]),
     ]);
 
-    const total = parseInt(countResult.rows[0].count);
+    const total = parseInt(countResult.rows.count);
     const showing = `${offset + 1} to ${Math.min(
       offset + parseInt(limit),
       total
@@ -104,7 +104,7 @@ exports.getBlogById = async (req, res) => {
         .json({ success: false, message: "Blog post not found" });
     }
 
-    res.json({ success: true, data: result.rows[0] });
+    res.json({ success: true, data: result.rows });
   } catch (error) {
     console.error("Error fetching blog:", error);
     res.status(500).json({
@@ -169,7 +169,7 @@ exports.getAllCourses = async (req, res) => {
       pool.query(countQuery, params.slice(0, -2)),
     ]);
 
-    const total = parseInt(countResult.rows[0].count);
+    const total = parseInt(countResult.rows.count);
     const showing = `${offset + 1} to ${Math.min(
       offset + parseInt(limit),
       total
@@ -212,7 +212,7 @@ exports.getCourseById = async (req, res) => {
         .json({ success: false, message: "Course not found" });
     }
 
-    res.json({ success: true, data: result.rows[0] });
+    res.json({ success: true, data: result.rows });
   } catch (error) {
     console.error("Error fetching course:", error);
     res.status(500).json({
@@ -286,7 +286,7 @@ exports.getAllSchedules = async (req, res) => {
       pool.query(countQuery, params.slice(0, -2)),
     ]);
 
-    const total = parseInt(countResult.rows[0].count);
+    const total = parseInt(countResult.rows.count);
     const showing = `${offset + 1} to ${Math.min(
       offset + parseInt(limit),
       total
@@ -343,7 +343,7 @@ exports.getScheduleById = async (req, res) => {
         .json({ success: false, message: "Schedule not found" });
     }
 
-    res.json({ success: true, data: result.rows[0] });
+    res.json({ success: true, data: result.rows });
   } catch (error) {
     console.error("Error fetching schedule:", error);
     res.status(500).json({
@@ -421,7 +421,7 @@ exports.getAllRegistrations = async (req, res) => {
       pool.query(countQuery, params.slice(0, -2)),
     ]);
 
-    const total = parseInt(countResult.rows[0].count);
+    const total = parseInt(countResult.rows.count);
     const showing = `${offset + 1} to ${Math.min(
       offset + parseInt(limit),
       total
@@ -483,7 +483,7 @@ exports.getRegistrationById = async (req, res) => {
         .json({ success: false, message: "Registration not found" });
     }
 
-    res.json({ success: true, data: result.rows[0] });
+    res.json({ success: true, data: result.rows });
   } catch (error) {
     console.error("Error fetching registration:", error);
     res.status(500).json({
@@ -546,7 +546,7 @@ exports.getAllRegistrationDocuments = async (req, res) => {
       pool.query(countQuery, params.slice(0, -2)),
     ]);
 
-    const total = parseInt(countResult.rows[0].count);
+    const total = parseInt(countResult.rows.count);
     const showing = `${offset + 1} to ${Math.min(
       offset + parseInt(limit),
       total
@@ -601,7 +601,7 @@ exports.getRegistrationDocumentById = async (req, res) => {
         .json({ success: false, message: "Document not found" });
     }
 
-    res.json({ success: true, data: result.rows[0] });
+    res.json({ success: true, data: result.rows });
   } catch (error) {
     console.error("Error fetching document:", error);
     res.status(500).json({
@@ -651,7 +651,7 @@ exports.getAllFormTemplates = async (req, res) => {
       pool.query(countQuery, [searchPattern]),
     ]);
 
-    const total = parseInt(countResult.rows[0].count);
+    const total = parseInt(countResult.rows.count);
     const showing = `${offset + 1} to ${Math.min(
       offset + parseInt(limit),
       total
@@ -694,7 +694,7 @@ exports.getFormTemplateById = async (req, res) => {
         .json({ success: false, message: "Form template not found" });
     }
 
-    res.json({ success: true, data: result.rows[0] });
+    res.json({ success: true, data: result.rows });
   } catch (error) {
     console.error("Error fetching form template:", error);
     res.status(500).json({
@@ -758,7 +758,7 @@ exports.getAllUsers = async (req, res) => {
       pool.query(countQuery, params.slice(0, -2)),
     ]);
 
-    const total = parseInt(countResult.rows[0].count);
+    const total = parseInt(countResult.rows.count);
     const showing = `${offset + 1} to ${Math.min(
       offset + parseInt(limit),
       total
@@ -805,7 +805,7 @@ exports.getUserById = async (req, res) => {
         .json({ success: false, message: "User not found" });
     }
 
-    res.json({ success: true, data: result.rows[0] });
+    res.json({ success: true, data: result.rows });
   } catch (error) {
     console.error("Error fetching user:", error);
     res.status(500).json({
@@ -859,18 +859,18 @@ exports.getDashboardStats = async (req, res) => {
       success: true,
       data: {
         counts: {
-          blogs: parseInt(results[0].rows[0].count),
-          courses: parseInt(results[1].rows[0].count),
-          schedules: parseInt(results[2].rows[0].count),
-          registrations: parseInt(results[3].rows[0].count),
-          users: parseInt(results[4].rows[0].count),
-          documents: parseInt(results[5].rows[0].count),
-          formTemplates: parseInt(results[6].rows[0].count),
-          pendingRegistrations: parseInt(results[7].rows[0].count),
+          blogs: parseInt(results.rows.count),
+          courses: parseInt(results.rows.count),
+          schedules: parseInt(results.rows.count),
+          registrations: parseInt(results.rows.count),
+          users: parseInt(results.rows.count),
+          documents: parseInt(results.rows.count),
+          formTemplates: parseInt(results.rows.count),
+          pendingRegistrations: parseInt(results.rows.count),
         },
         recent: {
-          blogs: results[8].rows,
-          registrations: results[9].rows,
+          blogs: results.rows,
+          registrations: results.rows,
         },
       },
     });
