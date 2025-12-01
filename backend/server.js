@@ -9,8 +9,9 @@ const errorHandler = require("./src/middleware/errorHandler");
 const { sequelize } = require("./src/config/database");
 const publishScheduledBlogs = require("./src/jobs/publishScheduledBlogs");
 const cmsAdminRoutes = require("./src/routes/cmsAdmin");
-
-app.use("/api/cms/admin", cmsAdminRoutes);
+const cmsAdminRoutes = require("./src/routes/cmsAdmin");
+const cmsEditorRoutes = require("./src/routes/cmsEditor");
+const cmsPICRoutes = require("./src/routes/cmsPIC");
 
 // Start cron job
 publishScheduledBlogs.start();
@@ -66,6 +67,10 @@ app.use("/api/schedules", require("./src/routes/schedule"));
 app.use("/api/categories", require("./src/routes/category"));
 app.use("/api/tags", require("./src/routes/tag"));
 app.use("/api/media", require("./src/routes/media"));
+app.use("/api/cms/admin", cmsAdminRoutes);
+app.use("/api/cms/admin", cmsAdminRoutes);
+app.use("/api/cms/editor", cmsEditorRoutes);
+app.use("/api/cms/pic", cmsPICRoutes);
 
 // Error Handler (must be last)
 app.use(errorHandler);
