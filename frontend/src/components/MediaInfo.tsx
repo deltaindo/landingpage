@@ -32,7 +32,7 @@ const BeritaTerbaru: React.FC = () => {
           description:
             "Penguatan kerjasama strategis untuk meningkatkan standar sertifikasi K3 di Indonesia.",
           label: "Media Release",
-          image: "/images/berita-1.jpg",
+          image: "/images/berita-1.png",
         },
         {
           id: "news-2",
@@ -41,7 +41,7 @@ const BeritaTerbaru: React.FC = () => {
           description:
             "Program pelatihan khusus disesuaikan dengan kebutuhan industri manufaktur modern.",
           label: "Media Release",
-          image: "/images/berita-2.jpg",
+          image: "/images/berita-2.png",
         },
       ],
     },
@@ -55,7 +55,7 @@ const BeritaTerbaru: React.FC = () => {
           description:
             "Pencapaian sertifikasi internasional untuk meningkatkan kualitas layanan kami.",
           label: "Media Release",
-          image: "/images/berita-3.jpg",
+          image: "/images/berita-3.png",
         },
         {
           id: "news-4",
@@ -64,7 +64,7 @@ const BeritaTerbaru: React.FC = () => {
           description:
             "Kesempatan magang di perusahaan terkemuka dengan mentoring profesional.",
           label: "Featured",
-          image: "/images/berita-4.jpg",
+          image: "/images/berita-4.png",
         },
       ],
     },
@@ -78,7 +78,7 @@ const BeritaTerbaru: React.FC = () => {
           description:
             "Diskusi mendalam tentang tren dan inovasi terbaru dalam keselamatan kerja.",
           label: "Media Release",
-          image: "/images/berita-5.jpg",
+          image: "/images/berita-5.png",
         },
         {
           id: "news-6",
@@ -87,7 +87,7 @@ const BeritaTerbaru: React.FC = () => {
           description:
             "Membuka peluang baru untuk melayani lebih banyak klien di kawasan timur.",
           label: "Media Release",
-          image: "/images/berita-6.jpg",
+          image: "/images/berita-3.png",
         },
       ],
     },
@@ -132,25 +132,38 @@ const BeritaTerbaru: React.FC = () => {
 
         {/* News Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 align-start">
-          {/* Pinned Card (Left) */}
-          <div className="lg:col-span-1 bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-8 text-white flex flex-col justify-between min-h-96 relative overflow-hidden shadow-lg z-10">
-            <div className="absolute -top-1/2 -right-1/2 w-96 h-96 bg-white/10 rounded-full -z-10" />
+          {/* Pinned Card (Left) - with full background image */}
+          <div className="lg:col-span-1 bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl overflow-hidden min-h-96 relative shadow-lg">
+            {/* Background Image */}
+            <Image
+              src="/images/featured.png"
+              alt="Featured"
+              fill
+              className="object-cover"
+              priority={true}
+            />
 
-            <button className="absolute top-6 right-6 w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white text-lg transition-all">
-              →
-            </button>
+            {/* Overlay to darken image for better text readability */}
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-600/70 to-blue-700/70 z-0" />
 
-            <div>
-              <span className="inline-block bg-white/25 px-4 py-1.5 rounded-full text-xs font-semibold mb-4">
-                Featured
-              </span>
-            </div>
+            {/* Content */}
+            <div className="relative z-10 p-8 text-white flex flex-col justify-between h-full">
+              <button className="absolute top-6 right-6 w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white text-lg transition-all">
+                →
+              </button>
 
-            <div>
-              <h3 className="text-2xl font-semibold mb-4 leading-snug">
-                Pelatihan K3 Ahli Umum Batch November 2025
-              </h3>
-              <div className="text-sm opacity-80">7 November 2025</div>
+              <div>
+                <span className="inline-block bg-white/25 px-4 py-1.5 rounded-full text-xs font-semibold mb-4">
+                  Featured
+                </span>
+              </div>
+
+              <div>
+                <h3 className="text-2xl font-semibold mb-4 leading-snug">
+                  Pelatihan K3 Ahli Umum Batch November 2025
+                </h3>
+                <div className="text-sm opacity-80">7 November 2025</div>
+              </div>
             </div>
           </div>
 
