@@ -1,8 +1,5 @@
-"use client";
-
 import type { Metadata } from "next";
 import { getTenantBySlug } from "@/lib/getTenantData";
-import { TenantConfig } from "@/types/tenant";
 import { notFound } from "next/navigation";
 import Navbar from "@/components/shared/Navbar";
 import Hero from "@/components/shared/Hero";
@@ -12,9 +9,7 @@ import CTA from "@/components/shared/CTA";
 import Footer from "@/components/shared/Footer";
 
 interface TenantPageProps {
-  params: Promise<{
-    tenant: string;
-  }>;
+  params: Promise<{ tenant: string }>;
 }
 
 export async function generateMetadata({
@@ -31,15 +26,14 @@ export async function generateMetadata({
     }
 
     return {
-      title: tenant.branding.pageTitle,
-      description: tenant.branding.pageDescription,
+      title: tenant.branding.name,
       openGraph: {
-        title: tenant.branding.pageTitle,
-        description: tenant.branding.pageDescription,
-        images: [tenant.branding.ogImage],
+        title: tenant.branding.name,
+        images: tenant.branding.logo ? [tenant.branding.logo] : [],
       },
     };
-  } catch {
+  } catch (error) {
+    console.error("Error generating metadata:", error);
     return {
       title: "Error",
     };
