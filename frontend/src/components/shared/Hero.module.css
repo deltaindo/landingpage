@@ -1,0 +1,97 @@
+.hero {
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.02));
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.content h1 {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 20px 0;
+  color: #1a1a1a;
+}
+
+.content p {
+  font-size: 18px;
+  color: #666;
+  line-height: 1.6;
+  margin: 0 0 30px 0;
+}
+
+.cta {
+  display: inline-flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.ctaBtn {
+  padding: 14px 30px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 16px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.ctaPrimary {
+  background: currentColor;
+  color: white;
+}
+
+.ctaPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.ctaSecondary {
+  background: white;
+  color: currentColor;
+  border: 2px solid currentColor;
+}
+
+.ctaSecondary:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.image {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .content h1 {
+    font-size: 32px;
+  }
+
+  .content p {
+    font-size: 16px;
+  }
+
+  .image {
+    height: 300px;
+  }
+}
