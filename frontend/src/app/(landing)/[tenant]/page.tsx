@@ -20,23 +20,18 @@ export async function generateMetadata({
     const tenant = await getTenantBySlug(resolvedParams.tenant);
 
     if (!tenant) {
-      return {
-        title: "404 - Not Found",
-      };
+      return { title: "404 - Not Found" };
     }
 
     return {
-      title: tenant.branding.name,
+      title: tenant.branding.name || "Tenant",
       openGraph: {
-        title: tenant.branding.name,
+        title: tenant.branding.name || "Tenant",
         images: tenant.branding.logo ? [tenant.branding.logo] : [],
       },
     };
   } catch (error) {
-    console.error("Error generating metadata:", error);
-    return {
-      title: "Error",
-    };
+    return { title: "Error" };
   }
 }
 
