@@ -2,15 +2,16 @@ import { notFound } from "next/navigation";
 
 const VALID_TENANTS = ["delta-indonesia", "delta-indonesia-pranenggar"];
 
-export default function TenantLayout({
+export default async function TenantLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
-  params: { tenant: string };
+  params: Promise<{ tenant: string }>;
 }) {
-  // Validate tenant exists
-  if (!VALID_TENANTS.includes(params.tenant)) {
+  const { tenant } = await params;
+
+  if (!VALID_TENANTS.includes(tenant)) {
     notFound();
   }
 

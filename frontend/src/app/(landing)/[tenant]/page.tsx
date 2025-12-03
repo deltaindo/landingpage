@@ -1,8 +1,15 @@
-export default function TenantPage({ params }: { params: { tenant: string } }) {
+export default async function TenantPage({
+  params,
+}: {
+  params: Promise<{ tenant: string }>;
+}) {
+  // AWAIT the params!
+  const { tenant } = await params;
+
   return (
     <div>
-      <h1>Landing Page: {params.tenant}</h1>
-      <p>Welcome to {params.tenant.replace(/-/g, " ")}</p>
+      <h1>Landing Page: {tenant}</h1>
+      <p>Welcome to {tenant.replace(/-/g, " ")}</p>
     </div>
   );
 }
