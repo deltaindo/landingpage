@@ -1,64 +1,8 @@
-import type { Metadata } from "next";
-import { getTenantBySlug } from "@/lib/getTenantData";
-import { notFound } from "next/navigation";
-import Navbar from "@/components/shared/Navbar";
-import Hero from "@/components/shared/Hero";
-import Features from "@/components/shared/Features";
-import Testimonials from "@/components/shared/Testimonials";
-import CTA from "@/components/shared/CTA";
-import Footer from "@/components/shared/Footer";
-
-interface TenantPageProps {
-  params: Promise<{ tenant: string }>;
-}
-
-export async function generateMetadata({
-  params,
-}: TenantPageProps): Promise<Metadata> {
-  try {
-    const resolvedParams = await params;
-    const tenant = await getTenantBySlug(resolvedParams.tenant);
-
-    if (!tenant) {
-      return { title: "404 - Not Found" };
-    }
-
-    return {
-      title: tenant.branding.name || "Tenant",
-      openGraph: {
-        title: tenant.branding.name || "Tenant",
-        images: tenant.branding.logo ? [tenant.branding.logo] : [],
-      },
-    };
-  } catch (error) {
-    return { title: "Error" };
-  }
-}
-
-export function generateViewport() {
-  return {
-    width: "device-width",
-    initialScale: 1,
-    themeColor: "#000000",
-  };
-}
-
-export default async function TenantPage({ params }: TenantPageProps) {
-  const resolvedParams = await params;
-  const tenant = await getTenantBySlug(resolvedParams.tenant);
-
-  if (!tenant) {
-    notFound();
-  }
-
+export default function TenantPage({ params }: { params: { tenant: string } }) {
   return (
-    <>
-      <Navbar tenant={tenant} />
-      <Hero tenant={tenant} />
-      <Features tenant={tenant} />
-      <Testimonials tenant={tenant} />
-      <CTA tenant={tenant} />
-      <Footer tenant={tenant} />
-    </>
+    <div>
+      <h1>Landing Page: {params.tenant}</h1>
+      <p>Welcome to {params.tenant.replace(/-/g, " ")}</p>
+    </div>
   );
 }

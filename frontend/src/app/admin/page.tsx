@@ -1,14 +1,8 @@
-"use client";
-
-import AdminLayout from "@/components/admin/AdminLayout";
-
-export default function AdminDashboard() {
+export default function AdminPage() {
   return (
-    <AdminLayout>
-      <div>
-        <h1>Admin Dashboard</h1>
-        <p>Welcome to the admin panel</p>
-      </div>
-    </AdminLayout>
+    <div>
+      <h2>Content Management</h2>
+      <p>Admin CMS is working ✅</p>
+    </div>
   );
 }
