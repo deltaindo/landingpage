@@ -1,3 +1,5 @@
+"use client";
+
 import { TenantConfig } from "@/types/tenant";
 import Link from "next/link";
 import Image from "next/image";
