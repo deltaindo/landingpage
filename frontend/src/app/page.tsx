@@ -3,9 +3,7 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
-import MediaInfo from "@/components/MediaInfo";
 import Services from "@/components/Services";
-import Training from "@/components/Training";
 import WhyUs from "@/components/WhyUs";
 import Clients from "@/components/Clients";
 import Testimonials from "@/components/Testimonials";
@@ -19,9 +17,7 @@ export default function Home() {
       <Navbar />
       <Hero />
       <About />
-      <MediaInfo />
       <Services />
-      <Training />
       <WhyUs />
       <Clients />
       <Testimonials />
