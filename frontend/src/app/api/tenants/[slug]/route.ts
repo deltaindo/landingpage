@@ -1,42 +1,50 @@
 import { getTenantBySlug } from "@/lib/getTenantData";
 import { NextRequest, NextResponse } from "next/server";
 
+interface Params {
+  slug: string;
+}
+
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  context: { params: Promise<Params> }
 ) {
   try {
-    if (!params.slug) {
-      return NextResponse.json(
-        { error: "Slug parameter is required" },
-        { status: 400 }
-      );
-    }
-
+    const params = await context.params;
     const tenant = await getTenantBySlug(params.slug);
 
-    // Add CORS headers
-    const response = NextResponse.json(tenant);
-    response.headers.set(
-      "Cache-Control",
-      "public, max-age=3600, s-maxage=3600"
-    );
-    return response;
+    if (!tenant) {
+      return NextResponse.json({ error: "Tenant not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(tenant, {
+      headers: {
+        "Cache-Control": "public, max-age=3600",
+      },
+    });
   } catch (error) {
-    console.error(`Error fetching tenant: ${params.slug}`, error);
-    return NextResponse.json({ error: "Tenant not found" }, { status: 404 });
+    console.error("Error fetching tenant:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }
 
-// Optional: Add HEAD request for checking if tenant exists
 export async function HEAD(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  context: { params: Promise<Params> }
 ) {
   try {
-    await getTenantBySlug(params.slug);
+    const params = await context.params;
+    const tenant = await getTenantBySlug(params.slug);
+
+    if (!tenant) {
+      return new NextResponse(null, { status: 404 });
+    }
+
     return new NextResponse(null, { status: 200 });
-  } catch {
-    return new NextResponse(null, { status: 404 });
+  } catch (error) {
+    return new NextResponse(null, { status: 500 });
   }
 }

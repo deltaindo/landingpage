@@ -1,85 +1,75 @@
+"use client";
+
+import type { Metadata } from "next";
+import { getTenantBySlug } from "@/lib/getTenantData";
+import { TenantConfig } from "@/types/tenant";
 import { notFound } from "next/navigation";
-import { Metadata } from "next";
-import { getTenantBySlug, generateTenantMetadata } from "@/lib/getTenantData";
-import { getAllTenantSlugs } from "@/config/tenants";
+import Navbar from "@/components/shared/Navbar";
 import Hero from "@/components/shared/Hero";
 import Features from "@/components/shared/Features";
-import CTA from "@/components/shared/CTA";
-import Navbar from "@/components/shared/Navbar";
-import Footer from "@/components/shared/Footer";
 import Testimonials from "@/components/shared/Testimonials";
+import CTA from "@/components/shared/CTA";
+import Footer from "@/components/shared/Footer";
 
 interface TenantPageProps {
-  params: {
+  params: Promise<{
     tenant: string;
-  };
+  }>;
 }
 
-/**
- * Generate static metadata for each tenant page
- */
 export async function generateMetadata({
   params,
 }: TenantPageProps): Promise<Metadata> {
   try {
-    const tenant = await getTenantBySlug(params.tenant);
-    return generateTenantMetadata(tenant);
+    const resolvedParams = await params;
+    const tenant = await getTenantBySlug(resolvedParams.tenant);
+
+    if (!tenant) {
+      return {
+        title: "404 - Not Found",
+      };
+    }
+
+    return {
+      title: tenant.branding.pageTitle,
+      description: tenant.branding.pageDescription,
+      openGraph: {
+        title: tenant.branding.pageTitle,
+        description: tenant.branding.pageDescription,
+        images: [tenant.branding.ogImage],
+      },
+    };
   } catch {
     return {
-      title: "Page Not Found",
-      description: "The requested tenant page could not be found.",
+      title: "Error",
     };
   }
 }
 
-/**
- * Generate static paths for all tenant landing pages
- */
-export async function generateStaticParams() {
-  return getAllTenantSlugs().map((slug) => ({
-    tenant: slug,
-  }));
+export function generateViewport() {
+  return {
+    width: "device-width",
+    initialScale: 1,
+    themeColor: "#000000",
+  };
 }
 
-/**
- * Main Landing Page Component
- */
-export default async function TenantLandingPage({ params }: TenantPageProps) {
-  let tenant;
+export default async function TenantPage({ params }: TenantPageProps) {
+  const resolvedParams = await params;
+  const tenant = await getTenantBySlug(resolvedParams.tenant);
 
-  try {
-    tenant = await getTenantBySlug(params.tenant);
-  } catch {
+  if (!tenant) {
     notFound();
   }
 
   return (
-    <div
-      style={
-        {
-          "--tenant-primary": tenant.branding.primaryColor,
-          "--tenant-secondary": tenant.branding.secondaryColor,
-          "--tenant-accent": tenant.branding.accentColor,
-        } as React.CSSProperties
-      }
-    >
+    <>
       <Navbar tenant={tenant} />
-
-      <main>
-        {/* Hero Section */}
-        <Hero tenant={tenant} />
-
-        {/* Features Section */}
-        {tenant.sections.showFeatures && <Features tenant={tenant} />}
-
-        {/* Testimonials Section */}
-        {tenant.sections.showTestimonials && <Testimonials tenant={tenant} />}
-
-        {/* CTA Section */}
-        {tenant.sections.showCTA && <CTA tenant={tenant} />}
-      </main>
-
+      <Hero tenant={tenant} />
+      <Features tenant={tenant} />
+      <Testimonials tenant={tenant} />
+      <CTA tenant={tenant} />
       <Footer tenant={tenant} />
-    </div>
+    </>
   );
 }
