@@ -29,43 +29,27 @@ const Hero = () => {
   const slides: Slide[] = [
     {
       type: "image",
-      src: "/slides/slide1.jpg",
-      title: "Trusted for Safety", //Terpercaya dalam Keselamatan
-      subtitle: "Guided by Expertise", //Terjaga dalam Profesionalitas
+      src: "/images/internal-13.jpeg",
+      title: "Pelatihan dan Sertifikasi K3",
+      subtitle: "Dengan Instruktur Tersertifikasi",
       description: "Pelatihan & Sertifikasi K3 Terpercaya",
-      countdownText: "Trusted",
+      countdownText: "Training",
     },
     {
       type: "image",
-      src: "/slides/slide2.jpg",
-      title: "Pelatihan K3",
-      subtitle: "Berkualitas & Tersertifikasi",
-      description: "Membangun SDM Unggul di Bidang Keselamatan Kerja",
-      countdownText: "Certified",
+      src: "/images/internal-11.jpg",
+      title: "Riksa Uji Alat",
+      subtitle: "Dengan Tim Ahli Profesional",
+      description: "Pengujian Kelayakan Alat oleh Tim Ahli",
+      countdownText: "Inspection",
     },
     {
       type: "image",
-      src: "/slides/slide3.jpg",
-      title: "Instruktur Berpengalaman",
+      src: "/images/internal-6.jpeg",
+      title: "Konsultasi dan Audit SMK3",
       subtitle: "Tim Ahli Profesional",
       description: "Lebih dari 19 tahun pengalaman di industri K3",
-      countdownText: "Professional",
-    },
-    {
-      type: "video",
-      src: "https://www.youtube.com/embed/Pf98Ui1ejPM?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&enablejsapi=1&loop=0",
-      title: "Delta Indonesia",
-      subtitle: "Solusi Terbaik Training & Sertifikasi",
-      description: "Tonton video profil kami",
-      countdownText: "Accountability",
-    },
-    {
-      type: "image",
-      src: "/slides/slide4.jpg",
-      title: "Wujudkan Tempat Kerja",
-      subtitle: "Yang Aman & Produktif",
-      description: "Bergabunglah dengan 1000+ perusahaan yang mempercayai kami",
-      countdownText: "Integrity",
+      countdownText: "Consultant",
     },
   ];
 
