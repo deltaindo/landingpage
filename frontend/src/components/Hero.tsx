@@ -30,8 +30,8 @@ const Hero = () => {
     {
       type: "image",
       src: "/slides/slide1.jpg",
-      title: "Trusted for Safety,",
-      subtitle: "Guided by Expertise",
+      title: "Trusted for Safety", //Terpercaya dalam Keselamatan
+      subtitle: "Guided by Expertise", //Terjaga dalam Profesionalitas
       description: "Pelatihan & Sertifikasi K3 Terpercaya",
       countdownText: "Trusted",
     },

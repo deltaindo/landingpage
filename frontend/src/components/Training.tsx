@@ -328,10 +328,10 @@ export default function Trainings() {
         {/* Header */}
         <header className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-            Pelatihan Profesional
+            Pelatihan & Sertifikasi K3
           </h1>
           <p className="text-gray-600 text-lg">
-            Tingkatkan skill Kami dengan pelatihan terbaik dari Delta Indonesia
+            Tingkatkan skill dengan pelatihan terbaik dari Delta Indonesia
           </p>
         </header>
 
