@@ -1,0 +1,6 @@
+SELECT COUNT(*) as "OLD COURSES TO DELETE" FROM courses 
+WHERE code LIKE 'KEM-%' OR code LIKE 'BNSP-%' OR code LIKE 'MIGAS-%' OR code LIKE 'INH-%';
+
+SELECT COUNT(*) as "OLD REGISTRATIONS TO DELETE" FROM registrations;
+
+SELECT COUNT(*) as "OLD SCHEDULES TO DELETE" FROM course_schedules;
