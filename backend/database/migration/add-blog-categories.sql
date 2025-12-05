@@ -24,5 +24,4 @@ CREATE TABLE "blogPostTags" (
 INSERT INTO "blogCategories" (name, slug, description) VALUES
 ('Media Release', 'media-release', 'Official company announcements'),
 ('Training News', 'training-news', 'Updates about training programs'),
-('Industry Insights', 'industry-insights', 'Industry trends and analysis'),
 ('Success Stories', 'success-stories', 'Client success stories and testimonials');
