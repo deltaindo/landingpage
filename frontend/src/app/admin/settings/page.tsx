@@ -11,7 +11,7 @@ export default function SettingsPage() {
   const { user } = useAdminAuth();
   const [activeTab, setActiveTab] = useState('general');
   const [formData, setFormData] = useState({
-    apiUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api',
+    apiUrl: process.env.NEXT_PUBLIC_API_URL || '/api',
     siteName: 'Delta Indonesia',
     adminEmail: user?.email || '',
   });

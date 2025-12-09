@@ -3,14 +3,14 @@ const nextConfig = {
   reactStrictMode: true,
 
   env: {
-    API_URL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api",
+    API_URL: process.env.NEXT_PUBLIC_API_URL || "/api",
   },
 
   async rewrites() {
     return [
       {
         source: "/api/:path*",
-        destination: "http://localhost:5000/api/:path*", // Backend proxy
+        destination: "/api/:path*", // Backend proxy
       },
     ];
   },

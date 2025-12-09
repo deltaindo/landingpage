@@ -8,7 +8,7 @@
  */
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+  process.env.NEXT_PUBLIC_API_URL || "/api";
 const USE_VPN_TUNNEL = process.env.NEXT_PUBLIC_USE_VPN_TUNNEL === "true";
 const VPN_GATEWAY_URL = process.env.NEXT_PUBLIC_VPN_GATEWAY_URL;
 const SSO_ENABLED = process.env.NEXT_PUBLIC_SSO_ENABLED === "true";

@@ -89,7 +89,7 @@ export default function MultiStepRegistrationPage() {
   const fetchCourse = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/courses/${params.courseId}`
+        `/api/courses/${params.courseId}`
       );
       const data = await response.json();
       if (data.success) {
@@ -262,7 +262,7 @@ export default function MultiStepRegistrationPage() {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/registrations", {
+      const response = await fetch("/api/registrations", {
         method: "POST",
         body: formDataToSend,
       });
