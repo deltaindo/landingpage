@@ -150,7 +150,7 @@ router.post(
 
       const { email, password } = req.body;
 
-      // Find user
+      // Find user - don't specify attributes to avoid column issues
       const user = await User.findOne({ where: { email } });
       if (!user) {
         return res.status(401).json({
@@ -214,10 +214,10 @@ router.get("/me", async (req, res, next) => {
     const token = authHeader.split(" ")[1];
     
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findByPk(decoded.id, {
-      attributes: { exclude: ["password"] },
-    });
-
+    
+    // Find user without specifying attributes to avoid schema issues
+    const user = await User.findByPk(decoded.id);
+    
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -225,15 +225,28 @@ router.get("/me", async (req, res, next) => {
       });
     }
 
+    // Return user without password
+    const userResponse = user.toJSON();
+    delete userResponse.password;
+
     res.json({
       success: true,
-      data: user,
+      data: userResponse,
     });
   } catch (error) {
-    res.status(401).json({
-      success: false,
-      error: "Invalid token",
-    });
+    if (error.name === "JsonWebTokenError") {
+      return res.status(401).json({
+        success: false,
+        error: "Invalid token",
+      });
+    }
+    if (error.name === "TokenExpiredError") {
+      return res.status(401).json({
+        success: false,
+        error: "Token expired",
+      });
+    }
+    next(error);
   }
 });
 
