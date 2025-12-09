@@ -8,14 +8,46 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Get frontend URL from environment
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
+const IS_PRODUCTION = process.env.NODE_ENV === 'production';
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      'http://localhost:3000',
+      'http://127.0.0.1:3000',
+      'https://dev-landing.deltaindo.co.id',
+      'https://landing.deltaindo.co.id',
+      FRONTEND_URL
+    ];
+    
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.warn(`CORS request from unknown origin: ${origin}`);
+      // Don't reject in development, only in production
+      if (IS_PRODUCTION) {
+        callback(new Error('Not allowed by CORS'));
+      } else {
+        callback(null, true);
+      }
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  exposedHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400 // 24 hours
+};
+
 // Security Middleware
 app.use(helmet());
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(cors(corsOptions));
+
+// Handle preflight requests
+app.options('*', cors(corsOptions));
 
 // Rate limiting
 const limiter = rateLimit({
@@ -30,7 +62,9 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Logging middleware
 app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  const timestamp = new Date().toISOString();
+  const origin = req.headers.origin || 'no-origin';
+  console.log(`[${timestamp}] ${req.method} ${req.path} - Origin: ${origin}`);
   next();
 });
 
@@ -74,7 +108,8 @@ app.get('/api/health', (req, res) => {
     status: 'OK',
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
-    environment: process.env.NODE_ENV
+    environment: process.env.NODE_ENV,
+    version: '1.0.0'
   });
 });
 
@@ -83,7 +118,8 @@ app.get('/', (req, res) => {
   res.json({
     message: 'Delta Indonesia API Server',
     version: '1.0.0',
-    docs: '/api/docs',
+    environment: process.env.NODE_ENV,
+    frontendUrl: FRONTEND_URL,
     health: '/api/health'
   });
 });
@@ -93,13 +129,14 @@ app.use((req, res) => {
   res.status(404).json({
     success: false,
     error: 'Route not found',
-    path: req.path
+    path: req.path,
+    method: req.method
   });
 });
 
 // Error handler
 app.use((err, req, res, next) => {
-  console.error('Error:', err);
+  console.error('Error:', err.message);
   res.status(err.status || 500).json({
     success: false,
     error: err.message || 'Internal server error',
@@ -119,11 +156,12 @@ const startServer = async () => {
     console.log('✅ Database models synced');
 
     // Start server
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0', () => {
       console.log(`\n🚀 Server is running on port ${PORT}`);
       console.log(`📍 API URL: http://localhost:${PORT}/api`);
-      console.log(`🏥 Health check: http://localhost:${PORT}/api/health`);
-      console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}\n`);
+      console.log(`🌐 Frontend URL: ${FRONTEND_URL}`);
+      console.log(`🔒 CORS Enabled for: ${FRONTEND_URL}`);
+      console.log(`💼 Environment: ${process.env.NODE_ENV || 'development'}\n`);
     });
   } catch (error) {
     console.error('❌ Unable to start server:', error);

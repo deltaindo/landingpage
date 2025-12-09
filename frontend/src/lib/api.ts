@@ -1,6 +1,41 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+// Get API URL from environment or detect from window location
+const getApiUrl = (): string => {
+  // Use env variable if available
+  if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL;
+  }
+  
+  // In browser, detect from location
+  if (typeof window !== 'undefined') {
+    const protocol = window.location.protocol;
+    const host = window.location.host;
+    
+    // If on localhost, use localhost backend
+    if (host.includes('localhost') || host.includes('127.0.0.1')) {
+      return 'http://localhost:5000/api';
+    }
+    
+    // If on dev domain, use dev backend
+    if (host.includes('dev-landing.deltaindo.co.id')) {
+      return 'https://api-dev.deltaindo.co.id/api';
+    }
+    
+    // If on production domain, use production backend
+    if (host.includes('landing.deltaindo.co.id')) {
+      return 'https://api.deltaindo.co.id/api';
+    }
+    
+    // Default to localhost for development
+    return 'http://localhost:5000/api';
+  }
+  
+  // Server-side fallback
+  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+};
+
+const API_BASE_URL = getApiUrl();
 
 export interface ApiResponse<T> {
   success: boolean;
@@ -36,7 +71,7 @@ class ApiClient {
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
-        console.log('[API Request]', config.method?.toUpperCase(), config.url);
+        console.log('[API Request]', config.method?.toUpperCase(), `${API_BASE_URL}${config.url}`);
         return config;
       },
       (error) => {
@@ -52,10 +87,11 @@ class ApiClient {
         return response;
       },
       (error: AxiosError) => {
-        console.error('[API Response Error]', error.config?.url, error.message);
+        console.error('[API Response Error]', error.config?.url, error.message, error.code);
         
         if (error.code === 'ECONNREFUSED' || error.code === 'ERR_NETWORK') {
-          console.error('Backend server is not running or not reachable at:', API_BASE_URL);
+          console.error('❌ Backend server is not running or not reachable at:', API_BASE_URL);
+          console.error('Make sure backend is running on port 5000');
         }
         
         if (error.response?.status === 401) {
@@ -67,6 +103,12 @@ class ApiClient {
             }
           }
         }
+        
+        // Log CORS errors
+        if (error.message.includes('CORS') || error.message.includes('blocked')) {
+          console.error('❌ CORS Error: Backend needs to allow requests from', window.location.origin);
+        }
+        
         return Promise.reject(error);
       }
     );
