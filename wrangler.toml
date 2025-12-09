@@ -1,0 +1,16 @@
+# Cloudflare Pages configuration for Next.js
+name = "deltaindo-landingpage"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+
+# Build configuration
+[build]
+command = "npm run build"
+dir = "frontend/.next"
+
+# Environment variables
+[env.production]
+vars = { NEXT_PUBLIC_API_URL = "https://api.deltaindo.co.id/api" }
+
+[env.development]
+vars = { NEXT_PUBLIC_API_URL = "http://localhost:5000/api" }

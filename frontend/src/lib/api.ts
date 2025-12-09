@@ -1,6 +1,31 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api';
+// Determine API URL based on environment
+const getApiUrl = () => {
+  // In browser
+  if (typeof window !== 'undefined') {
+    // Use environment variable from .env files
+    if (process.env.NEXT_PUBLIC_API_URL) {
+      return process.env.NEXT_PUBLIC_API_URL;
+    }
+    
+    // Fallback based on domain
+    const isDevelopment = window.location.hostname === 'localhost' || 
+                         window.location.hostname === '127.0.0.1';
+    
+    if (isDevelopment) {
+      return 'http://localhost:5000/api';
+    }
+    
+    // Production - use same domain
+    return `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''}/api`;
+  }
+  
+  // Server-side
+  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+};
+
+const API_BASE_URL = getApiUrl();
 
 export interface ApiResponse<T> {
   success: boolean;
@@ -21,11 +46,15 @@ class ApiClient {
   private token: string | null = null;
 
   constructor() {
+    console.log('[API Client] Initialized with URL:', API_BASE_URL);
+    
     this.api = axios.create({
       baseURL: API_BASE_URL,
       headers: {
         'Content-Type': 'application/json',
       },
+      timeout: 10000,
+      withCredentials: true, // Important for cookies/CORS
     });
 
     // Request interceptor
@@ -35,22 +64,52 @@ class ApiClient {
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
+        console.log('[API Request]', config.method?.toUpperCase(), config.baseURL + config.url);
         return config;
       },
-      (error) => Promise.reject(error)
+      (error) => {
+        console.error('[API Request Error]', error);
+        return Promise.reject(error);
+      }
     );
 
     // Response interceptor
     this.api.interceptors.response.use(
-      (response) => response,
-      (error: AxiosError) => {
+      (response) => {
+        console.log('[API Response]', response.config.url, response.status);
+        return response;
+      },
+      (error: AxiosError<any>) => {
+        console.error('[API Response Error]', {
+          url: error.config?.url,
+          status: error.response?.status,
+          message: error.message,
+          code: error.code,
+          data: error.response?.data
+        });
+        
+        if (error.code === 'ECONNREFUSED' || error.code === 'ERR_NETWORK') {
+          console.error('❌ Backend server is not running or not reachable at:', API_BASE_URL);
+          console.error('ℹ️ Make sure your backend API is deployed and accessible');
+        }
+        
         if (error.response?.status === 401) {
-          // Handle unauthorized
           if (typeof window !== 'undefined') {
             localStorage.removeItem('admin_token');
-            window.location.href = '/admin/login';
+            if (!window.location.pathname.includes('/admin/login')) {
+              window.location.href = '/admin/login';
+            }
           }
         }
+        
+        if (error.response?.status === 403) {
+          console.error('❌ Access forbidden - check your permissions');
+        }
+        
+        if (error.response?.status === 404) {
+          console.error('❌ API endpoint not found:', error.config?.url);
+        }
+        
         return Promise.reject(error);
       }
     );
