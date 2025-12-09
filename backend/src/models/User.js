@@ -24,20 +24,19 @@ const User = sequelize.define(
       allowNull: false,
     },
     role: {
-      type: DataTypes.ENUM("admin", "editor", "viewer"),
+      type: DataTypes.ENUM("admin", "editor", "pic", "viewer"),
       defaultValue: "viewer",
     },
     isActive: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
+      field: "is_active",
     },
   },
   {
     tableName: "users",
     timestamps: true,
-    underscored: true, // users table uses snake_case
-    createdAt: "created_at",
-    updatedAt: "updated_at",
+    underscored: true,
     hooks: {
       beforeCreate: async (user) => {
         if (user.password) {
