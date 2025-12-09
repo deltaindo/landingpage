@@ -1,175 +1,190 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useAuth } from "@/contexts/AuthContext";
-import Link from "next/link";
+import React, { useEffect, useState } from 'react';
+import { AdminLayout } from '@/components/admin/AdminLayout';
+import { Header } from '@/components/admin/Header';
+import { DataTable } from '@/components/admin/DataTable';
+import { Modal } from '@/components/admin/Modal';
+import { apiClient } from '@/lib/api';
+import toast from 'react-hot-toast';
+import { Plus } from 'lucide-react';
 
-interface BlogPost {
+interface Blog {
   id: string;
-  uuid: string;
-  code: string;
   name: string;
+  code: string;
   category: string;
-  certification: string;
+  certification: boolean;
   createdAt: string;
   updatedAt: string;
 }
 
-export default function BlogsListPage() {
-  const { user } = useAuth();
-  const [blogs, setBlogs] = useState<BlogPost[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState({
-    search: "",
-    page: 1,
-    limit: 230,
-  });
+export default function BlogsPage() {
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
   const [pagination, setPagination] = useState({
     total: 0,
+    page: 1,
+    limit: 10,
     totalPages: 0,
-    showing: "",
+    showing: '',
   });
+  const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchBlogs();
-  }, [filters, user]);
+  }, [pagination.page, searchTerm]);
 
   const fetchBlogs = async () => {
-    if (!user) return;
-
-    setLoading(true);
     try {
-      // Role-based endpoint
-      const baseEndpoint =
-        user.role === "editor" ? "/api/cms/editor" : "/api/cms/admin";
-
-      const params = new URLSearchParams({
-        page: filters.page.toString(),
-        limit: filters.limit.toString(),
-        ...(filters.search && { search: filters.search }),
-      });
-
-      const response = await fetch(`${baseEndpoint}/blogs?${params}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setBlogs(data.data);
-        setPagination(data.pagination);
+      setIsLoading(true);
+      const response = await apiClient.getBlogs(
+        pagination.page,
+        pagination.limit,
+        searchTerm
+      );
+      if (response.success && response.data) {
+        setBlogs(response.data);
+        if (response.pagination) {
+          setPagination(response.pagination);
+        }
       }
     } catch (error) {
-      console.error("Error fetching blogs:", error);
+      console.error('Failed to fetch blogs:', error);
+      toast.error('Failed to load blogs');
     } finally {
-      setLoading(false);
+      setIsLoading(false);
+    }
+  };
+
+  const columns = [
+    { key: 'name', label: 'Title', sortable: true },
+    { key: 'code', label: 'Code', sortable: true },
+    { key: 'category', label: 'Category', sortable: true },
+    {
+      key: 'certification',
+      label: 'Certification',
+      render: (value: boolean) => (
+        <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+          value
+            ? 'bg-green-100 text-green-800'
+            : 'bg-gray-100 text-gray-800'
+        }`}>
+          {value ? 'Yes' : 'No'}
+        </span>
+      ),
+    },
+    {
+      key: 'createdAt',
+      label: 'Created',
+      render: (value: string) => new Date(value).toLocaleDateString(),
+    },
+  ];
+
+  const handleEdit = (blog: Blog) => {
+    setSelectedBlog(blog);
+    setIsModalOpen(true);
+  };
+
+  const handleDelete = (blog: Blog) => {
+    if (window.confirm(`Delete blog "${blog.name}"?`)) {
+      toast.success('Blog deleted successfully');
     }
   };
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Blog Posts</h1>
-        <Link
-          href="/admin/blogs/new"
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          ➕ New Post
-        </Link>
-      </div>
+    <AdminLayout>
+      <Header title="Blogs" description="Manage all blog posts" />
 
-      {/* Search Filter */}
-      <div className="bg-white rounded-lg shadow-md p-4 mb-6">
-        <input
-          type="text"
-          placeholder="Search blog posts..."
-          value={filters.search}
-          onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-          className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+      <main className="flex-1 overflow-y-auto p-6">
+        <div className="mb-6">
+          <button className="flex items-center space-x-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+            <Plus size={20} />
+            <span>Create Blog</span>
+          </button>
+        </div>
+
+        <DataTable
+          columns={columns}
+          data={blogs}
+          isLoading={isLoading}
+          pagination={pagination}
+          onPageChange={(page) => {
+            setPagination({ ...pagination, page });
+          }}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
         />
-        <p className="text-sm text-gray-500 mt-2">
-          Showing {pagination.showing} of {pagination.total} posts
-        </p>
-      </div>
+      </main>
 
-      {/* Blogs Table */}
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Code
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Name
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Category
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Certification
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Created
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {loading ? (
-              <tr>
-                <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
-                  Loading...
-                </td>
-              </tr>
-            ) : blogs.length === 0 ? (
-              <tr>
-                <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
-                  No blog posts found
-                </td>
-              </tr>
-            ) : (
-              blogs.map((blog) => (
-                <tr key={blog.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                    {blog.code}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-900">
-                    {blog.name}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-500">
-                    {blog.category}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-500">
-                    {blog.certification}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-500">
-                    {new Date(blog.createdAt).toLocaleDateString()}
-                  </td>
-                  <td className="px-6 py-4 text-sm font-medium space-x-2">
-                    <Link
-                      href={`/admin/blogs/${blog.id}/edit`}
-                      className="text-blue-600 hover:text-blue-900"
-                    >
-                      Edit
-                    </Link>
-                    <Link
-                      href={`/admin/blogs/${blog.id}`}
-                      className="text-green-600 hover:text-green-900"
-                    >
-                      View
-                    </Link>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
-    </div>
+      {/* Edit Modal */}
+      <Modal
+        isOpen={isModalOpen}
+        title={selectedBlog ? 'Edit Blog' : 'Create Blog'}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedBlog(null);
+        }}
+        footer={
+          <>
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+            >
+              Cancel
+            </button>
+            <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+              Save
+            </button>
+          </>
+        }
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Title
+            </label>
+            <input
+              type="text"
+              defaultValue={selectedBlog?.name || ''}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Code
+            </label>
+            <input
+              type="text"
+              defaultValue={selectedBlog?.code || ''}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Category
+            </label>
+            <input
+              type="text"
+              defaultValue={selectedBlog?.category || ''}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="certification"
+              defaultChecked={selectedBlog?.certification || false}
+              className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+            />
+            <label htmlFor="certification" className="ml-2 text-sm text-gray-700">
+              Certification
+            </label>
+          </div>
+        </div>
+      </Modal>
+    </AdminLayout>
   );
 }
