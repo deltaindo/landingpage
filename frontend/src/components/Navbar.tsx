@@ -36,14 +36,14 @@ const Navbar = () => {
           {/* LOGO SECTION - Using logo.jpg image */}
           <div className="flex items-center gap-2">
             <Image
-              src="/logo.png"
+              src="/images/logo.png"
               alt="Delta Indonesia Group"
-              width={40}
-              height={40}
+              width={60}
+              height={60}
               className="rounded-lg"
             />
             <span className={`font-bold text-lg ${textColor}`}>
-              DELTA INDONESIA
+              DELTA INDONESIA GROUP
             </span>
           </div>
 

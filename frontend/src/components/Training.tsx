@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, ChangeEvent } from "react";
 import {
   ChevronRight,
   Loader,
@@ -11,12 +11,25 @@ import {
 } from "lucide-react";
 
 // ==================== TYPES ====================
+interface CourseSchedule {
+  id: string;
+  courseId: string;
+  startDate: string;
+  endDate: string;
+  location?: string;
+  type?: string;
+  maxParticipants?: number;
+  currentParticipants?: number;
+  status?: string;
+}
+
 interface TrainingData {
   id: string;
   code: string;
   name: string;
   category: string;
   certification: string;
+  courseSchedules?: CourseSchedule[];
 }
 
 interface ApiResponse {
@@ -30,45 +43,66 @@ interface ApiResponse {
   };
 }
 
-// ==================== CONSTANTS ====================
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL!;
 const ITEMS_PER_PAGE = 6;
 
-// ==================== LOADING STATE ====================
+// ==================== UTILS ====================
+
+const categoryColors: Record<string, string> = {
+  kemnaker: "bg-amber-100 text-amber-800 border-amber-200",
+  bnsp: "bg-blue-100 text-blue-800 border-blue-200",
+  inhouse: "bg-green-100 text-green-800 border-green-200",
+  migas: "bg-purple-100 text-purple-800 border-purple-200",
+};
+
+const categoryNames: Record<string, string> = {
+  kemnaker: "KEMNAKER",
+  bnsp: "BNSP",
+  inhouse: "INHOUSE",
+};
+
+function getNearestDate(schedules?: CourseSchedule[]): string {
+  if (!schedules?.length) return "Belum ada jadwal";
+
+  const today = new Date();
+  const minimum = new Date(today);
+  minimum.setDate(today.getDate() + 5);
+
+  const upcoming = schedules
+    .filter((s) => new Date(s.endDate) >= minimum)
+    .sort((a, b) => new Date(a.endDate).getTime() - new Date(b.endDate).getTime());
+
+  if (!upcoming.length) return "Belum ada jadwal";
+
+  return new Date(upcoming[0].endDate).toLocaleDateString("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
+// ==================== COMPONENTS ====================
+
 function LoadingState() {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="text-center">
-        <Loader className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-4" />
-        <p className="text-gray-600 font-medium">Memuat pelatihan...</p>
-      </div>
+    <div className="min-h-screen flex items-center justify-center">
+      <Loader className="w-12 h-12 text-blue-600 animate-spin" />
     </div>
   );
 }
 
-// ==================== ERROR STATE ====================
-interface ErrorStateProps {
-  error: string;
-  onRetry: () => void;
-}
-
-function ErrorState({ error, onRetry }: ErrorStateProps) {
+function ErrorState({ error, onRetry }: { error: string; onRetry: () => void }) {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div
-        className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full text-center"
-        role="alert"
-      >
-        <div className="bg-red-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="bg-white p-8 rounded-xl shadow-lg max-w-md w-full text-center">
+        <div className="bg-red-100 p-4 w-16 h-16 flex items-center justify-center rounded-full mx-auto mb-4">
           <AlertCircle className="w-8 h-8 text-red-600" />
         </div>
-        <h3 className="text-xl font-bold text-gray-900 mb-2">
-          Terjadi Kesalahan
-        </h3>
+        <h3 className="text-xl font-bold mb-2">Terjadi Kesalahan</h3>
         <p className="text-gray-600 mb-4">{error}</p>
         <button
           onClick={onRetry}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-200 inline-flex items-center gap-2"
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg inline-flex items-center gap-2"
         >
           <RefreshCw className="w-4 h-4" />
           Coba Lagi
@@ -78,164 +112,152 @@ function ErrorState({ error, onRetry }: ErrorStateProps) {
   );
 }
 
-// ==================== EMPTY STATE ====================
-interface EmptyStateProps {
-  searchQuery: string;
-}
-
-function EmptyState({ searchQuery }: EmptyStateProps) {
+function EmptyState({ search }: { search: string }) {
   return (
-    <div className="text-center py-16">
-      <div className="text-6xl mb-4">📚</div>
-      <h3 className="text-xl font-semibold text-gray-800 mb-2">
-        {searchQuery ? "Tidak Ada Hasil" : "Belum Ada Pelatihan"}
+    <div className="text-center py-20">
+      <div className="text-6xl mb-3">📚</div>
+      <h3 className="text-xl font-semibold">
+        {search ? "Tidak Ada Hasil" : "Belum Ada Pelatihan"}
       </h3>
       <p className="text-gray-600">
-        {searchQuery
-          ? `Tidak ditemukan pelatihan untuk "${searchQuery}"`
+        {search
+          ? `Tidak ditemukan pelatihan untuk "${search}"`
           : "Saat ini belum ada pelatihan yang tersedia."}
       </p>
     </div>
   );
 }
 
-// ==================== TRAINING CARD ====================
-interface TrainingCardProps {
-  training: TrainingData;
-}
-
-function TrainingCard({ training }: TrainingCardProps) {
+function TrainingCard({ training }: { training: TrainingData }) {
   return (
-    <article className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group">
-      {/* Card Header */}
+    <article className="bg-white rounded-xl shadow-md border hover:shadow-xl transition overflow-hidden">
       <div
-        className="relative bg-cover bg-center bg-no-repeat p-6 pb-8"
+        className="relative bg-cover bg-center p-6 pb-10"
         style={{ backgroundImage: "url('/images/training-card-bg.jpg')" }}
       >
-        <span className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1 rounded-full">
-          {training.category}
-        </span>
-        <h3 className="text-white font-bold text-lg line-clamp-2 mt-6">
+        {/* <span className="absolute top-4 right-4 bg-white/20 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-white">
+          {training.category.toUpperCase()}
+        </span> */}
+        <h3 className="text-white font-bold text-lg mt-6 line-clamp-2">
           {training.name}
         </h3>
       </div>
 
-      {/* Card Body */}
-      <div className="p-6">
-        <div className="space-y-3 mb-6">
-          {/* Code */}
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-gray-500 uppercase min-w-[80px]">
-              Kode
-            </span>
-            <span className="text-sm font-mono text-gray-900 bg-gray-50 px-3 py-1 rounded-md border border-gray-200">
-              {training.code}
-            </span>
-          </div>
-
-          {/* Certification */}
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-gray-500 uppercase min-w-[80px]">
-              Sertifikasi
-            </span>
-            <span className="text-sm text-amber-800 bg-amber-50 px-3 py-1 rounded-md border border-amber-200 font-medium">
-              {training.certification}
-            </span>
-          </div>
+      <div className="p-6 space-y-4">
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-bold text-gray-500 min-w-[80px]">
+            Jadwal
+          </span>
+          <span className="text-sm font-medium bg-gray-50 border px-3 py-1 rounded">
+            {getNearestDate(training.courseSchedules)}
+          </span>
         </div>
 
-        {/* CTA Button */}
-        <button
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 group/btn"
-          aria-label={`Lihat detail pelatihan ${training.name}`}
-        >
-          Selengkapnya
-          <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-bold text-gray-500 min-w-[80px]">
+            Sertifikasi
+          </span>
+          {/* <span className="text-sm font-medium bg-amber-50 border border-amber-200 text-amber-800 px-3 py-1 rounded">
+            {training.certification}
+          </span>*/}
+          <span
+            className={`text-xs font-bold px-3 py-1 rounded border ${
+              categoryColors[training.category] ?? categoryColors.kemnaker
+            }`}
+          >
+            {categoryNames[training.category] ?? training.category.toUpperCase()}
+          </span>
+        </div>
+
+        <button className="w-full bg-blue-600 py-3 text-white font-semibold rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700 transition">
+          Selengkapnya <ChevronRight className="w-4 h-4" />
         </button>
       </div>
     </article>
   );
 }
 
-// ==================== PAGINATION COMPONENT ====================
-interface PaginationProps {
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-}
-
 function Pagination({
   currentPage,
   totalPages,
   onPageChange,
-}: PaginationProps) {
+}: {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}) {
+
   if (totalPages <= 1) return null;
 
+  const renderPages = () => {
+    const pages: (number | string)[] = [];
+
+    // Always show first page
+    pages.push(1);
+
+    // Show left ellipsis
+    if (currentPage > 4) {
+      pages.push("...");
+    }
+
+    // Show middle pages around current page
+    for (let i = currentPage - 2; i <= currentPage + 2; i++) {
+      if (i > 1 && i < totalPages) {
+        pages.push(i);
+      }
+    }
+
+    // Show right ellipsis
+    if (currentPage < totalPages - 3) {
+      pages.push("...");
+    }
+
+    // Always show last page
+    if (totalPages > 1) {
+      pages.push(totalPages);
+    }
+
+    return pages;
+  };
+
   return (
-    <div className="flex items-center justify-center gap-2 mt-12 pb-8">
-      {/* Previous Button */}
+    <div className="flex items-center justify-center gap-2 mt-12">
+      {/* Prev */}
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="p-2 rounded-lg border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        aria-label="Halaman sebelumnya"
+        className="p-2 border rounded-lg disabled:opacity-50"
       >
         <ChevronLeft className="w-5 h-5" />
       </button>
 
-      {/* Page Numbers */}
-      <div className="flex items-center gap-1">
-        {Array.from({ length: totalPages }).map((_, index) => {
-          const page = index + 1;
-          const isActive = page === currentPage;
+      {/* Page Buttons */}
+      {renderPages().map((value, index) =>
+        value === "..." ? (
+          <span key={`dots-${index}`} className="px-3 py-2 text-gray-500">
+            ...
+          </span>
+        ) : (
+          <button
+            key={`page-${value}`}
+            onClick={() => onPageChange(value as number)}
+            className={`px-3 py-2 rounded-lg font-semibold transition ${
+              currentPage === value
+                ? "bg-blue-600 text-white"
+                : "border hover:bg-gray-100"
+            }`}
+          >
+            {value}
+          </button>
+        )
+      )}
 
-          // Show first, last, current, and adjacent pages
-          const showPage =
-            page === 1 ||
-            page === totalPages ||
-            page === currentPage ||
-            Math.abs(page - currentPage) <= 1;
 
-          if (!showPage && index > 0 && index < totalPages - 1) {
-            if (index === 1)
-              return (
-                <span key="dots-start" className="text-gray-500">
-                  ...
-                </span>
-              );
-            if (index === totalPages - 2)
-              return (
-                <span key="dots-end" className="text-gray-500">
-                  ...
-                </span>
-              );
-            return null;
-          }
-
-          return (
-            <button
-              key={page}
-              onClick={() => onPageChange(page)}
-              className={`px-3 py-2 rounded-lg font-semibold transition-colors ${
-                isActive
-                  ? "bg-blue-600 text-white"
-                  : "border border-gray-300 hover:bg-gray-100"
-              }`}
-              aria-label={`Halaman ${page}`}
-              aria-current={isActive ? "page" : undefined}
-            >
-              {page}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Next Button */}
+      {/* Next */}
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="p-2 rounded-lg border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        aria-label="Halaman berikutnya"
+        className="p-2 border rounded-lg disabled:opacity-50"
       >
         <ChevronRight className="w-5 h-5" />
       </button>
@@ -243,195 +265,102 @@ function Pagination({
   );
 }
 
-function getCategoryBadge(category: string) {
-  const colors: any = {
-    kemnaker: "bg-amber-100 text-amber-800 border-amber-300",
-    bnsp: "bg-blue-100 text-blue-800 border-blue-300",
-    inhouse: "bg-green-100 text-green-800 border-green-300",
-    migas: "bg-purple-100 text-purple-800 border-purple-300",
-  };
-  return colors[category] || colors.kemnaker;
-}
 
-// Capitalize category display name
-function getCategoryDisplayName(category: string) {
-  const names: any = {
-    kemnaker: "KEMNAKER",
-    bnsp: "BNSP",
-    inhouse: "INHOUSE",
-    migas: "MIGAS",
-  };
-  return names[category] || category.toUpperCase();
-}
+// ==================== MAIN ====================
 
-// Get nearest course date that has 5+ days left
-function getNearestDate(schedules?: CourseSchedule[]): string {
-  if (!schedules || schedules.length === 0) return "Belum ada jadwal";
-
-  const today = new Date();
-  const minimumDate = new Date(today);
-  minimumDate.setDate(minimumDate.getDate() + 5);
-
-  // Find all schedules with 5+ days remaining (checking toDate)
-  const available = schedules.filter((s) => {
-    const checkDate = new Date(s.toDate || s.endDate);
-    return checkDate >= minimumDate;
-  });
-
-  if (available.length === 0) return "Belum ada jadwal";
-
-  // Get the earliest one
-  const earliest = available.sort((a, b) => {
-    const dateA = new Date(a.toDate || a.endDate);
-    const dateB = new Date(b.toDate || b.endDate);
-    return dateA.getTime() - dateB.getTime();
-  });
-
-  // Format: "15 Desember 2025"
-  const date = new Date(earliest.toDate || earliest.endDate);
-  return date.toLocaleDateString("id-ID", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
-
-// ==================== MAIN COMPONENT ====================
 export default function Trainings() {
   const [trainings, setTrainings] = useState<TrainingData[]>([]);
-  const [filteredTrainings, setFilteredTrainings] = useState<TrainingData[]>(
-    []
-  );
+  const [filtered, setFiltered] = useState<TrainingData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalCount, setTotalCount] = useState(0);
+  const [error, setError] = useState("");
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
 
-  const fetchTrainings = useCallback(async () => {
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
-      setError(null);
+      const res = await fetch(`${API_BASE_URL}/courses?limit=1000`);
+      const json: ApiResponse = await res.json();
 
-      const response = await fetch(`${API_BASE_URL}/courses?limit=1000`);
+      if (!json.success) throw new Error("Invalid response");
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result: ApiResponse = await response.json();
-
-      if (result.success && Array.isArray(result.data)) {
-        setTrainings(result.data);
-        setFilteredTrainings(result.data);
-        setTotalCount(result.pagination?.total || result.data.length);
-        setCurrentPage(1);
-      } else {
-        throw new Error("Format respons tidak valid");
-      }
-    } catch (err) {
-      console.error("Error fetching trainings:", err);
-      setError(err instanceof Error ? err.message : "Gagal memuat pelatihan");
+      setTrainings(json.data);
+      setFiltered(json.data);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Gagal memuat pelatihan");
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    fetchTrainings();
-  }, [fetchTrainings]);
+    fetchData();
+  }, [fetchData]);
 
-  // Filter trainings based on search query
   useEffect(() => {
-    if (searchQuery.trim() === "") {
-      setFilteredTrainings(trainings);
-    } else {
-      const query = searchQuery.toLowerCase();
-      const filtered = trainings.filter(
-        (training) =>
-          training.name.toLowerCase().includes(query) ||
-          training.code.toLowerCase().includes(query) ||
-          training.category.toLowerCase().includes(query) ||
-          training.certification.toLowerCase().includes(query)
-      );
-      setFilteredTrainings(filtered);
-    }
-    setCurrentPage(1); // Reset to first page when searching
-  }, [searchQuery, trainings]);
+    const q = search.toLowerCase();
+    setFiltered(
+      q
+        ? trainings.filter((t) =>
+            [t.name, t.category, t.certification].some((v) =>
+              v.toLowerCase().includes(q)
+            )
+          )
+        : trainings
+    );
+    setPage(1);
+  }, [search, trainings]);
 
-  // Pagination calculation
-  const totalPages = Math.ceil(filteredTrainings.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const paginatedTrainings = filteredTrainings.slice(
-    startIndex,
-    startIndex + ITEMS_PER_PAGE
-  );
+  const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+  const visible = filtered.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
 
-  if (loading) {
-    return <LoadingState />;
-  }
-
-  if (error) {
-    return <ErrorState error={error} onRetry={fetchTrainings} />;
-  }
+  if (loading) return <LoadingState />;
+  if (error) return <ErrorState error={error} onRetry={fetchData} />;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Header */}
+    <div className="min-h-screen bg-gray-50 py-12 px-4">
+      <div className="max-w-7xl mx-auto">
         <header className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-            Pelatihan Profesional
-          </h1>
-          <p className="text-gray-600 text-lg">
-            Tingkatkan skill Kami dengan pelatihan terbaik dari Delta Indonesia
+          <h1 className="text-4xl font-bold">Pelatihan Profesional</h1>
+          <p className="text-gray-600 mt-2">
+            Tingkatkan skill Anda dengan pelatihan terbaik dari Delta Indonesia
           </p>
         </header>
 
-        {/* Search & Count */}
-        <div className="mb-8 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-          {/* Search Bar */}
+        <div className="flex flex-col sm:flex-row justify-between gap-4 mb-10">
           <div className="relative w-full sm:w-96">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
-              type="text"
               placeholder="Cari pelatihan..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+              value={search}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setSearch(e.target.value)
+              }
+              className="w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
-          {/* Count Badge */}
-          <div className="flex items-center gap-2">
-            <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg font-semibold text-sm whitespace-nowrap">
-              {filteredTrainings.length}{" "}
-              {filteredTrainings.length !== totalCount && `dari ${totalCount}`}{" "}
-              Tersedia
-            </span>
-          </div>
+          <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg font-semibold">
+            {filtered.length} Tersedia
+          </span>
         </div>
 
-        {/* Trainings Grid or Empty State */}
-        {filteredTrainings.length === 0 ? (
-          <EmptyState searchQuery={searchQuery} />
+        {filtered.length === 0 ? (
+          <EmptyState search={search} />
         ) : (
           <>
-            <section
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-              aria-label="Daftar pelatihan"
-            >
-              {paginatedTrainings.map((training) => (
-                <TrainingCard key={training.id} training={training} />
+            <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {visible.map((t) => (
+                <TrainingCard key={t.id} training={t} />
               ))}
             </section>
 
-            {/* Pagination */}
             <Pagination
-              currentPage={currentPage}
+              currentPage={page}
               totalPages={totalPages}
-              onPageChange={setCurrentPage}
+              onPageChange={setPage}
             />
+
           </>
         )}
       </div>
