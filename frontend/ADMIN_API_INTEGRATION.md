@@ -148,7 +148,7 @@ All endpoints should return:
 ### 1. Test Login
 
 ```bash
-curl -X POST http://localhost:3001/api/auth/login \
+curl -X POST http://localhost:5000/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"admin@deltaindonesia.com","password":"password123"}'
 ```
@@ -156,7 +156,7 @@ curl -X POST http://localhost:3001/api/auth/login \
 ### 2. Test Protected Endpoint
 
 ```bash
-curl -X GET http://localhost:3001/api/cms/admin/blogs \
+curl -X GET http://localhost:5000/api/cms/admin/blogs \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 

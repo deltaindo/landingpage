@@ -107,7 +107,7 @@ New dependencies added:
 Create `.env.local` in the frontend directory:
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:3001/api
+NEXT_PUBLIC_API_URL=http://localhost:5000/api
 ```
 
 ### 3. Run Development Server
@@ -307,7 +307,7 @@ All components use Tailwind CSS for styling. Color scheme:
 ### CORS Errors
 
 - Backend should enable CORS for frontend URL
-- Check `http://localhost:3001/api` is accessible
+- Check `http://localhost:5000/api` is accessible
 
 ### Data Not Loading
 

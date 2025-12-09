@@ -164,7 +164,7 @@ A production-ready, full-featured admin dashboard system for Delta Indonesia's l
 ### Prerequisites
 - Node.js 18+
 - npm or yarn
-- Backend running on http://localhost:3001
+- Backend running on http://localhost:5000
 
 ### Installation
 
@@ -177,7 +177,7 @@ cd landingpage/frontend
 npm install
 
 # Create .env.local
-echo "NEXT_PUBLIC_API_URL=http://localhost:3001/api" > .env.local
+echo "NEXT_PUBLIC_API_URL=http://localhost:5000/api" > .env.local
 
 # Run development server
 npm run dev
@@ -352,7 +352,7 @@ None currently. All features are fully functional.
 
 ```env
 # Required
-NEXT_PUBLIC_API_URL=http://localhost:3001/api
+NEXT_PUBLIC_API_URL=http://localhost:5000/api
 
 # Optional
 NEXT_PUBLIC_APP_NAME=Delta Indonesia

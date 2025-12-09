@@ -82,7 +82,7 @@ Create a `.env` file in the backend directory with your database credentials:
 
 ```env
 DATABASE_URL=postgresql://postgres:your_password@localhost:5432/landingpage_db
-PORT=3001
+PORT=5000
 NODE_ENV=development
 ```
 
@@ -123,13 +123,13 @@ After seeding the database, start the application:
 npm run dev
 ```
 
-The backend server should now be running on `http://localhost:3001` (or your configured port).
+The backend server should now be running on `http://localhost:5000` (or your configured port).
 
 ## Verification
 
 To verify everything is working:
 
-1. Check if the server is running by visiting `http://localhost:3001` in your browser
+1. Check if the server is running by visiting `http://localhost:5000` in your browser
 2. Verify database connection by checking server logs
 3. Use pgAdmin 4 to inspect the database tables and data
 
