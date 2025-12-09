@@ -1,9 +1,9 @@
+import React from "react";
 import type { Metadata } from "next";
-import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Delta Indonesia",
-  description: "Landing page with admin CMS",
+  description: "Multi-tenant landing page",
 };
 
 export default function RootLayout({
@@ -13,6 +13,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <meta charSet="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </head>
       <body>{children}</body>
     </html>
   );

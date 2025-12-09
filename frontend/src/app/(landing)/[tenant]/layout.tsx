@@ -1,25 +1,32 @@
-import { notFound } from "next/navigation";
+import React, { ReactNode } from "react";
+import { headers } from "next/headers";
 
-const VALID_TENANTS = ["delta-indonesia", "delta-indonesia-pranenggar"];
+interface TenantLayoutProps {
+  children: ReactNode;
+  params: Promise<{ tenant: string }>;
+}
 
 export default async function TenantLayout({
   children,
   params,
-}: {
-  children: React.ReactNode;
-  params: Promise<{ tenant: string }>;
-}) {
+}: TenantLayoutProps) {
   const { tenant } = await params;
+  const headersList = await headers();
+  const tenantId = headersList.get("x-tenant-id") || tenant;
 
-  if (!VALID_TENANTS.includes(tenant)) {
-    notFound();
-  }
-
-  return <>{children}</>;
-}
-
-export function generateStaticParams() {
-  return VALID_TENANTS.map((tenant) => ({
-    tenant,
-  }));
+  return (
+    <div data-tenant={tenantId} style={{ minHeight: "100vh" }}>
+      <header
+        style={{
+          background: "#667eea",
+          color: "white",
+          padding: "20px",
+          textAlign: "center",
+        }}
+      >
+        <h1>Tenant: {tenantId}</h1>
+      </header>
+      <main style={{ padding: "20px" }}>{children}</main>
+    </div>
+  );
 }
