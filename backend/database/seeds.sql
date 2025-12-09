@@ -1,27 +1,27 @@
 -- 🌱 PostgreSQL Seeder for Admin Users
 -- Run this SQL file to seed the database with default users
--- Command: psql -U your_user -d your_database -f backend/database/seeds.sql
+-- Command: psql -U admin -d pendaftaran -f ./database/seeds.sql
 
 -- ============================================
 -- Seed default users
 -- ============================================
--- Check and insert admin user
-INSERT INTO users (email, password, name, role, "isActive", "createdAt", "updatedAt")
-SELECT 
+-- Insert admin user (password: password123)
+INSERT INTO users (email, password, name, role, is_active, created_at, updated_at)
+VALUES (
     'admin@deltaindonesia.com',
     -- Password: password123 (bcrypt hash)
-    -- Generated with: bcrypt.hash('password123', 10)
     '$2a$10$0Wm6lVxWnLzKKWKzk1jP8.R0A5zQ5jJ5J5J5J5J5J5J5J5J5J5J5',
     'Admin User',
     'admin',
     true,
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP
-WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'admin@deltaindonesia.com');
+)
+ON CONFLICT (email) DO NOTHING;
 
 -- Insert editor user
-INSERT INTO users (email, password, name, role, "isActive", "createdAt", "updatedAt")
-SELECT 
+INSERT INTO users (email, password, name, role, is_active, created_at, updated_at)
+VALUES (
     'editor@deltaindonesia.com',
     '$2a$10$0Wm6lVxWnLzKKWKzk1jP8.R0A5zQ5jJ5J5J5J5J5J5J5J5J5J5J5',
     'Editor User',
@@ -29,11 +29,12 @@ SELECT
     true,
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP
-WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'editor@deltaindonesia.com');
+)
+ON CONFLICT (email) DO NOTHING;
 
 -- Insert PIC user
-INSERT INTO users (email, password, name, role, "isActive", "createdAt", "updatedAt")
-SELECT 
+INSERT INTO users (email, password, name, role, is_active, created_at, updated_at)
+VALUES (
     'pic@deltaindonesia.com',
     '$2a$10$0Wm6lVxWnLzKKWKzk1jP8.R0A5zQ5jJ5J5J5J5J5J5J5J5J5J5J5',
     'PIC User',
@@ -41,11 +42,12 @@ SELECT
     true,
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP
-WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'pic@deltaindonesia.com');
+)
+ON CONFLICT (email) DO NOTHING;
 
 -- Insert viewer user
-INSERT INTO users (email, password, name, role, "isActive", "createdAt", "updatedAt")
-SELECT 
+INSERT INTO users (email, password, name, role, is_active, created_at, updated_at)
+VALUES (
     'viewer@deltaindonesia.com',
     '$2a$10$0Wm6lVxWnLzKKWKzk1jP8.R0A5zQ5jJ5J5J5J5J5J5J5J5J5J5J5',
     'Viewer User',
@@ -53,10 +55,11 @@ SELECT
     true,
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP
-WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'viewer@deltaindonesia.com');
+)
+ON CONFLICT (email) DO NOTHING;
 
 -- ============================================
 -- Verify seeding
 -- ============================================
 SELECT '✅ Seeding Complete. Users in database:' as result;
-SELECT email, name, role, "isActive", "createdAt" FROM users ORDER BY "createdAt";
+SELECT email, name, role, is_active FROM users ORDER BY email;
