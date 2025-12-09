@@ -279,7 +279,7 @@ export default function Trainings() {
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await fetch(`${API_BASE_URL}/courses?limit=1000`);
+      const res = await fetch(`/api/courses?limit=1000`);
       const json: ApiResponse = await res.json();
 
       if (!json.success) throw new Error("Invalid response");

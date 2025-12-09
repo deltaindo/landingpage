@@ -6,6 +6,18 @@ import { courseAPI } from "@/lib/Oldapi";
 import { Search, ChevronLeft, ChevronRight, Filter } from "lucide-react";
 
 // ==================== TYPES ====================
+interface CourseSchedule {
+  id: string;
+  courseId: string;
+  startDate: string;
+  endDate: string;
+  location?: string;
+  type?: string;
+  maxParticipants?: number;
+  currentParticipants?: number;
+  status?: string;
+}
+
 interface Course {
   id: string;
   code: string;
@@ -17,6 +29,7 @@ interface Course {
   description: string;
   priceRegular: number;
   featured: boolean;
+  courseSchedules?: CourseSchedule[];
 }
 
 type SortField = "name" | "code" | "category";
@@ -24,6 +37,64 @@ type SortOrder = "asc" | "desc";
 
 // ==================== CONSTANTS ====================
 const ITEMS_PER_PAGE = 9;
+
+// ==================== UTILITY FUNCTIONS ====================
+
+// Get nearest course date that has 5+ days left
+function getNearestDate(schedules?: CourseSchedule[]): string {
+  if (!schedules || schedules.length === 0) return "Belum ada jadwal";
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const minimumDate = new Date(today);
+  minimumDate.setDate(minimumDate.getDate() + 5);
+
+  // Find all schedules with 5+ days remaining (checking endDate)
+  const available = schedules.filter((s) => {
+    const checkDate = new Date(s.endDate);
+    checkDate.setHours(0, 0, 0, 0);
+    return checkDate >= minimumDate;
+  });
+
+  if (available.length === 0) return "Belum ada jadwal";
+
+  // Get the earliest one
+  const earliest = available.sort((a, b) => {
+    const dateA = new Date(a.endDate);
+    const dateB = new Date(b.endDate);
+    return dateA.getTime() - dateB.getTime();
+  })[0];
+
+  // Format: "15 Desember 2025"
+  const date = new Date(earliest.endDate);
+  return date.toLocaleDateString("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
+// Get category badge colors and display name
+function getCategoryBadge(category: string) {
+  const colors: Record<string, string> = {
+    kemnaker: "bg-amber-100 text-amber-800 border-amber-200",
+    bnsp: "bg-blue-100 text-blue-800 border-blue-200",
+    inhouse: "bg-green-100 text-green-800 border-green-200",
+    migas: "bg-purple-100 text-purple-800 border-purple-200",
+  };
+  return colors[category] || colors.kemnaker;
+}
+
+function getCategoryDisplayName(category: string) {
+  const names: Record<string, string> = {
+    kemnaker: "KEMNAKER",
+    bnsp: "BNSP",
+    inhouse: "INHOUSE",
+    migas: "MIGAS",
+  };
+  return names[category] || category.toUpperCase();
+}
 
 // ==================== PAGINATION COMPONENT ====================
 interface PaginationProps {
@@ -113,6 +184,10 @@ function Pagination({
 
 // ==================== COURSE CARD COMPONENT ====================
 function CourseCard({ course }: { course: Course }) {
+  const nearestDate = getNearestDate(course.courseSchedules);
+  const categoryBadgeClass = getCategoryBadge(course.category);
+  const categoryDisplay = getCategoryDisplayName(course.category);
+
   return (
     <article className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group">
       {/* Card Header */}
@@ -126,7 +201,7 @@ function CourseCard({ course }: { course: Course }) {
           </span>
         )}
         <span className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1 rounded-full">
-          {course.category.toUpperCase()}
+          {course.category.charAt(0).toUpperCase() + course.category.slice(1)}
         </span>
         <h3 className="text-white font-bold text-lg line-clamp-2 mt-6">
           {course.name}
@@ -143,28 +218,38 @@ function CourseCard({ course }: { course: Course }) {
           </span>
         </div>
 
-        {/* Description */}
-        <p className="text-gray-700 text-sm line-clamp-2 mb-4">
-          {course.description}
+        {/* Training course (optional description) */}
+        <p className="text-gray-700 text-sm mb-3">
+          Training course: {course.name}
         </p>
 
-        {/* Code & Certification */}
+        {/* Date & Certification */}
         <div className="space-y-2 mb-6">
+          {/* JADWAL (replaces KODE) */}
           <div className="flex items-center gap-2">
             <span className="text-xs font-semibold text-gray-500 uppercase min-w-[70px]">
-              Kode
+              Jadwal
             </span>
-            <span className="text-sm font-mono text-gray-900 bg-gray-50 px-2 py-1 rounded border border-gray-200">
-              {course.code}
+            <span className="text-sm font-medium text-gray-900 bg-gray-50 px-2 py-1 rounded border border-gray-200">
+              {nearestDate}
             </span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-gray-500 uppercase min-w-[70px]">
+
+          {/* SERTIFIKAT with CATEGORY BADGE */}
+          <div className="flex items-start gap-2">
+            <span className="text-xs font-semibold text-gray-500 uppercase min-w-[70px] pt-1">
               Sertifikat
             </span>
-            <span className="text-sm text-amber-800 bg-amber-50 px-2 py-1 rounded border border-amber-200 font-medium">
-              {course.certification}
-            </span>
+            <div className="flex flex-wrap items-center gap-2">
+              {/*<span className="text-sm text-amber-800 bg-amber-50 px-2 py-1 rounded border border-amber-200 font-medium">
+                {course.certification}
+              </span>*/}
+              <span
+                className={`text-xs font-semibold px-3 py-1 rounded-md border ${categoryBadgeClass}`}
+              >
+                {categoryDisplay}
+              </span>
+            </div>
           </div>
         </div>
 
@@ -197,21 +282,23 @@ export default function CoursesPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  // NEW: Sort states
+  // Sort states
   const [sortField, setSortField] = useState<SortField>("name");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
   const [showSortMenu, setShowSortMenu] = useState(false);
 
-  // NEW: Get unique categories from courses
+  // Get unique categories from courses
   const [availableCategories, setAvailableCategories] = useState<string[]>([]);
 
   const categories = [
     { value: "all", label: "Semua Pelatihan" },
-    { value: "kemnaker", label: "Reguler" },
+    { value: "kemnaker", label: "KEMNAKER" },
+    { value: "bnsp", label: "BNSP" },
     { value: "inhouse", label: "In-House" },
+    { value: "migas", label: "MIGAS" },
   ];
 
-  // Fetch courses - FIXED: Remove limit to get all courses
+  // Fetch courses
   useEffect(() => {
     fetchCourses();
   }, [filter]);
@@ -220,15 +307,10 @@ export default function CoursesPage() {
     try {
       setLoading(true);
 
-      // CRITICAL FIX: Add limit parameter with a large value or no limit
-      // Option 1: Use a very large limit
       const response = await courseAPI.getAll({
         category: filter === "all" ? "" : filter,
         status: "active",
-        limit: 10000, // Set a very large limit to get all courses
-        // Option 2: If your API supports it, you can also try:
-        // limit: 0, // Some APIs use 0 to mean "no limit"
-        // or remove the limit parameter entirely if the API allows it
+        limit: 10000,
       });
 
       setCourses(response.data);
@@ -259,9 +341,9 @@ export default function CoursesPage() {
       result = result.filter(
         (course) =>
           course.name.toLowerCase().includes(query) ||
-          course.code.toLowerCase().includes(query) ||
           course.description.toLowerCase().includes(query) ||
-          course.certification.toLowerCase().includes(query)
+          course.certification.toLowerCase().includes(query) ||
+          course.category.toLowerCase().includes(query)
       );
     }
 
@@ -294,7 +376,7 @@ export default function CoursesPage() {
     });
 
     setFilteredCourses(result);
-    setCurrentPage(1); // Reset to first page when filtering/sorting
+    setCurrentPage(1);
   }, [searchQuery, courses, sortField, sortOrder]);
 
   // Pagination calculation

@@ -125,13 +125,14 @@ const Footer = () => {
 
       {/* Back to Top Button */}
       {showBackToTop && (
-        <button
-          onClick={scrollToTop}
-          className="fixed bottom-20 right-6 bg-primary text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition z-50"
-          aria-label="Back to top"
-        >
-          <FaArrowUp />
-        </button>
+      <button
+        onClick={scrollToTop}
+        className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-primary text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition z-50"
+        aria-label="Back to top"
+      >
+        <FaArrowUp />
+      </button>
+
       )}
     </footer>
   );

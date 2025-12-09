@@ -7,7 +7,7 @@ import { Toaster } from "react-hot-toast";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Delta Indonesia",
+  title: "Delta Indonesia Group",
   description: "Content Management System for Delta Indonesia",
 };
 
