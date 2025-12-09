@@ -1,13 +1,16 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useAuth } from "@/contexts/AuthContext";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from 'react';
+import { AdminLayout } from '@/components/admin/AdminLayout';
+import { Header } from '@/components/admin/Header';
+import { DataTable } from '@/components/admin/DataTable';
+import { Modal } from '@/components/admin/Modal';
+import { apiClient } from '@/lib/api';
+import toast from 'react-hot-toast';
+import { Plus } from 'lucide-react';
 
 interface User {
   id: string;
-  uuid: string;
   name: string;
   email: string;
   role: string;
@@ -16,197 +19,181 @@ interface User {
 }
 
 export default function UsersPage() {
-  const { user } = useAuth();
-  const router = useRouter();
   const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState({
-    search: "",
-    role: "",
-    page: 1,
-    limit: 230,
-  });
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [roleFilter, setRoleFilter] = useState('');
   const [pagination, setPagination] = useState({
     total: 0,
+    page: 1,
+    limit: 10,
     totalPages: 0,
-    showing: "",
+    showing: '',
   });
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    // Only admin and superadmin can access users page
-    if (user && user.role !== "admin" && user.role !== "superadmin") {
-      router.push("/admin");
-      return;
-    }
     fetchUsers();
-  }, [filters, user, router]);
+  }, [pagination.page, searchTerm, roleFilter]);
 
   const fetchUsers = async () => {
-    if (!user) return;
-
-    setLoading(true);
     try {
-      const params = new URLSearchParams({
-        page: filters.page.toString(),
-        limit: filters.limit.toString(),
-        ...(filters.search && { search: filters.search }),
-        ...(filters.role && { role: filters.role }),
-      });
-
-      const response = await fetch(`/api/cms/admin/users?${params}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setUsers(data.data);
-        setPagination(data.pagination);
+      setIsLoading(true);
+      const response = await apiClient.getUsers(
+        pagination.page,
+        pagination.limit,
+        searchTerm,
+        roleFilter
+      );
+      if (response.success && response.data) {
+        setUsers(response.data);
+        if (response.pagination) {
+          setPagination(response.pagination);
+        }
       }
     } catch (error) {
-      console.error("Error fetching users:", error);
+      console.error('Failed to fetch users:', error);
+      toast.error('Failed to load users');
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
-  const getRoleBadgeColor = (role: string) => {
-    const colors: Record<string, string> = {
-      superadmin: "bg-purple-100 text-purple-800",
-      admin: "bg-blue-100 text-blue-800",
-      editor: "bg-green-100 text-green-800",
-      pic: "bg-orange-100 text-orange-800",
-      user: "bg-gray-100 text-gray-800",
-    };
-    return colors[role] || "bg-gray-100 text-gray-800";
+  const columns = [
+    { key: 'name', label: 'Name', sortable: true },
+    { key: 'email', label: 'Email', sortable: true },
+    {
+      key: 'role',
+      label: 'Role',
+      render: (value: string) => {
+        const roleColors: Record<string, string> = {
+          admin: 'bg-red-100 text-red-800',
+          editor: 'bg-blue-100 text-blue-800',
+          pic: 'bg-purple-100 text-purple-800',
+          viewer: 'bg-gray-100 text-gray-800',
+        };
+        return (
+          <span className={`px-3 py-1 rounded-full text-sm font-medium ${roleColors[value] || 'bg-gray-100 text-gray-800'}`}>
+            {value?.charAt(0).toUpperCase() + value?.slice(1)}
+          </span>
+        );
+      },
+    },
+    {
+      key: 'createdAt',
+      label: 'Created',
+      render: (value: string) => new Date(value).toLocaleDateString(),
+    },
+  ];
+
+  const handleEdit = (user: User) => {
+    setSelectedUser(user);
+    setIsModalOpen(true);
   };
 
-  if (user && user.role !== "admin" && user.role !== "superadmin") {
-    return null; // Will redirect in useEffect
-  }
+  const handleDelete = (user: User) => {
+    if (window.confirm(`Delete user ${user.name}?`)) {
+      toast.success('User deleted successfully');
+    }
+  };
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">User Management</h1>
-        <Link
-          href="/admin/users/new"
-          className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
-        >
-          ➕ New User
-        </Link>
-      </div>
+    <AdminLayout>
+      <Header title="Users" description="Manage admin users" />
 
-      {/* Filters */}
-      <div className="bg-white rounded-lg shadow-md p-4 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input
-            type="text"
-            placeholder="Search by name or email..."
-            value={filters.search}
-            onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-          />
+      <main className="flex-1 overflow-y-auto p-6">
+        <div className="mb-6 flex items-center space-x-4">
+          <button className="flex items-center space-x-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+            <Plus size={20} />
+            <span>Add User</span>
+          </button>
           <select
-            value={filters.role}
-            onChange={(e) => setFilters({ ...filters, role: e.target.value })}
-            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+            value={roleFilter}
+            onChange={(e) => setRoleFilter(e.target.value)}
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >
             <option value="">All Roles</option>
-            <option value="superadmin">Superadmin</option>
             <option value="admin">Admin</option>
             <option value="editor">Editor</option>
             <option value="pic">PIC</option>
-            <option value="user">User</option>
+            <option value="viewer">Viewer</option>
           </select>
         </div>
-        <p className="text-sm text-gray-500 mt-2">
-          Showing {pagination.showing} of {pagination.total} users
-        </p>
-      </div>
 
-      {/* Users Table */}
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Name
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Email
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Role
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Created
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Last Updated
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {loading ? (
-              <tr>
-                <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
-                  Loading...
-                </td>
-              </tr>
-            ) : users.length === 0 ? (
-              <tr>
-                <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
-                  No users found
-                </td>
-              </tr>
-            ) : (
-              users.map((u) => (
-                <tr key={u.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                    {u.name}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-500">{u.email}</td>
-                  <td className="px-6 py-4 text-sm">
-                    <span
-                      className={`px-2 py-1 text-xs rounded-full ${getRoleBadgeColor(
-                        u.role
-                      )}`}
-                    >
-                      {u.role}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-500">
-                    {new Date(u.createdAt).toLocaleDateString()}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-500">
-                    {new Date(u.updatedAt).toLocaleDateString()}
-                  </td>
-                  <td className="px-6 py-4 text-sm font-medium space-x-2">
-                    <Link
-                      href={`/admin/users/${u.id}/edit`}
-                      className="text-blue-600 hover:text-blue-900"
-                    >
-                      Edit
-                    </Link>
-                    <Link
-                      href={`/admin/users/${u.id}`}
-                      className="text-green-600 hover:text-green-900"
-                    >
-                      View
-                    </Link>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
-    </div>
+        <DataTable
+          columns={columns}
+          data={users}
+          isLoading={isLoading}
+          pagination={pagination}
+          onPageChange={(page) => {
+            setPagination({ ...pagination, page });
+          }}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
+      </main>
+
+      {/* Edit Modal */}
+      <Modal
+        isOpen={isModalOpen}
+        title={selectedUser ? 'Edit User' : 'Create User'}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedUser(null);
+        }}
+        footer={
+          <>
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+            >
+              Cancel
+            </button>
+            <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+              Save
+            </button>
+          </>
+        }
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Full Name
+            </label>
+            <input
+              type="text"
+              defaultValue={selectedUser?.name || ''}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Email
+            </label>
+            <input
+              type="email"
+              defaultValue={selectedUser?.email || ''}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Role
+            </label>
+            <select
+              defaultValue={selectedUser?.role || ''}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="">Select Role</option>
+              <option value="admin">Admin</option>
+              <option value="editor">Editor</option>
+              <option value="pic">PIC</option>
+              <option value="viewer">Viewer</option>
+            </select>
+          </div>
+        </div>
+      </Modal>
+    </AdminLayout>
   );
 }

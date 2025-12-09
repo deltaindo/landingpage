@@ -7,20 +7,19 @@ import { DataTable } from '@/components/admin/DataTable';
 import { Modal } from '@/components/admin/Modal';
 import { apiClient } from '@/lib/api';
 import toast from 'react-hot-toast';
-import { Plus } from 'lucide-react';
+import { Plus, Edit, Trash2 } from 'lucide-react';
 
-interface Blog {
+interface FormTemplate {
   id: string;
   name: string;
-  code: string;
-  category: string;
-  certification: boolean;
+  description: string;
+  fields: any[];
   createdAt: string;
   updatedAt: string;
 }
 
-export default function BlogsPage() {
-  const [blogs, setBlogs] = useState<Blog[]>([]);
+export default function FormsPage() {
+  const [forms, setForms] = useState<FormTemplate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [pagination, setPagination] = useState({
@@ -30,51 +29,42 @@ export default function BlogsPage() {
     totalPages: 0,
     showing: '',
   });
-  const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
+  const [selectedForm, setSelectedForm] = useState<FormTemplate | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    fetchBlogs();
+    fetchForms();
   }, [pagination.page, searchTerm]);
 
-  const fetchBlogs = async () => {
+  const fetchForms = async () => {
     try {
       setIsLoading(true);
-      const response = await apiClient.getBlogs(
+      const response = await apiClient.getFormTemplates(
         pagination.page,
         pagination.limit,
         searchTerm
       );
       if (response.success && response.data) {
-        setBlogs(response.data);
+        setForms(response.data);
         if (response.pagination) {
           setPagination(response.pagination);
         }
       }
     } catch (error) {
-      console.error('Failed to fetch blogs:', error);
-      toast.error('Failed to load blogs');
+      console.error('Failed to fetch forms:', error);
+      toast.error('Failed to load form templates');
     } finally {
       setIsLoading(false);
     }
   };
 
   const columns = [
-    { key: 'name', label: 'Title', sortable: true },
-    { key: 'code', label: 'Code', sortable: true },
-    { key: 'category', label: 'Category', sortable: true },
+    { key: 'name', label: 'Form Name', sortable: true },
+    { key: 'description', label: 'Description' },
     {
-      key: 'certification',
-      label: 'Certification',
-      render: (value: boolean) => (
-        <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-          value
-            ? 'bg-green-100 text-green-800'
-            : 'bg-gray-100 text-gray-800'
-        }`}>
-          {value ? 'Yes' : 'No'}
-        </span>
-      ),
+      key: 'fields',
+      label: 'Fields',
+      render: (value: any[]) => (value?.length || 0) + ' fields',
     },
     {
       key: 'createdAt',
@@ -83,32 +73,32 @@ export default function BlogsPage() {
     },
   ];
 
-  const handleEdit = (blog: Blog) => {
-    setSelectedBlog(blog);
+  const handleEdit = (form: FormTemplate) => {
+    setSelectedForm(form);
     setIsModalOpen(true);
   };
 
-  const handleDelete = (blog: Blog) => {
-    if (window.confirm(`Delete blog "${blog.name}"?`)) {
-      toast.success('Blog deleted successfully');
+  const handleDelete = (form: FormTemplate) => {
+    if (window.confirm(`Delete form template "${form.name}"?`)) {
+      toast.success('Form template deleted');
     }
   };
 
   return (
     <AdminLayout>
-      <Header title="Blogs" description="Manage all blog posts" />
+      <Header title="Form Templates" description="Manage custom form templates" />
 
       <main className="flex-1 overflow-y-auto p-6">
         <div className="mb-6">
           <button className="flex items-center space-x-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
             <Plus size={20} />
-            <span>Create Blog</span>
+            <span>Create Template</span>
           </button>
         </div>
 
         <DataTable
           columns={columns}
-          data={blogs}
+          data={forms}
           isLoading={isLoading}
           pagination={pagination}
           onPageChange={(page) => {
@@ -122,10 +112,10 @@ export default function BlogsPage() {
       {/* Edit Modal */}
       <Modal
         isOpen={isModalOpen}
-        title={selectedBlog ? 'Edit Blog' : 'Create Blog'}
+        title={selectedForm ? 'Edit Template' : 'Create Template'}
         onClose={() => {
           setIsModalOpen(false);
-          setSelectedBlog(null);
+          setSelectedForm(null);
         }}
         footer={
           <>
@@ -144,44 +134,29 @@ export default function BlogsPage() {
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Title
+              Template Name
             </label>
             <input
               type="text"
-              defaultValue={selectedBlog?.name || ''}
+              defaultValue={selectedForm?.name || ''}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Code
+              Description
             </label>
-            <input
-              type="text"
-              defaultValue={selectedBlog?.code || ''}
+            <textarea
+              defaultValue={selectedForm?.description || ''}
+              rows={4}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Category
+              Number of Fields
             </label>
-            <input
-              type="text"
-              defaultValue={selectedBlog?.category || ''}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              id="certification"
-              defaultChecked={selectedBlog?.certification || false}
-              className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-            />
-            <label htmlFor="certification" className="ml-2 text-sm text-gray-700">
-              Certification
-            </label>
+            <p className="text-gray-600">{selectedForm?.fields?.length || 0} fields</p>
           </div>
         </div>
       </Modal>

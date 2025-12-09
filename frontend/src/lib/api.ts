@@ -1,80 +1,168 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://dev-landing.deltaindo.co.id/api';
+import axios, { AxiosInstance, AxiosError } from 'axios';
 
-export const api = {
-  // Generic fetch wrapper
-  async request(endpoint: string, options: RequestInit = {}) {
-    const url = `${API_URL}${endpoint}`;
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 
-    const response = await fetch(url, {
-      ...options,
+export interface ApiResponse<T> {
+  success: boolean;
+  data?: T;
+  message?: string;
+  error?: string;
+  pagination?: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+    showing: string;
+  };
+}
+
+class ApiClient {
+  private api: AxiosInstance;
+  private token: string | null = null;
+
+  constructor() {
+    this.api = axios.create({
+      baseURL: API_BASE_URL,
       headers: {
-        "Content-Type": "application/json",
-        ...options.headers,
+        'Content-Type': 'application/json',
       },
     });
 
-    if (!response.ok) {
-      throw new Error(`API Error: ${response.statusText}`);
+    // Request interceptor
+    this.api.interceptors.request.use(
+      (config) => {
+        const token = this.getToken();
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
+
+    // Response interceptor
+    this.api.interceptors.response.use(
+      (response) => response,
+      (error: AxiosError) => {
+        if (error.response?.status === 401) {
+          // Handle unauthorized
+          if (typeof window !== 'undefined') {
+            localStorage.removeItem('admin_token');
+            window.location.href = '/admin/login';
+          }
+        }
+        return Promise.reject(error);
+      }
+    );
+  }
+
+  setToken(token: string): void {
+    this.token = token;
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('admin_token', token);
     }
+  }
 
-    return response.json();
-  },
+  getToken(): string | null {
+    if (this.token) return this.token;
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('admin_token');
+    }
+    return null;
+  }
 
-  // Specific methods
-  blogs: {
-    getAll: () => api.request("/api/blogs"),
-    getOne: (id: string) => api.request(`/api/blogs/${id}`),
-    create: (data: any) =>
-      api.request("/api/blogs", {
-        method: "POST",
-        body: JSON.stringify(data),
-      }),
-    update: (id: string, data: any) =>
-      api.request(`/api/blogs/${id}`, {
-        method: "PUT",
-        body: JSON.stringify(data),
-      }),
-    delete: (id: string) =>
-      api.request(`/api/blogs/${id}`, { method: "DELETE" }),
-  },
+  clearToken(): void {
+    this.token = null;
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('admin_token');
+    }
+  }
 
-  courses: {
-    getAll: () => api.request("/api/courses"),
-    getOne: (id: string) => api.request(`/api/courses/${id}`),
-    create: (data: any) =>
-      api.request("/api/courses", {
-        method: "POST",
-        body: JSON.stringify(data),
-      }),
-    update: (id: string, data: any) =>
-      api.request(`/api/courses/${id}`, {
-        method: "PUT",
-        body: JSON.stringify(data),
-      }),
-    delete: (id: string) =>
-      api.request(`/api/courses/${id}`, { method: "DELETE" }),
-  },
+  // Auth endpoints
+  async login(email: string, password: string): Promise<ApiResponse<any>> {
+    const { data } = await this.api.post('/auth/login', { email, password });
+    return data;
+  }
 
-  registrations: {
-    getAll: () => api.request("/api/registrations"),
-    updateStatus: (id: string, status: string) =>
-      api.request(`/api/registrations/${id}/status`, {
-        method: "PATCH",
-        body: JSON.stringify({ status }),
-      }),
-  },
+  async getMe(): Promise<ApiResponse<any>> {
+    const { data } = await this.api.get('/auth/me');
+    return data;
+  }
 
-  media: {
-    upload: async (file: File) => {
-      const formData = new FormData();
-      formData.append("file", file);
+  // CMS Admin endpoints
+  async getBlogs(page = 1, limit = 10, search = ''): Promise<ApiResponse<any[]>> {
+    const { data } = await this.api.get('/cms/admin/blogs', {
+      params: { page, limit, search },
+    });
+    return data;
+  }
 
-      const response = await fetch(`${API_URL}/api/media`, {
-        method: "POST",
-        body: formData,
-      });
+  async getBlogById(id: string): Promise<ApiResponse<any>> {
+    const { data } = await this.api.get(`/cms/admin/blogs/${id}`);
+    return data;
+  }
 
-      return response.json();
-    },
-  },
-};
+  async getCourses(page = 1, limit = 10, search = '', category = ''): Promise<ApiResponse<any[]>> {
+    const { data } = await this.api.get('/cms/admin/courses', {
+      params: { page, limit, search, category },
+    });
+    return data;
+  }
+
+  async getCourseById(id: string): Promise<ApiResponse<any>> {
+    const { data } = await this.api.get(`/cms/admin/courses/${id}`);
+    return data;
+  }
+
+  async getSchedules(page = 1, limit = 10, courseId = '', status = ''): Promise<ApiResponse<any[]>> {
+    const { data } = await this.api.get('/cms/admin/schedules', {
+      params: { page, limit, courseId, status },
+    });
+    return data;
+  }
+
+  async getScheduleById(id: string): Promise<ApiResponse<any>> {
+    const { data } = await this.api.get(`/cms/admin/schedules/${id}`);
+    return data;
+  }
+
+  async getRegistrations(page = 1, limit = 10, status = '', search = ''): Promise<ApiResponse<any[]>> {
+    const { data } = await this.api.get('/cms/admin/registrations', {
+      params: { page, limit, status, search },
+    });
+    return data;
+  }
+
+  async getRegistrationById(id: string): Promise<ApiResponse<any>> {
+    const { data } = await this.api.get(`/cms/admin/registrations/${id}`);
+    return data;
+  }
+
+  async getRegistrationDocuments(page = 1, limit = 10, registrationId = ''): Promise<ApiResponse<any[]>> {
+    const { data } = await this.api.get('/cms/admin/registration-documents', {
+      params: { page, limit, registrationId },
+    });
+    return data;
+  }
+
+  async getFormTemplates(page = 1, limit = 10, search = ''): Promise<ApiResponse<any[]>> {
+    const { data } = await this.api.get('/cms/admin/form-templates', {
+      params: { page, limit, search },
+    });
+    return data;
+  }
+
+  async getUsers(page = 1, limit = 10, search = '', role = ''): Promise<ApiResponse<any[]>> {
+    const { data } = await this.api.get('/cms/admin/users', {
+      params: { page, limit, search, role },
+    });
+    return data;
+  }
+
+  async getDashboardStats(): Promise<ApiResponse<any>> {
+    const { data } = await this.api.get('/cms/admin/stats');
+    return data;
+  }
+}
+
+export const apiClient = new ApiClient();
