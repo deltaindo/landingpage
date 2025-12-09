@@ -20,74 +20,74 @@ const FloatingWhatsApp = () => {
     {
       name: "Atika",
       title: "Head Office",
-      phone: "6281234567890", // Replace with actual number
-      avatar: "/images/whatsapp/atika.jpg", // ← Changed to local path
+      phone: "6281234567890",
+      avatar: "/images/wa/atika-300x300",
     },
     {
       name: "Anik",
       title: "Head Office",
       phone: "6281234567891",
-      avatar: "/images/whatsapp/anik.jpg",
+      avatar: "/images/wa/Anik-300x300",
     },
     {
-      name: "Yopi",
+      name: "Yoppi",
       title: "Head Office",
       phone: "6281234567892",
-      avatar: "/images/whatsapp/yopi.jpg",
+      avatar: "/images/wa/Yopi-300x300",
     },
     {
       name: "Intang",
       title: "Head Office",
       phone: "6281234567893",
-      avatar: "/images/whatsapp/intang.jpg",
+      avatar: "/images/wa/Intang-300x300",
     },
     {
       name: "Erwin",
       title: "Karawang Office",
       phone: "6281234567894",
-      avatar: "/images/whatsapp/erwin.jpg",
+      avatar: "/images/wa/Yuyun-300x300",
     },
     {
       name: "Ali M",
       title: "Gresik Office",
       phone: "6281234567895",
-      avatar: "/images/whatsapp/ali.jpg",
+      avatar: "/images/wa/Ali-300x300",
     },
     {
       name: "Erje",
       title: "Surabaya Office",
       phone: "6281234567896",
-      avatar: "/images/whatsapp/erje.jpg",
+      avatar: "/images/wa/Erje-300x300.jpg",
     },
     {
       name: "Indri",
       title: "Head Office",
       phone: "6281234567897",
-      avatar: "/images/whatsapp/indri.jpg",
+      avatar: "/images/wa/Indri-300x300",
     },
     {
       name: "Bayu",
       title: "Head Office",
       phone: "6281234567898",
-      avatar: "/images/whatsapp/bayu.jpg",
+      avatar: "/images/wa/Bayu-300x300",
     },
     {
       name: "Tya",
       title: "Head Office",
       phone: "6281234567899",
-      avatar: "/images/whatsapp/tya.jpg",
+      avatar: "/images/wa/Tya-300x300",
     },
     {
       name: "Yunny",
       title: "Central Java Office",
       phone: "6281234567900",
-      avatar: "/images/whatsapp/yunny.jpg",
+      avatar: "/images/wa/Yuyun-300x300",
     },
     {
       name: "Eko",
       title: "Medan Office",
       phone: "6281234567901",
-      avatar: "/images/whatsapp/eko.jpg",
+      avatar: "/images/wa/Eko-300x300",
     },
   ];
 
