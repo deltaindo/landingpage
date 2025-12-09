@@ -1,84 +1,136 @@
-const express = require("express");
-const cors = require("cors");
-const helmet = require("helmet");
-const dotenv = require("dotenv");
-const bodyParser = require("body-parser");
-const path = require("path");
-const { connectDB } = require("./src/config/database");
-const errorHandler = require("./src/middleware/errorHandler");
-const { sequelize } = require("./src/config/database");
-const publishScheduledBlogs = require("./src/jobs/publishScheduledBlogs");
-const cmsAdminRoutes = require("./src/routes/cmsAdmin");
-const cmsEditorRoutes = require("./src/routes/cmsEditor");
-const cmsPICRoutes = require("./src/routes/cmsPIC");
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const { sequelize } = require('./src/models');
+require('dotenv').config();
 
-// Start cron job
-publishScheduledBlogs.start();
-
-// Load environment variables
-dotenv.config();
-
-// Initialize app
 const app = express();
+const PORT = process.env.PORT || 5000;
 
-// Connect to database
-connectDB();
+// Security Middleware
+app.use(helmet());
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
-// Middleware - CORS MUST BE FIRST!
-app.use(
-  cors({
-    origin: ["http://localhost:3000", "http://127.0.0.1:3000", "https://dev-landing.deltaindo.co.id"],
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+});
+app.use('/api/', limiter);
 
-// Handle preflight requests
-app.options("*", cors());
+// Body Parser
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-app.use(
-  helmet({
-    crossOriginResourcePolicy: { policy: "cross-origin" },
-  })
-);
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// Serve uploaded files
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
-// Health check
-app.get("/api", (req, res) => {
-  res.json({
-    success: true,
-    message: "Delta Indonesia API is running",
-    version: "2.0.0",
-    database: "PostgreSQL",
-  });
+// Logging middleware
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  next();
 });
 
 // Routes
-app.use("/api/blogs", require("./src/routes/blog"));
-app.use("/api/courses", require("./src/routes/course"));
-app.use("/api/registrations", require("./src/routes/registration"));
-app.use("/api/schedules", require("./src/routes/schedule"));
-app.use("/api/categories", require("./src/routes/category"));
-app.use("/api/tags", require("./src/routes/tag"));
-app.use("/api/media", require("./src/routes/media"));
-app.use("/api/cms/admin", require("./src/routes/cmsAdmin.js"));
-app.use("/api/cms/editor", require("./src/routes/cmsEditor.js"));
-app.use("/api/cms/pic", require("./src/routes/cmsPIC.js"));
+const authRoutes = require('./src/routes/auth');
+const blogRoutes = require('./src/routes/blog');
+const categoryRoutes = require('./src/routes/category');
+const tagRoutes = require('./src/routes/tag');
+const mediaRoutes = require('./src/routes/media');
+const courseRoutes = require('./src/routes/course');
+const scheduleRoutes = require('./src/routes/schedule');
+const registrationRoutes = require('./src/routes/registration');
+const contactRoutes = require('./src/routes/contact');
+const subscriptionRoutes = require('./src/routes/subscription');
+const formTemplateRoutes = require('./src/routes/formTemplate');
+const trainingRoutes = require('./src/routes/training');
+const cmsAdminRoutes = require('./src/routes/cmsAdmin');
+const cmsEditorRoutes = require('./src/routes/cmsEditor');
+const cmsPICRoutes = require('./src/routes/cmsPIC');
 
-// Error Handler (must be last)
-app.use(errorHandler);
+// API Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/blogs', blogRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/tags', tagRoutes);
+app.use('/api/media', mediaRoutes);
+app.use('/api/courses', courseRoutes);
+app.use('/api/schedules', scheduleRoutes);
+app.use('/api/registrations', registrationRoutes);
+app.use('/api/contact', contactRoutes);
+app.use('/api/subscriptions', subscriptionRoutes);
+app.use('/api/form-templates', formTemplateRoutes);
+app.use('/api/trainings', trainingRoutes);
+app.use('/api/cms/admin', cmsAdminRoutes);
+app.use('/api/cms/editor', cmsEditorRoutes);
+app.use('/api/cms/pic', cmsPICRoutes);
 
-// Start server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
-  console.log(`📍 API: http://localhost:${PORT}/api`);
-  console.log(`🗄️  Database: ${process.env.DB_NAME}`);
+// Health check
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV
+  });
 });
+
+// Root route
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Delta Indonesia API Server',
+    version: '1.0.0',
+    docs: '/api/docs',
+    health: '/api/health'
+  });
+});
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    error: 'Route not found',
+    path: req.path
+  });
+});
+
+// Error handler
+app.use((err, req, res, next) => {
+  console.error('Error:', err);
+  res.status(err.status || 500).json({
+    success: false,
+    error: err.message || 'Internal server error',
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+  });
+});
+
+// Database connection and server start
+const startServer = async () => {
+  try {
+    // Test database connection
+    await sequelize.authenticate();
+    console.log('✅ Database connection established successfully');
+
+    // Sync models (use { force: false } in production)
+    await sequelize.sync({ alter: false });
+    console.log('✅ Database models synced');
+
+    // Start server
+    app.listen(PORT, () => {
+      console.log(`\n🚀 Server is running on port ${PORT}`);
+      console.log(`📍 API URL: http://localhost:${PORT}/api`);
+      console.log(`🏥 Health check: http://localhost:${PORT}/api/health`);
+      console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}\n`);
+    });
+  } catch (error) {
+    console.error('❌ Unable to start server:', error);
+    process.exit(1);
+  }
+};
+
+startServer();
 
 module.exports = app;

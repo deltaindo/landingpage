@@ -1,9 +1,6 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 
-// Use environment variable or fallback to localhost:3001
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
-
-console.log('API Base URL:', API_BASE_URL);
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
 export interface ApiResponse<T> {
   success: boolean;
@@ -39,11 +36,11 @@ class ApiClient {
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
-        console.log('API Request:', config.method?.toUpperCase(), config.url);
+        console.log('[API Request]', config.method?.toUpperCase(), config.url);
         return config;
       },
       (error) => {
-        console.error('Request interceptor error:', error);
+        console.error('[API Request Error]', error);
         return Promise.reject(error);
       }
     );
@@ -51,22 +48,23 @@ class ApiClient {
     // Response interceptor
     this.api.interceptors.response.use(
       (response) => {
-        console.log('API Response:', response.status, response.config.url);
+        console.log('[API Response]', response.config.url, response.status);
         return response;
       },
       (error: AxiosError) => {
-        console.error('API Error:', {
-          url: error.config?.url,
-          status: error.response?.status,
-          message: error.message,
-          data: error.response?.data
-        });
+        console.error('[API Response Error]', error.config?.url, error.message);
+        
+        if (error.code === 'ECONNREFUSED' || error.code === 'ERR_NETWORK') {
+          console.error('Backend server is not running or not reachable at:', API_BASE_URL);
+        }
         
         if (error.response?.status === 401) {
           // Handle unauthorized
           if (typeof window !== 'undefined') {
             localStorage.removeItem('admin_token');
-            window.location.href = '/admin/login';
+            if (!window.location.pathname.includes('/admin/login')) {
+              window.location.href = '/admin/login';
+            }
           }
         }
         return Promise.reject(error);
@@ -98,12 +96,8 @@ class ApiClient {
 
   // Auth endpoints
   async login(email: string, password: string): Promise<ApiResponse<any>> {
-    try {
-      const { data } = await this.api.post('/auth/login', { email, password });
-      return data;
-    } catch (error: any) {
-      throw error;
-    }
+    const { data } = await this.api.post('/auth/login', { email, password });
+    return data;
   }
 
   async getMe(): Promise<ApiResponse<any>> {
