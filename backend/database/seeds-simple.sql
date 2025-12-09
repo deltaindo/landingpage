@@ -1,9 +1,9 @@
 -- 🌱 Simple PostgreSQL Seeder - Insert Users Only
--- Use this if the users table already exists
+-- For existing users table with snake_case columns
 -- Command: psql -U admin -d pendaftaran -f ./database/seeds-simple.sql
 
 -- Insert admin user (password: password123)
-INSERT INTO users (email, password, name, role, "isActive", "createdAt", "updatedAt")
+INSERT INTO users (email, password, name, role, is_active, created_at, updated_at)
 VALUES (
     'admin@deltaindonesia.com',
     '$2a$10$0Wm6lVxWnLzKKWKzk1jP8.R0A5zQ5jJ5J5J5J5J5J5J5J5J5J5J5',
@@ -16,7 +16,7 @@ VALUES (
 ON CONFLICT (email) DO NOTHING;
 
 -- Insert editor user
-INSERT INTO users (email, password, name, role, "isActive", "createdAt", "updatedAt")
+INSERT INTO users (email, password, name, role, is_active, created_at, updated_at)
 VALUES (
     'editor@deltaindonesia.com',
     '$2a$10$0Wm6lVxWnLzKKWKzk1jP8.R0A5zQ5jJ5J5J5J5J5J5J5J5J5J5J5',
@@ -29,7 +29,7 @@ VALUES (
 ON CONFLICT (email) DO NOTHING;
 
 -- Insert PIC user
-INSERT INTO users (email, password, name, role, "isActive", "createdAt", "updatedAt")
+INSERT INTO users (email, password, name, role, is_active, created_at, updated_at)
 VALUES (
     'pic@deltaindonesia.com',
     '$2a$10$0Wm6lVxWnLzKKWKzk1jP8.R0A5zQ5jJ5J5J5J5J5J5J5J5J5J5J5',
@@ -42,7 +42,7 @@ VALUES (
 ON CONFLICT (email) DO NOTHING;
 
 -- Insert viewer user
-INSERT INTO users (email, password, name, role, "isActive", "createdAt", "updatedAt")
+INSERT INTO users (email, password, name, role, is_active, created_at, updated_at)
 VALUES (
     'viewer@deltaindonesia.com',
     '$2a$10$0Wm6lVxWnLzKKWKzk1jP8.R0A5zQ5jJ5J5J5J5J5J5J5J5J5J5J5',
@@ -56,4 +56,4 @@ ON CONFLICT (email) DO NOTHING;
 
 -- Verify
 SELECT '✅ Done! Users in database:' as result;
-SELECT email, name, role, "isActive" FROM users WHERE email LIKE '%deltaindonesia.com' ORDER BY email;
+SELECT email, name, role, is_active FROM users WHERE email LIKE '%deltaindonesia.com' ORDER BY email;
