@@ -36,8 +36,8 @@ const Navbar = () => {
           {/* LOGO SECTION - Using logo.jpg image */}
           <div className="flex items-center gap-2">
             <Image
-              src="/logo.jpg"
-              alt="Delta Indonesia"
+              src="/logo.png"
+              alt="Delta Indonesia Group"
               width={40}
               height={40}
               className="rounded-lg"
