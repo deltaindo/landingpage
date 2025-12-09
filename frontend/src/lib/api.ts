@@ -1,6 +1,9 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 
+// Use environment variable or fallback to localhost:3001
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+
+console.log('API Base URL:', API_BASE_URL);
 
 export interface ApiResponse<T> {
   success: boolean;
@@ -26,6 +29,7 @@ class ApiClient {
       headers: {
         'Content-Type': 'application/json',
       },
+      timeout: 10000, // 10 second timeout
     });
 
     // Request interceptor
@@ -35,15 +39,29 @@ class ApiClient {
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
+        console.log('API Request:', config.method?.toUpperCase(), config.url);
         return config;
       },
-      (error) => Promise.reject(error)
+      (error) => {
+        console.error('Request interceptor error:', error);
+        return Promise.reject(error);
+      }
     );
 
     // Response interceptor
     this.api.interceptors.response.use(
-      (response) => response,
+      (response) => {
+        console.log('API Response:', response.status, response.config.url);
+        return response;
+      },
       (error: AxiosError) => {
+        console.error('API Error:', {
+          url: error.config?.url,
+          status: error.response?.status,
+          message: error.message,
+          data: error.response?.data
+        });
+        
         if (error.response?.status === 401) {
           // Handle unauthorized
           if (typeof window !== 'undefined') {
@@ -80,8 +98,12 @@ class ApiClient {
 
   // Auth endpoints
   async login(email: string, password: string): Promise<ApiResponse<any>> {
-    const { data } = await this.api.post('/auth/login', { email, password });
-    return data;
+    try {
+      const { data } = await this.api.post('/auth/login', { email, password });
+      return data;
+    } catch (error: any) {
+      throw error;
+    }
   }
 
   async getMe(): Promise<ApiResponse<any>> {
