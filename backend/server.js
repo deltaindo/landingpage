@@ -27,7 +27,7 @@ connectDB();
 // Middleware - CORS MUST BE FIRST!
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://127.0.0.1:3000", "https://dev-landing.deltaindo.co.id"],
+    origin: ["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:5000", "https://dev-landing.deltaindo.co.id"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -69,6 +69,7 @@ app.use("/api/media", require("./src/routes/media"));
 app.use("/api/cms/admin", require("./src/routes/cmsAdmin.js"));
 app.use("/api/cms/editor", require("./src/routes/cmsEditor.js"));
 app.use("/api/cms/pic", require("./src/routes/cmsPIC.js"));
+app.use("/api/auth", require("./src/routes/auth.js"));
 
 // Error Handler (must be last)
 app.use(errorHandler);

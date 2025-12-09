@@ -202,14 +202,17 @@ router.post(
 // Get current user
 router.get("/me", async (req, res, next) => {
   try {
-    const token = req.headers.authorization?.split(" ");
-    if (!token) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({
         success: false,
         error: "Authentication required",
       });
     }
 
+    // ✅ Extract token correctly
+    const token = authHeader.split(" ");
+    
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findByPk(decoded.id, {
       attributes: { exclude: ["password"] },
@@ -227,8 +230,12 @@ router.get("/me", async (req, res, next) => {
       data: user,
     });
   } catch (error) {
-    next(error);
+    res.status(401).json({
+      success: false,
+      error: "Invalid token",
+    });
   }
 });
+
 
 module.exports = router;
