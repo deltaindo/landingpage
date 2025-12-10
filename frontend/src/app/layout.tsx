@@ -4,10 +4,17 @@ import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Toaster } from "react-hot-toast";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ 
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
 const roboto = Roboto({
   weight: ["400", "500", "700"],
   subsets: ["latin"],
+  variable: "--font-roboto",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -21,8 +28,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className} style={{ "--font-roboto": roboto.style.fontFamily } as React.CSSProperties}>
+    <html lang="en" className={`${inter.variable} ${roboto.variable}`}>
+      <body className={inter.className}>
         <AuthProvider>
           {children}
           <Toaster
