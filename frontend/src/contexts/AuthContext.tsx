@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   createContext,
@@ -6,153 +6,152 @@ import {
   useState,
   useEffect,
   ReactNode,
-} from "react";
-import { useRouter } from "next/navigation";
-import { api } from "@/lib/oldapi2";
-import toast from "react-hot-toast";
+} from 'react';
+import { useRouter } from 'next/navigation';
+import { apiClient } from '@/lib/api';
+import toast from 'react-hot-toast';
 
 /**
- * 🔐 Authentication Context with WireGuard VPN + SSO Support
- *
- * WireGuard VPN Integration:
- * - All auth requests go through encrypted VPN tunnel when enabled
- * - SSO token validation happens over VPN for enhanced security
- * - Client certificate validation (mutual TLS) can be added
+ * 🔐 Authentication Context
+ * Unified auth context for the entire application
+ * Uses the improved api.ts client with better error handling
  */
 
 interface User {
   id: string;
   email: string;
   name: string;
-  role: string;
+  role: 'admin' | 'editor' | 'pic' | 'viewer';
+  isActive?: boolean;
 }
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  loginWithSSO: (token: string) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
-  ssoEnabled: boolean;
+  error: string | null;
+  checkAuth: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const SSO_ENABLED = process.env.NEXT_PUBLIC_SSO_ENABLED === "true";
-const USE_VPN = process.env.NEXT_PUBLIC_USE_VPN_TUNNEL === "true";
-
+/**
+ * Authentication Provider
+ * Wraps the application to provide auth context
+ */
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
+  /**
+   * Check authentication status on mount
+   */
   useEffect(() => {
     checkAuth();
   }, []);
 
+  /**
+   * Verify if user has valid token and is authenticated
+   */
   const checkAuth = async () => {
     try {
-      const token = localStorage.getItem("authToken");
-      if (token) {
-        const response = await api.getCurrentUser();
-        if (response.success) {
-          setUser(response.data);
-          if (USE_VPN) {
-            console.log("✅ User authenticated through VPN tunnel");
-          }
-        }
+      setError(null);
+      const token = apiClient.getToken();
+
+      if (!token) {
+        console.log('[Auth] No token found');
+        setLoading(false);
+        return;
       }
-    } catch (error) {
-      console.error("Auth check failed:", error);
-      localStorage.removeItem("authToken");
+
+      console.log('[Auth] Token found, validating with backend...');
+      const response = await apiClient.getMe();
+
+      if (response.success && response.data) {
+        setUser(response.data);
+        console.log('[Auth] User authenticated:', response.data.email);
+      } else {
+        console.log('[Auth] Invalid token response, clearing storage');
+        apiClient.clearToken();
+        setUser(null);
+      }
+    } catch (error: any) {
+      console.error('[Auth] Check auth failed:', error.message);
+      apiClient.clearToken();
+      setUser(null);
+      setError(error.message);
     } finally {
       setLoading(false);
     }
   };
 
   /**
-   * Standard login (disabled when SSO is enabled)
+   * Login with email and password
    */
-  const login = async (email: string, password: string) => {
-    if (SSO_ENABLED) {
-      toast.error("Please use SSO to login");
-      return;
-    }
-
+  const login = async (email: string, password: string): Promise<void> => {
     try {
-      const response = await api.login(email, password);
-      if (response.success && response.data?.token) {
-        localStorage.setItem("authToken", response.data.token);
-        setUser(response.data.user);
-        toast.success("Login successful!");
-        router.push("/admin");
-      } else {
-        throw new Error(response.error || "Login failed");
-      }
-    } catch (error: any) {
-      toast.error(error.message || "Login failed");
-      throw error;
-    }
-  };
-
-  /**
-   * 🔐 SSO Login with WireGuard VPN
-   *
-   * Flow:
-   * 1. Receive SSO token from provider
-   * 2. Validate token through VPN-encrypted channel
-   * 3. Exchange for application JWT
-   * 4. Store JWT and fetch user profile
-   *
-   * @param ssoToken - Token from SSO provider
-   */
-  const loginWithSSO = async (ssoToken: string) => {
-    try {
+      setError(null);
       setLoading(true);
 
-      if (USE_VPN) {
-        console.log("🔒 Validating SSO token through WireGuard VPN tunnel");
+      // Validate inputs
+      if (!email || !password) {
+        throw new Error('Email and password are required');
       }
 
-      // Validate SSO token and exchange for app token
-      const response = await api.validateSSOToken(ssoToken);
-
-      if (response.success && response.data?.token) {
-        localStorage.setItem("authToken", response.data.token);
-
-        // Fetch user profile
-        const userResponse = await api.getCurrentUser();
-        if (userResponse.success) {
-          setUser(userResponse.data);
-          toast.success("SSO login successful!");
-          router.push("/admin");
-        }
-      } else {
-        throw new Error(response.error || "SSO validation failed");
+      if (!email.includes('@')) {
+        throw new Error('Invalid email format');
       }
+
+      console.log('[Auth] Attempting login for:', email);
+      const response = await apiClient.login(email, password);
+
+      if (!response.success) {
+        throw new Error(response.error || 'Login failed');
+      }
+
+      if (!response.data?.token) {
+        throw new Error('No token received from server');
+      }
+
+      // Store token and set user
+      apiClient.setToken(response.data.token);
+      setUser(response.data);
+
+      console.log('[Auth] Login successful for:', email);
+      toast.success('Login successful!');
     } catch (error: any) {
-      console.error("SSO login error:", error);
-      toast.error("SSO login failed");
-      localStorage.removeItem("authToken");
+      const message =
+        error.response?.data?.error ||
+        error.message ||
+        'Login failed. Please check your credentials.';
+
+      setError(message);
+      console.error('[Auth] Login error:', message);
+      toast.error(message);
       throw error;
     } finally {
       setLoading(false);
     }
   };
 
-  const logout = () => {
-    if (USE_VPN) {
-      console.log("🔒 Logging out through VPN tunnel");
-    }
-
-    api.logout();
-    setUser(null);
-    toast.success("Logged out successfully");
-
-    // SSO logout will redirect to SSO provider
-    if (!SSO_ENABLED) {
-      router.push("/admin/login");
+  /**
+   * Logout and clear authentication
+   */
+  const logout = (): void => {
+    try {
+      apiClient.clearToken();
+      setUser(null);
+      setError(null);
+      console.log('[Auth] Logged out');
+      toast.success('Logged out successfully');
+      router.push('/admin/login');
+    } catch (error) {
+      console.error('[Auth] Logout error:', error);
+      toast.error('Error logging out');
     }
   };
 
@@ -162,10 +161,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         user,
         loading,
         login,
-        loginWithSSO,
         logout,
         isAuthenticated: !!user,
-        ssoEnabled: SSO_ENABLED,
+        error,
+        checkAuth,
       }}
     >
       {children}
@@ -173,10 +172,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
+/**
+ * Hook to use auth context
+ * Must be used within AuthProvider
+ */
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 }
