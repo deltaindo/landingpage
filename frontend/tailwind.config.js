@@ -13,7 +13,6 @@ module.exports = {
         dark: "#2C3E50",
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
         inter: ["var(--font-inter)", "system-ui", "sans-serif"],
         roboto: ["var(--font-roboto)", "system-ui", "sans-serif"],
       },
