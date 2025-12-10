@@ -12,6 +12,10 @@ module.exports = {
         secondary: "#FF8C00",
         dark: "#2C3E50",
       },
+      fontFamily: {
+        inter: ["Inter", "system-ui", "sans-serif"],
+        roboto: ["Roboto", "system-ui", "sans-serif"],
+      },
       animation: {
         "fade-in": "fadeIn 0.6s ease-in",
         "slide-up": "slideUp 0.6s ease-out",
