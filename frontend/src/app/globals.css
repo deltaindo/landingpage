@@ -2,12 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* CSS Variables for Fonts */
-:root {
-  --font-roboto: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, sans-serif;
-}
-
 /* Global reset */
 * {
   margin: 0;
@@ -20,32 +14,45 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Base typography */
+/* Base typography - Apply Inter to everything by default */
 body {
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
-    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Title/Heading Styles - Inter */
+/* Title/Heading Styles - Inter (default, no action needed) */
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI",
     "Helvetica Neue", sans-serif;
   font-weight: 700;
 }
 
-/* Subtitle Styles - Roboto */
+/* Paragraph and text elements - Inter (default) */
+p,
+span,
+div,
+a,
+button,
+input,
+textarea,
+select {
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+/* Subtitle utility classes - Roboto */
 .subtitle,
 .subtitle-text,
 .sub-heading {
-  font-family: var(--font-roboto);
+  font-family: var(--font-roboto), "Roboto", system-ui, sans-serif !important;
 }
 
 /* Custom Scrollbar */
@@ -182,6 +189,7 @@ iframe {
     padding: 10px 14px;
   }
 }
+
 /* Tiptap Editor Styles */
 .ProseMirror {
   outline: none;
@@ -189,20 +197,21 @@ iframe {
 
 .ProseMirror p {
   margin: 1em 0;
+  font-family: var(--font-inter), sans-serif;
 }
 
 .ProseMirror h2 {
   font-size: 1.5em;
   font-weight: bold;
   margin-top: 1em;
-  font-family: "Inter", sans-serif;
+  font-family: var(--font-inter), sans-serif;
 }
 
 .ProseMirror h3 {
   font-size: 1.25em;
   font-weight: bold;
   margin-top: 0.75em;
-  font-family: "Inter", sans-serif;
+  font-family: var(--font-inter), sans-serif;
 }
 
 .ProseMirror ul,
