@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================== */
+/* FONT SYSTEM - INTER & ROBOTO ONLY              */
+/* ============================================== */
+
+/* CSS Variables for Fonts */
+:root {
+  --font-inter: "Inter", sans-serif;
+  --font-roboto: "Roboto", sans-serif;
+}
+
 /* Global reset */
 * {
   margin: 0;
@@ -14,48 +24,95 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Base typography - Apply Inter to everything by default */
+/* ============================================== */
+/* BASE TYPOGRAPHY - EVERYTHING USES INTER       */
+/* ============================================== */
+
 body {
-  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
-    "Helvetica Neue", sans-serif;
+  font-family: var(--font-inter);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: inherit;
 }
 
-/* Title/Heading Styles - Inter (default, no action needed) */
+/* All text elements inherit font from body */
+p,
+span,
+strong,
+em,
+small,
+code,
+pre,
+li,
+dt,
+dd,
+a,
+button,
+input,
+textarea,
+select,
+label,
+fieldset,
+legend {
+  font-family: var(--font-inter);
+}
+
+/* ============================================== */
+/* HEADINGS - INTER (TITLES)                      */
+/* ============================================== */
+
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "Helvetica Neue", sans-serif;
+  font-family: var(--font-inter);
   font-weight: 700;
+  line-height: 1.2;
 }
 
-/* Paragraph and text elements - Inter (default) */
-p,
-span,
-div,
-a,
-button,
-input,
-textarea,
-select {
-  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
-}
+/* ============================================== */
+/* SUBTITLE UTILITY CLASSES - ROBOTO              */
+/* ============================================== */
 
-/* Subtitle utility classes - Roboto */
 .subtitle,
 .subtitle-text,
 .sub-heading {
-  font-family: var(--font-roboto), "Roboto", system-ui, sans-serif !important;
+  font-family: var(--font-roboto) !important;
 }
 
-/* Custom Scrollbar */
+/* ============================================== */
+/* FORM ELEMENTS - INTER                          */
+/* ============================================== */
+
+input,
+textarea,
+select,
+button,
+option,
+optgroup {
+  font-family: var(--font-inter);
+}
+
+/* ============================================== */
+/* CODE & PRE - MONOSPACE (Keep as exception)    */
+/* ============================================== */
+
+code,
+pre,
+kbd,
+samp {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.9em;
+}
+
+/* ============================================== */
+/* CUSTOM SCROLLBAR                               */
+/* ============================================== */
+
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -73,7 +130,10 @@ select {
   background: #0052a3;
 }
 
-/* Animation Keyframes */
+/* ============================================== */
+/* ANIMATION KEYFRAMES                            */
+/* ============================================== */
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -103,7 +163,10 @@ select {
   }
 }
 
-/* Animation Classes */
+/* ============================================== */
+/* ANIMATION CLASSES                              */
+/* ============================================== */
+
 .animate-fade-in {
   animation: fadeIn 0.6s ease-in forwards;
 }
@@ -121,16 +184,18 @@ select {
   transition: opacity 1s ease-in-out, transform 1s ease-in-out;
 }
 
-/* Video responsive */
+/* ============================================== */
+/* VIDEO RESPONSIVE                               */
+/* ============================================== */
+
 iframe {
   border: none;
 }
 
-/* ---------------------------------------------------- */
-/* WhyUs section only – minimal, isolated styles        */
-/* ---------------------------------------------------- */
+/* ============================================== */
+/* WHYUS SECTION - GLASS CARDS                    */
+/* ============================================== */
 
-/* Slide-in for WhyUs cards (doesn't touch other components) */
 @keyframes whyus-slide-in {
   from {
     opacity: 0;
@@ -142,11 +207,10 @@ iframe {
   }
 }
 
-/* White glass cards */
 .whyus-card {
-  background: rgba(255, 255, 255, 0.7); /* Semi-transparent white */
-  backdrop-filter: blur(18px); /* Glass blur */
-  -webkit-backdrop-filter: blur(18px); /* Safari support */
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 12px;
   padding: 16px 20px;
@@ -154,12 +218,11 @@ iframe {
   cursor: pointer;
   animation: whyus-slide-in 0.6s ease-out forwards;
   opacity: 0;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.35); /* Deep soft shadow */
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.35);
 }
 
-/* Hover state: stronger glass + slight lift */
 .whyus-card:hover {
-  background: rgba(255, 255, 255, 0.26); /* Slightly more opaque on hover */
+  background: rgba(255, 255, 255, 0.26);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border-color: rgba(255, 255, 255, 0.55);
@@ -171,7 +234,6 @@ iframe {
   transform: translateY(-2px);
 }
 
-/* Optional: keep the same responsive tweaks */
 @media (max-width: 1024px) {
   .whyus-card {
     padding: 14px 18px;
@@ -190,28 +252,32 @@ iframe {
   }
 }
 
-/* Tiptap Editor Styles */
+/* ============================================== */
+/* TIPTAP EDITOR STYLES                           */
+/* ============================================== */
+
 .ProseMirror {
   outline: none;
+  font-family: var(--font-inter);
 }
 
 .ProseMirror p {
   margin: 1em 0;
-  font-family: var(--font-inter), sans-serif;
+  font-family: var(--font-inter);
 }
 
 .ProseMirror h2 {
   font-size: 1.5em;
   font-weight: bold;
   margin-top: 1em;
-  font-family: var(--font-inter), sans-serif;
+  font-family: var(--font-inter);
 }
 
 .ProseMirror h3 {
   font-size: 1.25em;
   font-weight: bold;
   margin-top: 0.75em;
-  font-family: var(--font-inter), sans-serif;
+  font-family: var(--font-inter);
 }
 
 .ProseMirror ul,
