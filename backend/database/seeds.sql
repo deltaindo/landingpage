@@ -6,7 +6,7 @@
 -- DELETE FROM users WHERE email LIKE '%deltaindonesia.com';
 
 -- Insert admin user
-INSERT INTO users (email, password, name, role, "isActive", "createdAt", "updatedAt")
+INSERT INTO users (email, password, name, role, "isactive", "createdAt", "updatedAt")
 VALUES (
     'admin@deltaindonesia.com',
     '$2a$10$0Wm6lVxWnLzKKWKzk1jP8.R0A5zQ5jJ5J5J5J5J5J5J5J5J5J5J5',
@@ -19,7 +19,7 @@ VALUES (
 ON CONFLICT (email) DO NOTHING;
 
 -- Insert editor user
-INSERT INTO users (email, password, name, role, "isActive", "createdAt", "updatedAt")
+INSERT INTO users (email, password, name, role, "isactive", "createdAt", "updatedAt")
 VALUES (
     'editor@deltaindonesia.com',
     '$2a$10$0Wm6lVxWnLzKKWKzk1jP8.R0A5zQ5jJ5J5J5J5J5J5J5J5J5J5J5',
@@ -32,7 +32,7 @@ VALUES (
 ON CONFLICT (email) DO NOTHING;
 
 -- Insert PIC user
-INSERT INTO users (email, password, name, role, "isActive", "createdAt", "updatedAt")
+INSERT INTO users (email, password, name, role, "isactive", "createdAt", "updatedAt")
 VALUES (
     'pic@deltaindonesia.com',
     '$2a$10$0Wm6lVxWnLzKKWKzk1jP8.R0A5zQ5jJ5J5J5J5J5J5J5J5J5J5J5',
@@ -45,7 +45,7 @@ VALUES (
 ON CONFLICT (email) DO NOTHING;
 
 -- Insert viewer user
-INSERT INTO users (email, password, name, role, "isActive", "createdAt", "updatedAt")
+INSERT INTO users (email, password, name, role, "isactive", "createdAt", "updatedAt")
 VALUES (
     'viewer@deltaindonesia.com',
     '$2a$10$0Wm6lVxWnLzKKWKzk1jP8.R0A5zQ5jJ5J5J5J5J5J5J5J5J5J5J5',
@@ -59,4 +59,4 @@ ON CONFLICT (email) DO NOTHING;
 
 -- Verify
 SELECT '✅ Seeding Complete!' as status;
-SELECT email, name, role, "isActive" FROM users WHERE email LIKE '%deltaindonesia.com' ORDER BY email;
+SELECT email, name, role, "isactive" FROM users WHERE email LIKE '%deltaindonesia.com' ORDER BY email;

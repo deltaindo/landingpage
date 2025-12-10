@@ -60,7 +60,7 @@ const Services: React.FC = () => {
         {/* Header */}
         <div className="max-w-3xl mb-6">
           <h2 className="text-white text-4xl font-bold tracking-tight md:text-5xl">
-            Layanan Kami
+            Mengapa 
           </h2>
           <p className="mt-2 text-lg text-white/90 md:text-xl">
             Layanan komprehensif untuk kebutuhan K3 perusahaan anda

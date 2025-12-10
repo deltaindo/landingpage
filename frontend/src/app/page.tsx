@@ -6,7 +6,7 @@ import About from "@/components/About";
 import MediaInfo from "@/components/MediaInfo";
 import Services from "@/components/Services";
 import Training from "@/components/Training";
-import WhyUs from "@/components/WhyUs";
+import Trainers from "@/components/Trainers";
 import Clients from "@/components/Clients";
 import Testimonials from "@/components/Testimonials";
 import CTA from "@/components/old CTA";
@@ -23,7 +23,7 @@ export default function Home() {
       <MediaInfo />
       <Services />
       <Training />
-      <WhyUs />
+      <Trainers />
       <Clients />
       <Testimonials />
       <CTA />

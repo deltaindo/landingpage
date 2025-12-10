@@ -30,7 +30,7 @@ const User = sequelize.define(
     isActive: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
-      field: "is_active",
+      field: "isactive",
     },
   },
   {

@@ -24,8 +24,8 @@ const Tag = sequelize.define(
     tableName: "blog_tags",
     timestamps: true,
     underscored: true,
-    createdAt: "created_at",
-    updatedAt: "updated_at",
+    createdAt: "createdAt",
+    updatedAt: "updatedAt",
     hooks: {
       beforeValidate: (tag) => {
         if (tag.name && !tag.slug) {

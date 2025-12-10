@@ -22,8 +22,8 @@ module.exports = {
         name: "Admin User",
         role: "admin",
         is_active: true,
-        created_at: new Date(),
-        updated_at: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         id: require("uuid").v4(),
@@ -32,8 +32,8 @@ module.exports = {
         name: "Editor User",
         role: "editor",
         is_active: true,
-        created_at: new Date(),
-        updated_at: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         id: require("uuid").v4(),
@@ -42,8 +42,8 @@ module.exports = {
         name: "PIC User",
         role: "pic",
         is_active: true,
-        created_at: new Date(),
-        updated_at: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         id: require("uuid").v4(),
@@ -52,8 +52,8 @@ module.exports = {
         name: "Viewer User",
         role: "viewer",
         is_active: true,
-        created_at: new Date(),
-        updated_at: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
     ];
 

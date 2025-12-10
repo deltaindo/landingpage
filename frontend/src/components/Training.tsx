@@ -169,6 +169,7 @@ function TrainingCard({ training }: { training: TrainingData }) {
           </span>
         </div>
 
+        
         <button className="w-full bg-blue-600 py-3 text-white font-semibold rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700 transition">
           Selengkapnya <ChevronRight className="w-4 h-4" />
         </button>

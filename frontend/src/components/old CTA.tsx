@@ -12,18 +12,21 @@ const CTA = () => {
     <section className="py-20 bg-gradient-to-r from-primary via-blue-600 to-blue-800">
       <div className="max-w-7xl mx-auto px-6 text-center text-white">
         <h2 className="text-4xl font-bold mb-4">
-          Siap Tingkatkan Kompetensi K3 Tim Anda?
+          Siap Tingkatkan Kompetensi K3
         </h2>
-        <p className="text-xl mb-8 text-blue-100 max-w-3xl mx-auto">
-          Hubungi kami untuk konsultasi gratis dan jadwal pelatihan terbaru
-        </p>
+        <h2 className="text-4xl font-bold mb-4">
+          bersama Delta Indonesia Group
+        </h2>
+        {/*<p className="text-xl mb-8 text-blue-100 max-w-3xl mx-auto">
+          Hubungi kami untuk konsultasi gratis
+        </p>*/}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <button
+          {/*<button
             onClick={scrollToContact}
             className="bg-secondary text-white px-8 py-4 rounded-lg font-semibold hover:bg-orange-600 transition transform hover:scale-105 shadow-lg"
           >
             Lihat Jadwal Pelatihan
-          </button>
+          </button>*/}
           <button
             onClick={scrollToContact}
             className="bg-white text-primary px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition transform hover:scale-105 shadow-lg"

@@ -28,7 +28,7 @@ const Category = sequelize.define(
     tableName: "blog_categories",
     timestamps: true,
     underscored: true,
-    createdAt: "created_at",
+    createdAt: "createdAt",
     updatedAt: "updated_at",
     hooks: {
       beforeValidate: (category) => {

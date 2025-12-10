@@ -84,8 +84,8 @@ const Blog = sequelize.define(
     tableName: "blog_posts",
     timestamps: true,
     underscored: true,
-    createdAt: "created_at",
-    updatedAt: "updated_at",
+    createdAt: "createdAt",
+    updatedAt: "updatedAt",
     hooks: {
       beforeValidate: (blog) => {
         // Auto-generate slug from title if not provided

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { FaArrowUp } from "react-icons/fa";
 
 const Footer = () => {
@@ -24,11 +25,15 @@ const Footer = () => {
         <div className="grid md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div>
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">D</span>
-              </div>
-              <span className="font-bold text-xl">DELTA INDONESIA</span>
+             <div className="flex items-center gap-2 mb-4">
+              <Image
+                src="/images/logo.png"
+                alt="Delta Indonesia Group"
+                width={60}
+                height={60}
+                className="rounded-lg"
+              />
+              <span className="font-bold text-xl">DELTA INDONESIA GROUP</span>
             </div>
             <p className="text-gray-400 mb-4">
               Perusahaan Jasa Keselamatan Kesehatan Kerja (PJK3) terpercaya
