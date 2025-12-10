@@ -317,6 +317,33 @@ class ApiClient {
     }
   }
 
+  async createBlog(data: any): Promise<ApiResponse<any>> {
+    try {
+      const response = await this.api.post('/cms/admin/blogs', data);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  async updateBlog(id: string, data: any): Promise<ApiResponse<any>> {
+    try {
+      const response = await this.api.put(`/cms/admin/blogs/${id}`, data);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  async deleteBlog(id: string): Promise<ApiResponse<any>> {
+    try {
+      const response = await this.api.delete(`/cms/admin/blogs/${id}`);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
   // ==================== COURSE ENDPOINTS ====================
 
   async getCourses(page = 1, limit = 10, search = '', category = ''): Promise<ApiResponse<any[]>> {
@@ -334,6 +361,33 @@ class ApiClient {
     try {
       const { data } = await this.api.get(`/cms/admin/courses/${id}`);
       return data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  async createCourse(data: any): Promise<ApiResponse<any>> {
+    try {
+      const response = await this.api.post('/cms/admin/courses', data);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  async updateCourse(id: string, data: any): Promise<ApiResponse<any>> {
+    try {
+      const response = await this.api.put(`/cms/admin/courses/${id}`, data);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  async deleteCourse(id: string): Promise<ApiResponse<any>> {
+    try {
+      const response = await this.api.delete(`/cms/admin/courses/${id}`);
+      return response.data;
     } catch (error) {
       throw this.handleError(error);
     }
@@ -428,6 +482,104 @@ class ApiClient {
     try {
       const { data } = await this.api.get('/cms/admin/stats');
       return data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  // ==================== CATEGORY ENDPOINTS ====================
+
+  async getCategories(): Promise<ApiResponse<any[]>> {
+    try {
+      const { data } = await this.api.get('/categories');
+      return data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  async createCategory(data: any): Promise<ApiResponse<any>> {
+    try {
+      const response = await this.api.post('/categories', data);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  async updateCategory(id: string, data: any): Promise<ApiResponse<any>> {
+    try {
+      const response = await this.api.put(`/categories/${id}`, data);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  async deleteCategory(id: string): Promise<ApiResponse<any>> {
+    try {
+      const response = await this.api.delete(`/categories/${id}`);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  // ==================== TAG ENDPOINTS ====================
+
+  async getTags(): Promise<ApiResponse<any[]>> {
+    try {
+      const { data } = await this.api.get('/tags');
+      return data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  async createTag(data: any): Promise<ApiResponse<any>> {
+    try {
+      const response = await this.api.post('/tags', data);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  // ==================== MEDIA ENDPOINTS ====================
+
+  async getMedia(page = 1, limit = 10): Promise<ApiResponse<any[]>> {
+    try {
+      const { data } = await this.api.get('/media', {
+        params: { page, limit },
+      });
+      return data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  async uploadMedia(file: File, metadata?: { alt?: string; caption?: string }): Promise<ApiResponse<any>> {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      if (metadata?.alt) formData.append('alt', metadata.alt);
+      if (metadata?.caption) formData.append('caption', metadata.caption);
+
+      const response = await this.api.post('/media', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  async deleteMedia(id: string): Promise<ApiResponse<any>> {
+    try {
+      const response = await this.api.delete(`/media/${id}`);
+      return response.data;
     } catch (error) {
       throw this.handleError(error);
     }
