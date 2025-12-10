@@ -13,8 +13,9 @@ module.exports = {
         dark: "#2C3E50",
       },
       fontFamily: {
-        inter: ["Inter", "system-ui", "sans-serif"],
-        roboto: ["Roboto", "system-ui", "sans-serif"],
+        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        inter: ["var(--font-inter)", "system-ui", "sans-serif"],
+        roboto: ["var(--font-roboto)", "system-ui", "sans-serif"],
       },
       animation: {
         "fade-in": "fadeIn 0.6s ease-in",
